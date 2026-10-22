@@ -1,0 +1,235 @@
+import React, { useState } from 'react';
+import {
+  XLogo,
+  IconAnnouncements,
+  IconEvents,
+  IconWebsites,
+  IconNotifications,
+  IconBookmarks,
+  IconProfile,
+  IconSettings,
+  IconMore,
+  IconSidebarToggle,
+  VerifiedBadge
+} from './Icons';
+
+export default function LeftSidebar({
+  activeNav,
+  setActiveNav,
+  currentUser,
+  onSwitchUser,
+  users,
+  onOpenCompose,
+  onOpenDisplay,
+  unreadCount,
+  isSidebarHidden,
+  onToggleSidebar,
+  onLogout
+}) {
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+
+  const canPublish = currentUser.roleKey !== 'student';
+
+  return (
+    <header className={`sidebar-left ${isSidebarHidden ? 'hidden' : ''}`} role="banner">
+      <div className="sidebar-inner">
+        <div>
+          {/* Brand Logo & Collapse Header */}
+          <div className="sidebar-header-row">
+            <div
+              className="logo-wrap"
+              onClick={() => setActiveNav('announcements')}
+              style={{ cursor: 'pointer' }}
+              title="SMVITM Campus Hub"
+            >
+              <XLogo className="x-logo" />
+            </div>
+
+            <button
+              type="button"
+              className="sidebar-hide-btn"
+              onClick={onToggleSidebar}
+              title="Hide side navigation (Press [)"
+              aria-label="Hide side navigation"
+            >
+              <IconSidebarToggle style={{ width: 18, height: 18 }} />
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="nav-menu" aria-label="Primary navigation">
+            <button
+              type="button"
+              className={`nav-item ${activeNav === 'announcements' ? 'active' : ''}`}
+              onClick={() => setActiveNav('announcements')}
+            >
+              <div className="nav-icon-wrap">
+                <IconAnnouncements className="nav-icon" />
+              </div>
+              <span className="nav-label">Notices</span>
+            </button>
+
+            <button
+              type="button"
+              className={`nav-item ${activeNav === 'events' ? 'active' : ''}`}
+              onClick={() => setActiveNav('events')}
+            >
+              <div className="nav-icon-wrap">
+                <IconEvents className="nav-icon" />
+              </div>
+              <span className="nav-label">Events</span>
+            </button>
+
+            <button
+              type="button"
+              className={`nav-item ${activeNav === 'websites' ? 'active' : ''}`}
+              onClick={() => setActiveNav('websites')}
+            >
+              <div className="nav-icon-wrap">
+                <IconWebsites className="nav-icon" />
+              </div>
+              <span className="nav-label">Websites</span>
+            </button>
+
+            <button
+              type="button"
+              className={`nav-item ${activeNav === 'notifications' ? 'active' : ''}`}
+              onClick={() => setActiveNav('notifications')}
+            >
+              <div className="nav-icon-wrap">
+                <IconNotifications className="nav-icon" />
+                {unreadCount > 0 && <span className="badge-dot" aria-hidden="true" />}
+              </div>
+              <span className="nav-label">Notifications</span>
+            </button>
+
+            <button
+              type="button"
+              className={`nav-item ${activeNav === 'bookmarks' ? 'active' : ''}`}
+              onClick={() => setActiveNav('bookmarks')}
+            >
+              <div className="nav-icon-wrap">
+                <IconBookmarks className="nav-icon" />
+              </div>
+              <span className="nav-label">Bookmarks</span>
+            </button>
+
+            {/* More Menu Dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button
+                type="button"
+                className="nav-item"
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+              >
+                <div className="nav-icon-wrap">
+                  <IconMore className="nav-icon" />
+                </div>
+                <span className="nav-label">More</span>
+              </button>
+
+              {showMoreMenu && (
+                <div className="dropdown-popover" style={{ bottom: 'calc(100% + 4px)', left: 0 }}>
+                  <button
+                    type="button"
+                    className="dropdown-item"
+                    onClick={() => {
+                      setShowMoreMenu(false);
+                      onOpenDisplay();
+                    }}
+                  >
+                    <IconSettings style={{ width: 18, height: 18 }} />
+                    <span>Display Settings</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </nav>
+
+          {/* Post / Publish CTA Button */}
+          <button
+            type="button"
+            className="post-cta-btn"
+            onClick={onOpenCompose}
+            title={canPublish ? 'Publish notice' : 'Submit student notice inquiry'}
+          >
+            <span className="post-cta-text">
+              {currentUser.roleKey === 'coordinator' ? 'Create Event' : 'Publish Notice'}
+            </span>
+            <span className="post-cta-icon">+</span>
+          </button>
+        </div>
+
+        {/* User Card with Role Switcher Popover */}
+        <div className="sidebar-user-container">
+          <button
+            type="button"
+            className="sidebar-user-card"
+            onClick={() => setShowUserDropdown(!showUserDropdown)}
+            title="Click to switch role or view account"
+          >
+            <div className="avatar avatar-md" style={{ background: currentUser.avatarBg }}>
+              <span>{currentUser.avatarChar}</span>
+            </div>
+            <div className="user-meta">
+              <div className="user-name-line">
+                <span className="user-display-name">{currentUser.name}</span>
+                <VerifiedBadge type={currentUser.verifiedType} />
+              </div>
+              <span className="user-handle">{currentUser.role} · {currentUser.branch}</span>
+            </div>
+            <div className="user-more-dots">
+              <IconMore />
+            </div>
+          </button>
+
+          {showUserDropdown && (
+            <div className="dropdown-popover" style={{ bottom: 'calc(100% + 10px)', width: 280, left: 0 }}>
+              <div style={{ padding: '8px 16px', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)' }}>
+                SWITCH ACTIVE ROLE (RBAC)
+              </div>
+              {Object.keys(users).map((key) => {
+                const u = users[key];
+                const isActive = u.roleKey === currentUser.roleKey;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    className="dropdown-item"
+                    onClick={() => {
+                      onSwitchUser(key);
+                      setShowUserDropdown(false);
+                    }}
+                    style={{ backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent' }}
+                  >
+                    <div className="avatar avatar-sm" style={{ background: u.avatarBg }}>
+                      <span>{u.avatarChar}</span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontWeight: 700, fontSize: 14 }}>{u.name}</span>
+                      <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                        {u.role} ({u.branch})
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+              <div className="dropdown-divider" />
+              <button
+                type="button"
+                className="dropdown-item"
+                onClick={() => {
+                  setShowUserDropdown(false);
+                  onLogout();
+                }}
+                style={{ color: '#f4212e' }}
+              >
+                <span>Log out {currentUser.handle}</span>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}

@@ -1,0 +1,484 @@
+/**
+ * Campus Notice & Event Hub
+ * Clean X.com Theme - Zero Emojis Policy
+ */
+
+export const BRANCHES = [
+  {
+    id: 'ALL',
+    label: 'All Campus',
+    code: 'ALL',
+    slug: 's/all',
+    members: '1.4k members',
+    description: 'All campus announcements & broadcasts',
+    avatarBg: 'linear-gradient(135deg, #1d9bf0, #00ba7c)'
+  },
+  {
+    id: 'AI&DS',
+    label: 'AI & Data Science',
+    code: 'AI&DS',
+    slug: 's/AI&DS',
+    members: '280 members',
+    description: 'Artificial Intelligence & Data Science Community',
+    avatarBg: 'linear-gradient(135deg, #7856ff, #1d9bf0)'
+  },
+  {
+    id: 'AI-ML',
+    label: 'AI & Machine Learning',
+    code: 'AI-ML',
+    slug: 's/AIML',
+    members: '240 members',
+    description: 'Machine Learning, Neural Systems & Robotics',
+    avatarBg: 'linear-gradient(135deg, #f91880, #ff7a00)'
+  },
+  {
+    id: 'CS',
+    label: 'Computer Science',
+    code: 'CS',
+    slug: 's/CS',
+    members: '410 members',
+    description: 'Computer Science, Systems & Cloud Architecture',
+    avatarBg: 'linear-gradient(135deg, #00ba7c, #1d9bf0)'
+  },
+  {
+    id: 'EC',
+    label: 'Electronics & Comm.',
+    code: 'EC',
+    slug: 's/EC',
+    members: '320 members',
+    description: 'Electronics, VLSI Design & Embedded Systems',
+    avatarBg: 'linear-gradient(135deg, #ffd400, #f91880)'
+  },
+  {
+    id: 'MECH',
+    label: 'Mechanical Engg.',
+    code: 'MECH',
+    slug: 's/MECH',
+    members: '190 members',
+    description: 'Mechanical Engineering, CAD & Automotive Systems',
+    avatarBg: 'linear-gradient(135deg, #ff7a00, #ffd400)'
+  }
+];
+
+export const CATEGORIES = [
+  'All',
+  'Academic',
+  'Exam',
+  'Club',
+  'Workshop',
+  'Hackathon',
+  'Placement'
+];
+
+export const USERS = {
+  student: {
+    id: 'user-student',
+    name: 'Student',
+    usn: 'USN202601',
+    role: 'Student',
+    roleKey: 'student',
+    branch: 'AI&DS',
+    department: 'Dept. of AI & Data Science',
+    handle: '@student_aids',
+    avatarChar: 'S',
+    avatarBg: 'linear-gradient(135deg, #1d9bf0, #7856ff)',
+    verified: true,
+    verifiedType: 'blue'
+  },
+  faculty: {
+    id: 'user-faculty',
+    name: 'Faculty Coordinator',
+    usn: 'FAC-AI-012',
+    role: 'Faculty',
+    roleKey: 'faculty',
+    branch: 'AI&DS',
+    department: 'Dept. of AI & Data Science',
+    handle: '@faculty_aids',
+    avatarChar: 'F',
+    avatarBg: '#8e24aa',
+    verified: true,
+    verifiedType: 'gold'
+  },
+  coordinator: {
+    id: 'user-coordinator',
+    name: 'Event Coordinator',
+    usn: 'EVT-COORD-01',
+    role: 'Event Coordinator',
+    roleKey: 'coordinator',
+    branch: 'AI&DS',
+    department: 'Campus Events Office',
+    handle: '@events_coord',
+    avatarChar: 'E',
+    avatarBg: '#00897b',
+    verified: true,
+    verifiedType: 'blue'
+  },
+  admin: {
+    id: 'user-admin',
+    name: 'Campus Admin',
+    usn: 'ADM-01',
+    role: 'Administrator',
+    roleKey: 'admin',
+    branch: 'ALL',
+    department: 'Campus Administration',
+    handle: '@campus_admin',
+    avatarChar: 'A',
+    avatarBg: '#e65100',
+    verified: true,
+    verifiedType: 'gold'
+  }
+};
+
+export const INITIAL_ANNOUNCEMENTS = [
+  {
+    id: 'post-1',
+    author: 'Faculty Coordinator',
+    authorRole: 'Faculty',
+    handle: '@faculty_aids',
+    department: 'Dept. of AI & Data Science',
+    verified: true,
+    verifiedType: 'gold',
+    avatarChar: 'F',
+    avatarBg: '#8e24aa',
+    branch: 'AI&DS',
+    category: 'Academic',
+    time: '2h',
+    timestamp: Date.now() - 7200000,
+    text: 'Final Year Project Phase-1 Synopsis Submission & Review Schedule: All 7th & 5th semester AI&DS student batches must upload their project proposals along with literature review matrices before Monday 5:00 PM.',
+    linkUrl: 'https://vtu.ac.in',
+    replies: 14,
+    reposts: 28,
+    likes: 86,
+    views: '1.2K',
+    isLiked: false,
+    isBookmarked: true
+  },
+  {
+    id: 'post-2',
+    author: 'Campus Events Office',
+    authorRole: 'Event Coordinator',
+    handle: '@campus_events',
+    department: 'Dept. of AI & Data Science',
+    verified: true,
+    verifiedType: 'blue',
+    avatarChar: 'E',
+    avatarBg: '#00897b',
+    branch: 'AI&DS',
+    category: 'Hackathon',
+    time: '4h',
+    timestamp: Date.now() - 14400000,
+    text: 'DevHacks 2026: 24-Hour AI & Edge Intelligence Hackathon. Cash prize pool worth INR 50,000 with industry internship opportunities. Internal event with digital QR attendance tracking at entry and exit.',
+    media: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
+    replies: 32,
+    reposts: 74,
+    likes: 210,
+    views: '3.4K',
+    isLiked: true,
+    isBookmarked: false
+  },
+  {
+    id: 'post-3',
+    author: 'Campus Admin',
+    authorRole: 'Administrator',
+    handle: '@campus_admin',
+    department: 'Campus Administration',
+    verified: true,
+    verifiedType: 'gold',
+    avatarChar: 'A',
+    avatarBg: '#e65100',
+    branch: 'ALL',
+    category: 'Exam',
+    time: '8h',
+    timestamp: Date.now() - 28800000,
+    text: 'Semester End Theory Examination Timetable announced for B.E. 3rd, 5th, and 7th semesters. Check the Examination section on the college ERP for lab examination batch allocations and hall ticket issuance requirements.',
+    media: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80',
+    replies: 9,
+    reposts: 112,
+    likes: 178,
+    views: '4.8K',
+    isLiked: false,
+    isBookmarked: false
+  },
+  {
+    id: 'post-4',
+    author: 'Training & Placement Cell',
+    authorRole: 'Placement Coordinator',
+    handle: '@placement_cell',
+    department: 'T&P Department',
+    verified: true,
+    verifiedType: 'gold',
+    avatarChar: 'P',
+    avatarBg: '#1565c0',
+    branch: 'ALL',
+    category: 'Placement',
+    time: '1d',
+    timestamp: Date.now() - 86400000,
+    text: 'Campus Placement Drive: Bosch & Infosys on-campus pool drives for 2026 graduating batches (AI&DS, CS, and EC). Eligible students must update their verified resume profiles and ensure minimum 7.0 CGPA criteria by Wednesday.',
+    media: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80',
+    replies: 19,
+    reposts: 63,
+    likes: 195,
+    views: '2.9K',
+    isLiked: false,
+    isBookmarked: false
+  },
+  {
+    id: 'post-5',
+    author: 'Robotics & IoT Club',
+    authorRole: 'Club Coordinator',
+    handle: '@robotics_club',
+    department: 'Dept. of Electronics & Comm.',
+    verified: true,
+    verifiedType: 'blue',
+    avatarChar: 'R',
+    avatarBg: '#2e7d32',
+    branch: 'EC',
+    category: 'Workshop',
+    time: '1d',
+    timestamp: Date.now() - 95000000,
+    text: 'Hands-on Bootcamp on Embedded Robotics and ARM Cortex Microcontrollers this Saturday in IoT Lab 3. Hardware component kits and development boards will be provided to all registered student teams.',
+    replies: 6,
+    reposts: 18,
+    likes: 72,
+    views: '1.1K',
+    isLiked: false,
+    isBookmarked: false
+  },
+  {
+    id: 'post-6',
+    author: 'CSE Department HOD',
+    authorRole: 'Faculty',
+    handle: '@cse_dept',
+    department: 'Dept. of Computer Science & Engg.',
+    verified: true,
+    verifiedType: 'gold',
+    avatarChar: 'C',
+    avatarBg: '#00ba7c',
+    branch: 'CS',
+    category: 'Workshop',
+    time: '1d',
+    timestamp: Date.now() - 105000000,
+    text: 's/CS Deep Dive: Cloud Native Infrastructure & Kubernetes Architecture workshop with industry architects this Friday. All 5th and 7th semester students are requested to complete Docker pre-requisites.',
+    replies: 11,
+    reposts: 34,
+    likes: 142,
+    views: '2.1K',
+    isLiked: false,
+    isBookmarked: false
+  },
+  {
+    id: 'post-7',
+    author: 'AI Research Lab',
+    authorRole: 'Faculty',
+    handle: '@aiml_research',
+    department: 'Dept. of AI & Machine Learning',
+    verified: true,
+    verifiedType: 'blue',
+    avatarChar: 'M',
+    avatarBg: '#f91880',
+    branch: 'AI-ML',
+    category: 'Club',
+    time: '2d',
+    timestamp: Date.now() - 172800000,
+    text: 's/AIML Research Circle: Weekly paper reading group on Diffusion Models and Reinforcement Learning from Human Feedback (RLHF). Meets every Thursday at 4:30 PM in Turing Lab.',
+    replies: 8,
+    reposts: 26,
+    likes: 98,
+    views: '1.8K',
+    isLiked: false,
+    isBookmarked: true
+  },
+  {
+    id: 'post-8',
+    author: 'Mech Design Center',
+    authorRole: 'Faculty',
+    handle: '@mech_cad',
+    department: 'Dept. of Mechanical Engineering',
+    verified: true,
+    verifiedType: 'blue',
+    avatarChar: 'M',
+    avatarBg: '#ff7a00',
+    branch: 'MECH',
+    category: 'Academic',
+    time: '3d',
+    timestamp: Date.now() - 259200000,
+    text: 's/MECH Certification: Industrial SolidWorks 3D Modeling and FEA Stress Analysis certification batches starting next week. Registration open at the Department CAD Center.',
+    replies: 4,
+    reposts: 15,
+    likes: 64,
+    views: '950',
+    isLiked: false,
+    isBookmarked: false
+  }
+];
+
+export const INITIAL_EVENTS = [
+  {
+    id: 'evt-1',
+    type: 'internal',
+    title: 'DevHacks 2026: 24-Hour AI & Edge Hackathon',
+    organizer: 'Dept. of AI&DS & Campus Events',
+    date: 'Oct 28, 2026',
+    time: '09:00 AM - 09:00 AM (Next Day)',
+    venue: 'Central Computing Lab, Main Block',
+    poster: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+    deadline: 'Oct 26, 2026 11:59 PM',
+    description: 'Build innovative agentic workflows, autonomous copilots, and intelligent applications. Mentorship by industry engineers. Food and refreshments provided.',
+    maxCapacity: 120,
+    registeredCount: 86,
+    isRegistered: true,
+    qrPayload: 'EVENT_DEVHACKS_2026',
+    attendance: [
+      { usn: 'USN202601', name: 'Student', checkIn: '09:12 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: 'USN202602', name: 'Student 2', checkIn: '08:58 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: 'USN202603', name: 'Student 3', checkIn: '09:05 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: 'USN202604', name: 'Student 4', checkIn: '09:01 AM', checkOut: 'In Progress', status: 'Checked In' }
+    ]
+  },
+  {
+    id: 'evt-2',
+    type: 'internal',
+    title: 'Workshop on Production Deep Learning & Model Serving',
+    organizer: 'Faculty Coordinator & AI&DS Faculty',
+    date: 'Nov 04, 2026',
+    time: '02:00 PM - 05:00 PM',
+    venue: 'Seminar Hall 2, Dept. of AI&DS',
+    poster: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80',
+    deadline: 'Nov 02, 2026 05:00 PM',
+    description: 'Hands-on model deployment using FastAPI, ONNX Runtime, and containerization. Bring laptops with Python 3.10+ installed.',
+    maxCapacity: 60,
+    registeredCount: 48,
+    isRegistered: false,
+    qrPayload: 'EVENT_DEEPLEARNING_WORKSHOP_2026',
+    attendance: []
+  },
+  {
+    id: 'evt-3',
+    type: 'internal',
+    title: 'Varnothsava 2027: Annual Fest Technical Inauguration',
+    organizer: 'Student Welfare Office',
+    date: 'Nov 12, 2026',
+    time: '10:00 AM - 04:30 PM',
+    venue: 'College Open Air Auditorium',
+    poster: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80',
+    deadline: 'Nov 10, 2026 12:00 PM',
+    description: 'Annual intra-college cultural and technical showcase with code sprint, robotic obstacle courses, and project exhibitions.',
+    maxCapacity: 500,
+    registeredCount: 340,
+    isRegistered: false,
+    qrPayload: 'EVENT_VARNOTHSAVA_INAUGURATION_2026',
+    attendance: []
+  },
+  {
+    id: 'evt-4',
+    type: 'external',
+    title: 'Smart India Hackathon (SIH) 2026 - College Teams Nomination',
+    organizer: 'Ministry of Education Innovation Cell (MIC)',
+    date: 'Nov 18, 2026',
+    time: 'Online / Multi-center',
+    venue: 'National Level Finals',
+    poster: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80',
+    deadline: 'Oct 30, 2026',
+    link: 'https://sih.gov.in',
+    description: 'National level hackathon for college teams solving real-world challenges for ministries and public sector departments.',
+    isRegistered: false
+  },
+  {
+    id: 'evt-5',
+    type: 'external',
+    title: 'IEEE Mangalore Subsection Student Paper Conference',
+    organizer: 'IEEE Mangalore Subsection',
+    date: 'Dec 05, 2026',
+    time: '09:30 AM - 05:00 PM',
+    venue: 'NITK Surathkal',
+    poster: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
+    deadline: 'Nov 15, 2026',
+    link: 'https://ieee-mangalore.org',
+    description: 'Call for research papers across AI, Computer Vision, and IoT. Accepted peer-reviewed papers will be published in IEEE Xplore.',
+    isRegistered: false
+  }
+];
+
+export const INITIAL_WEBSITES = [
+  {
+    id: 'web-1',
+    name: 'Campus Cloud Printing Service',
+    category: 'Student Utilities',
+    description: 'Upload documents from phone or laptop directly to the college reprography centre. Check daily free page quota and queue status.',
+    url: 'https://smvitm.ac.in/printing',
+    badge: 'Campus Service',
+    iconType: 'printer'
+  },
+  {
+    id: 'web-2',
+    name: 'Student ERP & Attendance Portal',
+    category: 'Academic',
+    description: 'Subject-wise attendance tracking, continuous internal evaluation (CIE) scores, and updated class timetables.',
+    url: 'https://erp.smvitm.ac.in',
+    badge: 'Academic ERP',
+    iconType: 'database'
+  },
+  {
+    id: 'web-3',
+    name: 'VTU Exam Results & University Circulars',
+    category: 'University',
+    description: 'Official Visvesvaraya Technological University circulars, academic calendar, syllabus schemes, and semester grade cards.',
+    url: 'https://vtu.ac.in',
+    badge: 'University Portal',
+    iconType: 'external'
+  },
+  {
+    id: 'web-4',
+    name: 'Digital Central Library (DELNET & IEEE)',
+    category: 'Academic',
+    description: 'Access 10,000+ technical journals, e-books, previous VTU examination question papers, and reserve library titles.',
+    url: 'https://smvitm.ac.in/library',
+    badge: 'Library Portal',
+    iconType: 'book'
+  },
+  {
+    id: 'web-5',
+    name: 'NSS & Community Volunteering Hub',
+    category: 'Volunteering',
+    description: 'Student volunteering hours logging, blood donation camp registrations, environmental drives, and certificate downloads.',
+    url: 'https://smvitm.ac.in/nss',
+    badge: 'Volunteering',
+    iconType: 'users'
+  },
+  {
+    id: 'web-6',
+    name: 'Training & Placement Office (T&P)',
+    category: 'Career',
+    description: 'Campus hiring drives, placement test preparation material, mock interviews, and technical internship announcements.',
+    url: 'https://smvitm.ac.in/placements',
+    badge: 'Career & Placement',
+    iconType: 'briefcase'
+  }
+];
+
+export const INITIAL_NOTIFICATIONS = [
+  {
+    id: 'notif-1',
+    type: 'notice',
+    title: 'New Notice for AI&DS',
+    body: 'Faculty Coordinator posted: Final Year Project Phase-1 Synopsis Submission Schedule.',
+    time: '2h ago',
+    unread: true
+  },
+  {
+    id: 'notif-2',
+    type: 'event',
+    title: 'Event Registration Reminder',
+    body: 'DevHacks 2026 registration deadline is approaching on Oct 26, 2026.',
+    time: '4h ago',
+    unread: true
+  },
+  {
+    id: 'notif-3',
+    type: 'attendance',
+    title: 'Attendance Recorded',
+    body: 'QR Check-In confirmed for Student (USN202601) at DevHacks 2026 entry.',
+    time: '1d ago',
+    unread: false
+  }
+];
