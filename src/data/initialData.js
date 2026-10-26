@@ -430,19 +430,19 @@ export const INITIAL_WEBSITES = [
   },
   {
     id: 'web-5',
-    name: 'NSS & Community Volunteering Hub',
+    name: 'ASV PORTAL',
     category: 'Volunteering',
     description: 'Student volunteering hours logging, blood donation camp registrations, environmental drives, and certificate downloads.',
-    url: 'https://smvitm.ac.in/nss',
+    url: 'https://asv.sode-edu.in/login',
     badge: 'Volunteering',
     iconType: 'users'
   },
   {
     id: 'web-6',
-    name: 'Training & Placement Office (T&P)',
+    name: 'Menntr Portal',
     category: 'Career',
     description: 'Campus hiring drives, placement test preparation material, mock interviews, and technical internship announcements.',
-    url: 'https://smvitm.ac.in/placements',
+    url: 'https://menntr.in/',
     badge: 'Career & Placement',
     iconType: 'briefcase'
   },

@@ -129,10 +129,10 @@ export default function App() {
 
   const [websites, setWebsites] = useState(() => {
     try {
+      const savedV5 = localStorage.getItem('college_hub_websites_v5');
+      if (savedV5) return JSON.parse(savedV5);
       const savedV4 = localStorage.getItem('college_hub_websites_v4');
-      if (savedV4) return JSON.parse(savedV4);
-      const savedV3 = localStorage.getItem('college_hub_websites_v3');
-      if (savedV3 && savedV3.includes('SMVITM EDMIN PORTAL')) return JSON.parse(savedV3);
+      if (savedV4 && savedV4.includes('Menntr') && savedV4.includes('ASV')) return JSON.parse(savedV4);
       return INITIAL_WEBSITES;
     } catch {
       return INITIAL_WEBSITES;
@@ -236,7 +236,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_websites_v4', JSON.stringify(websites));
+      localStorage.setItem('college_hub_websites_v5', JSON.stringify(websites));
     } catch {}
   }, [websites]);
 
