@@ -4,6 +4,7 @@ import {
   INITIAL_EVENTS,
   INITIAL_WEBSITES,
   INITIAL_NOTIFICATIONS,
+  PORTAL_LOGOS,
   USERS
 } from '../data/initialData';
 
@@ -125,7 +126,8 @@ function mapWebsiteFromDB(row) {
     description: row.description,
     url: row.url,
     badge: row.badge || row.category,
-    iconType: row.icon_type || row.iconType || 'external'
+    iconType: row.icon_type || row.iconType || 'external',
+    logo: row.logo || PORTAL_LOGOS[row.id] || null
   };
 }
 
@@ -415,7 +417,7 @@ export async function fetchWebsites() {
   } catch (err) {
     console.info('[Supabase:fetchWebsites fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_websites_v7') || localStorage.getItem('college_hub_websites_v6');
+      const saved = localStorage.getItem('college_hub_websites_v8') || localStorage.getItem('college_hub_websites_v7');
       if (saved) return JSON.parse(saved);
     } catch {}
     return INITIAL_WEBSITES;

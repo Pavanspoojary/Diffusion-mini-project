@@ -17,6 +17,26 @@ import {
   IconNotifications,
   VerifiedBadge
 } from './Icons';
+import { PORTAL_LOGOS } from '../data/initialData';
+
+function PortalLogoIcon({ site, getSiteIcon }) {
+  const [hasError, setHasError] = useState(false);
+  const logo = site.logo || (PORTAL_LOGOS && PORTAL_LOGOS[site.id]);
+
+  if (logo && !hasError) {
+    return (
+      <img
+        src={logo}
+        alt=""
+        className="web-card-logo-img"
+        loading="lazy"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return getSiteIcon(site.iconType);
+}
 
 function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
   const [open, setOpen] = useState(false);
@@ -382,7 +402,7 @@ export default function WebsitesView({
                       borderColor: colors.border
                     }}
                   >
-                    {getSiteIcon(site.iconType)}
+                    <PortalLogoIcon site={site} getSiteIcon={getSiteIcon} />
                   </div>
 
                   {/* Main Information */}
