@@ -436,7 +436,17 @@ export default function AnnouncementFeed({
                       <span className="post-timestamp">{item.time}</span>
                     </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                      <span className="category-badge">{item.category}</span>
+                      <button
+                        type="button"
+                        className={`category-badge cat-${(item.category || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (setActiveCategory) setActiveCategory(item.category);
+                        }}
+                        title={`Filter notices by ${item.category}`}
+                      >
+                        {item.category}
+                      </button>
                       <button
                         type="button"
                         className="reddit-sub-badge"

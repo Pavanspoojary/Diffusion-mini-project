@@ -2187,13 +2187,126 @@ html[data-theme="light"] .post-important-badge {
 }
 
 .category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background-color: var(--card-bg);
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
   font-size: 11px;
-  font-weight: 600;
-  padding: 1px 8px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 2px 8px;
   border-radius: 9999px;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.category-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+.category-badge:hover {
+  filter: brightness(1.15);
+  transform: translateY(-0.5px);
+}
+
+/* Academic - Sky Blue */
+.category-badge.cat-academic {
+  background-color: rgba(29, 155, 240, 0.14);
+  border-color: rgba(29, 155, 240, 0.4);
+  color: #38bdf8;
+}
+html[data-theme="light"] .category-badge.cat-academic {
+  background-color: #e0f2fe;
+  border-color: #bae6fd;
+  color: #0284c7;
+}
+
+/* Exam - Amber / Golden Orange */
+.category-badge.cat-exam {
+  background-color: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #fbbf24;
+}
+html[data-theme="light"] .category-badge.cat-exam {
+  background-color: #fef3c7;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+/* Club - Royal Purple */
+.category-badge.cat-club {
+  background-color: rgba(168, 85, 247, 0.16);
+  border-color: rgba(168, 85, 247, 0.45);
+  color: #c084fc;
+}
+html[data-theme="light"] .category-badge.cat-club {
+  background-color: #f3e8ff;
+  border-color: #e9d5ff;
+  color: #7e22ce;
+}
+
+/* Workshop - Cyan Teal */
+.category-badge.cat-workshop {
+  background-color: rgba(20, 184, 166, 0.16);
+  border-color: rgba(20, 184, 166, 0.45);
+  color: #2dd4bf;
+}
+html[data-theme="light"] .category-badge.cat-workshop {
+  background-color: #ccfbf1;
+  border-color: #99f6e4;
+  color: #0f766e;
+}
+
+/* Hackathon - Vibrant Rose / Crimson */
+.category-badge.cat-hackathon {
+  background-color: rgba(244, 63, 94, 0.16);
+  border-color: rgba(244, 63, 94, 0.45);
+  color: #fb7185;
+}
+html[data-theme="light"] .category-badge.cat-hackathon {
+  background-color: #ffe4e6;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+/* Placement - Emerald Green */
+.category-badge.cat-placement {
+  background-color: rgba(0, 186, 124, 0.16);
+  border-color: rgba(0, 186, 124, 0.45);
+  color: #34d399;
+}
+html[data-theme="light"] .category-badge.cat-placement {
+  background-color: #d1fae5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+/* General / Fallback Categories */
+.category-badge.cat-general,
+.category-badge.cat-career,
+.category-badge.cat-university,
+.category-badge.cat-studentutilities {
+  background-color: rgba(99, 102, 241, 0.14);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #818cf8;
+}
+html[data-theme="light"] .category-badge.cat-general,
+html[data-theme="light"] .category-badge.cat-career,
+html[data-theme="light"] .category-badge.cat-university,
+html[data-theme="light"] .category-badge.cat-studentutilities {
+  background-color: #e0e7ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
 }
 
 .post-dot {
