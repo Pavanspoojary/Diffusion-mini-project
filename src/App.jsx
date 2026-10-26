@@ -202,12 +202,20 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Register PWA service worker
+  // Register PWA service worker with update check
   useEffect(() => {
+    // Reset any temporary chunk load retry flag once successfully mounted
+    sessionStorage.removeItem('chunk_load_failed');
+
     if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-      navigator.serviceWorker.register('/service-worker.js').catch((err) => {
-        console.info('Service Worker registration skipped:', err);
-      });
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .then((reg) => {
+          reg.update().catch(() => {});
+        })
+        .catch((err) => {
+          console.info('Service Worker registration skipped:', err);
+        });
     }
   }, []);
 
