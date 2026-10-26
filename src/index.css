@@ -515,6 +515,16 @@ html[data-theme="light"] .auth-hero-x-logo {
   pointer-events: none;
 }
 
+.sticky-header.community-sticky-header {
+  padding-top: 0 !important;
+  border-bottom: 1px solid var(--border-color);
+  transform: none !important;
+}
+
+.sticky-header.community-sticky-header .feed-filter-bar {
+  border-bottom: none;
+}
+
 .header-top-row {
   display: flex;
   align-items: center;

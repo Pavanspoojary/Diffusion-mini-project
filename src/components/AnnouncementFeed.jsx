@@ -280,14 +280,17 @@ export default function AnnouncementFeed({
           isJoined={joinedCommunities.includes(activeCommunity.id)}
           onToggleJoin={() => onToggleJoin && onToggleJoin(activeCommunity.id)}
           onCreatePost={canPublish ? () => onOpenCompose({ mode: 'text', branch: activeCommunity.id }) : null}
-          onBack={() => setActiveBranch('ALL')}
+          onBack={() => {
+            setActiveBranch('ALL');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }}
           sort={sort}
           setSort={setSort}
         />
       )}
 
       {/* Sticky Header */}
-      <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
+      <div className={`sticky-header ${!activeCommunity && isHeaderHidden ? 'header-hidden' : ''} ${activeCommunity ? 'community-sticky-header' : ''}`}>
         {!activeCommunity && (
           <div className="header-top-row">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
