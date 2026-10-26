@@ -436,37 +436,39 @@ export default function AnnouncementFeed({
                       <span className="post-dot">·</span>
                       <span className="post-timestamp">{item.time}</span>
                     </div>
-                    <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                      <button
-                        type="button"
-                        className={`category-badge cat-${(item.category || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (setActiveCategory) setActiveCategory(item.category);
-                        }}
-                        title={`Filter notices by ${item.category}`}
-                      >
-                        {item.category}
-                      </button>
-                      <button
-                        type="button"
-                        className="reddit-sub-badge"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (item.branch === 'ALL') {
-                            setActiveBranch('ALL');
-                          } else if (onOpenCommunity) {
-                            onOpenCommunity(item.branch);
-                          } else {
-                            setActiveBranch(item.branch);
-                          }
-                        }}
-                        title={`Filter by ${item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}`}
-                      >
-                        <CommunityAvatar id={item.branch} size={15} />
-                        <span>{item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}</span>
-                      </button>
-                    </div>
+                  </div>
+
+                  {/* Badges Row - Always placed below author line */}
+                  <div className="post-badges-row">
+                    <button
+                      type="button"
+                      className={`category-badge cat-${(item.category || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (setActiveCategory) setActiveCategory(item.category);
+                      }}
+                      title={`Filter notices by ${item.category}`}
+                    >
+                      {item.category}
+                    </button>
+                    <button
+                      type="button"
+                      className="reddit-sub-badge"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (item.branch === 'ALL') {
+                          setActiveBranch('ALL');
+                        } else if (onOpenCommunity) {
+                          onOpenCommunity(item.branch);
+                        } else {
+                          setActiveBranch(item.branch);
+                        }
+                      }}
+                      title={`Filter by ${item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}`}
+                    >
+                      <CommunityAvatar id={item.branch} size={15} />
+                      <span>{item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}</span>
+                    </button>
                   </div>
 
                   {item.articleTitle && (

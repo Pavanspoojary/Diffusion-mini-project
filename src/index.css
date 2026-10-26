@@ -2377,8 +2377,16 @@ html[data-theme="light"] .post-important-badge {
 .post-header-line {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+}
+
+.post-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .post-user-info {
