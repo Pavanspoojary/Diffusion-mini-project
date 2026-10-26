@@ -48,17 +48,6 @@ export default function EventsView({
                 <IconSidebarToggle style={{ width: 18, height: 18 }} />
               </button>
             )}
-            <button
-              type="button"
-              className="mobile-header-avatar-btn mobile-only"
-              onClick={() => onToggleSidebar && onToggleSidebar(true)}
-              title="Open profile & menu"
-              aria-label="Open profile & menu"
-            >
-              <span className="avatar avatar-sm" style={{ background: currentUser?.avatarBg || 'var(--card-bg)' }}>
-                <span>{currentUser?.avatarChar || 'U'}</span>
-              </span>
-            </button>
             <div className="header-title-block">
               <h1 className="header-main-title">College Events & Discovery</h1>
               <span className="header-sub-title">Internal QR Attendance & External Opportunities</span>

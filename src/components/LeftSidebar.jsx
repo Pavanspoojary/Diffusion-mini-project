@@ -94,14 +94,14 @@ export default function LeftSidebar({
 
             <button
               type="button"
-              className={`nav-item ${activeNav === 'notifications' ? 'active' : ''}`}
-              onClick={() => setActiveNav('notifications')}
+              className={`nav-item ${activeNav === 'profile' ? 'active' : ''}`}
+              onClick={() => setActiveNav('profile')}
             >
               <div className="nav-icon-wrap">
-                <IconNotifications className="nav-icon" />
+                <IconProfile className="nav-icon" />
                 {unreadCount > 0 && <span className="badge-dot" aria-hidden="true" />}
               </div>
-              <span className="nav-label">Notifications</span>
+              <span className="nav-label">Profile</span>
             </button>
 
             <button

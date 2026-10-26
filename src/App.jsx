@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import AnnouncementFeed from './components/AnnouncementFeed';
 import EventsView from './components/EventsView';
 import WebsitesView from './components/WebsitesView';
-import NotificationsView from './components/NotificationsView';
+import ProfileView from './components/ProfileView';
 import ComposeModal from './components/ComposeModal';
 import CreateEventModal from './components/CreateEventModal';
 import DisplayModal from './components/DisplayModal';
 import LightboxModal from './components/LightboxModal';
 import QRAttendanceModal from './components/QRAttendanceModal';
-import MobileDrawer from './components/MobileDrawer';
 import AuthPage from './components/AuthPage';
 import Toast from './components/Toast';
 import {
@@ -18,7 +17,8 @@ import {
   IconEvents,
   IconWebsites,
   IconNotifications,
-  IconBookmarks
+  IconBookmarks,
+  IconProfile
 } from './components/Icons';
 import {
   USERS,
@@ -217,6 +217,39 @@ export default function App() {
           console.info('Service Worker registration skipped:', err);
         });
     }
+  }, []);
+
+  // Auto-hide mobile dock on scroll down (swipe up), show on scroll up (swipe down)
+  const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
+  const lastScrollYRef = useRef(0);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          const diff = currentScrollY - lastScrollYRef.current;
+
+          if (currentScrollY <= 60) {
+            setIsBottomNavHidden(false);
+          } else if (diff > 8) {
+            // Scrolling down feed (swiping up) -> auto hide dock
+            setIsBottomNavHidden(true);
+          } else if (diff < -8) {
+            // Scrolling up feed (swiping down) -> show dock
+            setIsBottomNavHidden(false);
+          }
+
+          lastScrollYRef.current = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Toast Helper
@@ -560,13 +593,19 @@ export default function App() {
           />
         )}
 
-        {activeNav === 'notifications' && (
-          <NotificationsView
+        {(activeNav === 'profile' || activeNav === 'notifications') && (
+          <ProfileView
+            currentUser={currentUser}
+            users={USERS}
+            onSwitchUser={handleSwitchUser}
             notifications={notifications}
             onMarkAllRead={handleMarkAllRead}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
-            currentUser={currentUser}
+            onSelectNav={(nav) => setActiveNav(nav)}
+            onOpenDisplay={() => setIsDisplayOpen(true)}
+            onOpenCommunity={openCommunity}
+            onLogout={handleLogout}
           />
         )}
 
@@ -615,7 +654,10 @@ export default function App() {
       />
 
       {/* MOBILE BOTTOM NAVIGATION BAR */}
-      <nav className="mobile-bottom-nav" aria-label="Mobile Navigation">
+      <nav
+        className={`mobile-bottom-nav ${isBottomNavHidden ? 'nav-hidden' : ''}`}
+        aria-label="Mobile Navigation"
+      >
         <button
           type="button"
           className={`mobile-nav-item ${activeNav === 'announcements' ? 'active' : ''}`}
@@ -654,12 +696,12 @@ export default function App() {
 
         <button
           type="button"
-          className={`mobile-nav-item ${activeNav === 'notifications' ? 'active' : ''}`}
-          onClick={() => setActiveNav('notifications')}
-          aria-label="Notifications"
+          className={`mobile-nav-item ${activeNav === 'profile' || activeNav === 'notifications' ? 'active' : ''}`}
+          onClick={() => setActiveNav('profile')}
+          aria-label="Profile"
         >
           <div style={{ position: 'relative' }}>
-            <IconNotifications className="mobile-nav-icon" />
+            <IconProfile className="mobile-nav-icon" />
             {unreadCount > 0 && <span className="badge-dot" style={{ top: -2, right: -2 }} />}
           </div>
         </button>
@@ -668,7 +710,7 @@ export default function App() {
       {/* MOBILE FLOATING ACTION BUTTON (POST) */}
       <button
         type="button"
-        className="mobile-fab-btn"
+        className={`mobile-fab-btn ${isBottomNavHidden ? 'nav-hidden' : ''}`}
         onClick={() => {
           if (currentUser.roleKey === 'coordinator') {
             setIsCreateEventOpen(true);
@@ -721,23 +763,6 @@ export default function App() {
         currentUser={currentUser}
         mode={qrModal.mode}
         onRecordAttendance={handleRecordAttendance}
-      />
-
-      {/* MOBILE ACCOUNT DRAWER */}
-      <MobileDrawer
-        isOpen={isMobileDrawerOpen}
-        onClose={() => setIsMobileDrawerOpen(false)}
-        currentUser={currentUser}
-        users={USERS}
-        onSwitchUser={handleSwitchUser}
-        onOpenDisplay={() => setIsDisplayOpen(true)}
-        onSelectNav={(nav) => {
-          setActiveNav(nav);
-          setIsMobileDrawerOpen(false);
-        }}
-        activeBranch={activeBranch}
-        onOpenCommunity={openCommunity}
-        onLogout={handleLogout}
       />
 
       {/* FLOATING TOAST NOTIFICATION */}
