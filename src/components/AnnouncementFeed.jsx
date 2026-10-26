@@ -260,10 +260,10 @@ export default function AnnouncementFeed({
       return (b.timestamp || 0) - (a.timestamp || 0);
     }
     if (sort === 'Top') {
-      return (b.likes || 0) - (a.likes || 0);
+      return (b.reposts || 0) - (a.reposts || 0);
     }
-    // Best: engagement score with a freshness boost
-    const score = (p) => (p.likes || 0) * 2 + (p.reposts || 0) * 3 + (p.replies || 0);
+    // Best: engagement score with reposts & replies
+    const score = (p) => (p.reposts || 0) * 3 + (p.replies || 0) * 2;
     return score(b) - score(a);
   });
 
@@ -524,48 +524,40 @@ export default function AnnouncementFeed({
                   </div>
                 ) : null}
 
-                {/* Post action bar: Like, Bookmark, Share */}
+                {/* Post action bar: Bookmark, Share */}
                 <div className="post-actions-row">
                   <button
                     type="button"
-                    className={`x-action-btn x-like ${item.isLiked ? 'liked' : ''}`}
-                    onClick={(e) => { e.stopPropagation(); onLike(item.id); }}
-                    aria-label={item.isLiked ? 'Unlike' : 'Like'}
+                    className={`x-action-btn x-bookmark ${item.isBookmarked ? 'bookmarked' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); onBookmark(item.id); }}
+                    aria-label={item.isBookmarked ? 'Remove bookmark' : 'Bookmark'}
+                    title={item.isBookmarked ? 'Remove bookmark' : 'Bookmark notice'}
                   >
-                    <span className="x-action-icon-wrap"><IconHeart filled={item.isLiked} /></span>
-                    <span className="x-action-count">{formatCount(item.likes)}</span>
+                    <span className="x-action-icon-wrap"><IconBookmarkAction filled={item.isBookmarked} /></span>
+                    <span className="x-action-count">{item.isBookmarked ? 'Saved' : 'Save'}</span>
                   </button>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: 'auto' }}>
+                  <div style={{ position: 'relative' }}>
                     <button
                       type="button"
-                      className={`x-action-btn x-bookmark ${item.isBookmarked ? 'bookmarked' : ''}`}
-                      onClick={(e) => { e.stopPropagation(); onBookmark(item.id); }}
-                      aria-label={item.isBookmarked ? 'Remove bookmark' : 'Bookmark'}
+                      className={`x-action-btn x-share ${activeShareId === item.id ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveShareId((prev) => (prev === item.id ? null : item.id));
+                      }}
+                      aria-label="Share notice"
+                      aria-expanded={activeShareId === item.id}
+                      title="Share notice"
                     >
-                      <span className="x-action-icon-wrap"><IconBookmarkAction filled={item.isBookmarked} /></span>
+                      <span className="x-action-icon-wrap"><IconShare /></span>
+                      <span className="x-action-count">Share</span>
                     </button>
 
-                    <div style={{ position: 'relative' }}>
-                      <button
-                        type="button"
-                        className={`x-action-btn x-share ${activeShareId === item.id ? 'active' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveShareId((prev) => (prev === item.id ? null : item.id));
-                        }}
-                        aria-label="Share notice"
-                        aria-expanded={activeShareId === item.id}
-                      >
-                        <span className="x-action-icon-wrap"><IconShare /></span>
-                      </button>
-
-                      <PostShareMenu
-                        item={item}
-                        isOpen={activeShareId === item.id}
-                        onClose={() => setActiveShareId(null)}
-                      />
-                    </div>
+                    <PostShareMenu
+                      item={item}
+                      isOpen={activeShareId === item.id}
+                      onClose={() => setActiveShareId(null)}
+                    />
                   </div>
                 </div>
               </div>

@@ -2478,16 +2478,16 @@ html[data-theme="light"] .category-badge.cat-workshop {
   color: #0f766e;
 }
 
-/* Hackathon - Vibrant Rose / Crimson */
+/* Hackathon - Electric Lime (Distinct from Red Alerts & Blue Communities) */
 .category-badge.cat-hackathon {
-  background-color: rgba(244, 63, 94, 0.16);
-  border-color: rgba(244, 63, 94, 0.45);
-  color: #fb7185;
+  background-color: rgba(163, 230, 53, 0.16);
+  border-color: rgba(163, 230, 53, 0.45);
+  color: #a3e635;
 }
 html[data-theme="light"] .category-badge.cat-hackathon {
-  background-color: #ffe4e6;
-  border-color: #fecdd3;
-  color: #be123c;
+  background-color: #ecfccb;
+  border-color: #d9f99d;
+  color: #4d7c0f;
 }
 
 /* Placement - Emerald Green */
@@ -2666,7 +2666,7 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   align-items: center;
   margin-top: 12px;
   margin-left: -8px;
-  gap: 0;
+  gap: 12px;
 }
 
 .x-action-btn {
