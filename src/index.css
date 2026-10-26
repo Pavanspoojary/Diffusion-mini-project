@@ -2573,16 +2573,16 @@ html[data-theme="light"] .category-badge.cat-club {
   color: #7e22ce;
 }
 
-/* Workshop - Cyan Teal */
+/* Workshop - Electric Magenta / Hot Pink (Distinct from all other tags) */
 .category-badge.cat-workshop {
-  background-color: rgba(20, 184, 166, 0.16);
-  border-color: rgba(20, 184, 166, 0.45);
-  color: #2dd4bf;
+  background-color: rgba(249, 24, 128, 0.16);
+  border-color: rgba(249, 24, 128, 0.45);
+  color: #ff60a8;
 }
 html[data-theme="light"] .category-badge.cat-workshop {
-  background-color: #ccfbf1;
-  border-color: #99f6e4;
-  color: #0f766e;
+  background-color: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #db2777;
 }
 
 /* Hackathon - Electric Lime (Distinct from Red Alerts & Blue Communities) */
