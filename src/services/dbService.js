@@ -277,6 +277,20 @@ export async function toggleNoticeBookmark(noticeId, currentUserId, currentIsBoo
   }
 }
 
+export async function toggleNoticePin(noticeId, nextPinned) {
+  try {
+    const { error } = await supabase
+      .from('announcements')
+      .update({ is_important: nextPinned })
+      .eq('id', noticeId);
+    if (error) throw error;
+    return { isImportant: nextPinned };
+  } catch (err) {
+    console.warn('[Supabase:toggleNoticePin fallback]', err.message);
+    return { isImportant: nextPinned };
+  }
+}
+
 // --- Events API ---
 
 export async function fetchEvents(currentUserId = 'user-student') {

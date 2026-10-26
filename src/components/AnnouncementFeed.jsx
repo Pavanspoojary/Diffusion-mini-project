@@ -14,7 +14,8 @@ import {
   IconArrowLeft,
   IconCopy,
   IconWhatsApp,
-  IconArticle
+  IconArticle,
+  IconPin
 } from './Icons';
 import LinkedInComposer from './LinkedInComposer';
 import CommunityHeader from './CommunityHeader';
@@ -205,9 +206,11 @@ export default function AnnouncementFeed({
   onOpenCommunity,
   unreadCount = 0,
   onOpenNotifications,
-  isHeaderHidden = false
+  isHeaderHidden = false,
+  onTogglePin
 }) {
   const canPublish = currentUser.roleKey !== 'student';
+  const canManagePin = currentUser?.roleKey !== 'student';
   const [sort, setSort] = useState('Best');
   const [activeShareId, setActiveShareId] = useState(null);
 
@@ -526,8 +529,26 @@ export default function AnnouncementFeed({
                   </div>
                 ) : null}
 
-                {/* Post action bar: Bookmark, Share */}
+                {/* Post action bar: Pin (Staff only), Bookmark, Share */}
                 <div className="post-actions-row">
+                  {canManagePin && onTogglePin && (
+                    <button
+                      type="button"
+                      className={`x-action-btn x-pin ${isItemImportant ? 'pinned' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onTogglePin(item.id);
+                      }}
+                      aria-label={isItemImportant ? 'Unpin notice' : 'Pin notice'}
+                      title={isItemImportant ? 'Unpin from feed top' : 'Pin notice to top'}
+                    >
+                      <span className="x-action-icon-wrap">
+                        <IconPin filled={isItemImportant} />
+                      </span>
+                      <span className="x-action-count">{isItemImportant ? 'Pinned' : 'Pin'}</span>
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     className={`x-action-btn x-bookmark ${item.isBookmarked ? 'bookmarked' : ''}`}

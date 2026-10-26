@@ -33,6 +33,7 @@ import {
   createAnnouncement,
   toggleNoticeLike,
   toggleNoticeBookmark,
+  toggleNoticePin,
   fetchEvents,
   createEvent,
   toggleEventRegistration,
@@ -386,6 +387,27 @@ export default function App() {
     await toggleNoticeBookmark(id, currentUser.id, wasBookmarked);
   };
 
+  const handleTogglePin = async (noticeId) => {
+    if (currentUser.roleKey === 'student') return;
+    const target = announcements.find((item) => item.id === noticeId);
+    const nextPinned = target ? !(target.isImportant || target.important || target.tag === 'Important') : true;
+
+    setAnnouncements((prev) =>
+      prev.map((item) => {
+        if (item.id === noticeId) {
+          showToast(nextPinned ? 'Notice pinned to top of feed' : 'Notice unpinned');
+          return {
+            ...item,
+            isImportant: nextPinned
+          };
+        }
+        return item;
+      })
+    );
+
+    await toggleNoticePin(noticeId, nextPinned);
+  };
+
   const handleShare = (item) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(`${window.location.origin}/#notice-${item.id}`)
@@ -686,6 +708,7 @@ export default function App() {
             unreadCount={unreadCount}
             onOpenNotifications={() => setActiveNav('notifications')}
             isHeaderHidden={isHeaderHidden}
+            onTogglePin={handleTogglePin}
           />
         )}
 
@@ -768,6 +791,7 @@ export default function App() {
             onToggleJoin={handleToggleJoin}
             onOpenCommunity={openCommunity}
             isHeaderHidden={isHeaderHidden}
+            onTogglePin={handleTogglePin}
           />
         )}
       </main>

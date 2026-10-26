@@ -2733,6 +2733,29 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 .x-bookmark.bookmarked { color: var(--accent-color); }
 .x-bookmark.bookmarked .x-action-icon-wrap { background-color: var(--accent-subtle); }
 
+/* Pin: gold/amber when active or hover */
+.x-action-btn.x-pin:hover { color: #d97706; }
+.x-action-btn.x-pin:hover .x-action-icon-wrap { background-color: rgba(217, 119, 6, 0.1); }
+.x-action-btn.x-pin.pinned { color: #d97706; font-weight: 600; }
+.x-action-btn.x-pin.pinned .x-action-icon-wrap { background-color: rgba(217, 119, 6, 0.15); }
+
+[data-theme="dark"] .x-action-btn.x-pin:hover,
+[data-theme="dim"] .x-action-btn.x-pin:hover {
+  color: #ffd400;
+}
+[data-theme="dark"] .x-action-btn.x-pin:hover .x-action-icon-wrap,
+[data-theme="dim"] .x-action-btn.x-pin:hover .x-action-icon-wrap {
+  background-color: rgba(255, 212, 0, 0.1);
+}
+[data-theme="dark"] .x-action-btn.x-pin.pinned,
+[data-theme="dim"] .x-action-btn.x-pin.pinned {
+  color: #ffd400;
+}
+[data-theme="dark"] .x-action-btn.x-pin.pinned .x-action-icon-wrap,
+[data-theme="dim"] .x-action-btn.x-pin.pinned .x-action-icon-wrap {
+  background-color: rgba(255, 212, 0, 0.15);
+}
+
 /* Share */
 .x-share:hover { color: var(--accent-color); }
 .x-share:hover .x-action-icon-wrap { background-color: var(--accent-subtle); }
