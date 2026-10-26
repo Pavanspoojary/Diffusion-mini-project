@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   IconHeart,
-  IconRepost,
-  IconReply,
   IconBookmarkAction,
   IconShare,
   IconSidebarToggle,
@@ -473,26 +471,8 @@ export default function AnnouncementFeed({
                   </div>
                 ) : null}
 
-                {/* X.com-style action bar */}
+                {/* Post action bar: Like, Bookmark, Share */}
                 <div className="post-actions-row">
-                  <button
-                    type="button"
-                    className="x-action-btn x-reply"
-                    aria-label="Replies"
-                  >
-                    <span className="x-action-icon-wrap"><IconReply /></span>
-                    <span className="x-action-count">{formatCount(item.replies)}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="x-action-btn x-repost"
-                    aria-label="Reposts"
-                  >
-                    <span className="x-action-icon-wrap"><IconRepost /></span>
-                    <span className="x-action-count">{formatCount(item.reposts)}</span>
-                  </button>
-
                   <button
                     type="button"
                     className={`x-action-btn x-like ${item.isLiked ? 'liked' : ''}`}
