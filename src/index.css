@@ -868,30 +868,86 @@ html[data-theme="light"] .auth-hero-x-logo {
 }
 
 .community-hero-banner {
-  height: 96px;
+  height: 130px;
   width: 100%;
-  opacity: 0.9;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.community-hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.65) 100%),
+    radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.community-hero-banner-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.community-hero-banner-tag {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  z-index: 2;
+}
+
+.community-hero-banner-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #00ba7c;
 }
 
 .community-hero-top {
   display: flex;
   align-items: flex-end;
-  gap: 14px;
-  padding: 0 16px 12px;
+  gap: 16px;
+  padding: 0 16px 14px;
 }
 
 .community-hero-avatar {
   flex-shrink: 0;
-  align-self: flex-start;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   border: 4px solid var(--bg-primary);
-  background-color: var(--bg-primary);
-  line-height: 0;
-  margin-top: -36px;
-}
-
-.community-hero-avatar-circle {
-  border: 3px solid var(--bg-primary);
+  background-color: var(--card-bg);
+  margin-top: -42px;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .community-hero-info {
@@ -917,7 +973,7 @@ html[data-theme="light"] .auth-hero-x-logo {
 .community-hero-desc {
   font-size: 13px;
   color: var(--text-secondary);
-  margin-top: 2px;
+  margin-top: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -926,10 +982,42 @@ html[data-theme="light"] .auth-hero-x-logo {
 .community-hero-meta {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 12px;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+/* Online Indicator Pill & Pulsing Dot */
+.community-online-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0, 186, 124, 0.1);
+  border: 1px solid rgba(0, 186, 124, 0.3);
+  color: #00ba7c;
+  padding: 2px 8px 2px 7px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+html[data-theme="light"] .community-online-pill {
+  background: #d1fae5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.community-online-pulse {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .community-online-dot {
@@ -938,6 +1026,59 @@ html[data-theme="light"] .auth-hero-x-logo {
   border-radius: 50%;
   background-color: #00ba7c;
   display: inline-block;
+  z-index: 1;
+}
+
+.community-online-ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: #00ba7c;
+  opacity: 0.75;
+  animation: ping-wave 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping-wave {
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.community-online-text strong {
+  font-weight: 800;
+}
+
+.community-online-avatars {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+.community-online-avatar-chip {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--bg-primary);
+  margin-left: -5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+  user-select: none;
+}
+
+.community-online-avatar-chip:first-child {
+  margin-left: 0;
+}
+
+.community-online-avatar-chip:hover {
+  transform: translateY(-2px) scale(1.2);
+  z-index: 5;
 }
 
 .community-hero-actions {
@@ -1087,21 +1228,93 @@ html[data-theme="light"] .auth-hero-x-logo {
   line-height: 17px;
 }
 
-.community-mod-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.community-mod {
+.community-online-section-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.community-live-pill {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #00ba7c;
+  background: rgba(0, 186, 124, 0.1);
+  border: 1px solid rgba(0, 186, 124, 0.28);
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+html[data-theme="light"] .community-live-pill {
+  background: #d1fae5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.community-mod-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.community-mod-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background-color: var(--bg-hover-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.community-mod-card:hover {
+  background-color: var(--bg-hover);
+}
+
+.community-mod-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.community-mod-online-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00ba7c;
+  border: 1.5px solid var(--bg-primary);
+}
+
+.community-mod-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.community-mod-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .community-mod-name {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.community-mod-role {
+  font-size: 11px;
   color: var(--text-secondary);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .community-sort-row {
@@ -1156,15 +1369,18 @@ html[data-theme="light"] .auth-hero-x-logo {
 
 @media (max-width: 760px) {
   .community-hero-banner {
-    height: 64px;
+    height: 96px;
   }
 
   .community-hero-top {
     flex-wrap: wrap;
+    gap: 12px;
   }
 
   .community-hero-avatar {
-    margin-top: -26px;
+    width: 68px;
+    height: 68px;
+    margin-top: -34px;
   }
 
   .community-hero-name {
