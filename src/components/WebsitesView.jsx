@@ -6,6 +6,7 @@ import {
   IconBook,
   IconUsers,
   IconBriefcase,
+  IconShield,
   IconSidebarToggle,
   IconSearch,
   IconClose,
@@ -122,6 +123,7 @@ export default function WebsitesView({
       case 'book': return <IconBook style={{ width: 22, height: 22 }} />;
       case 'users': return <IconUsers style={{ width: 22, height: 22 }} />;
       case 'briefcase': return <IconBriefcase style={{ width: 22, height: 22 }} />;
+      case 'shield': return <IconShield style={{ width: 22, height: 22 }} />;
       default: return <IconExternal style={{ width: 22, height: 22 }} />;
     }
   };

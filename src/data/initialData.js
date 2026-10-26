@@ -445,6 +445,15 @@ export const INITIAL_WEBSITES = [
     url: 'https://smvitm.ac.in/placements',
     badge: 'Career & Placement',
     iconType: 'briefcase'
+  },
+  {
+    id: 'web-7',
+    name: 'Online Grievance Redressal Portal',
+    category: 'Student Utilities',
+    description: 'Official SMVITM grievance redressal mechanism for students and staff to submit complaints, inquiries, or feedback securely.',
+    url: 'https://sode-edu.in/smvitm/grievance/grievance_form/',
+    badge: 'Grievance Portal',
+    iconType: 'shield'
   }
 ];
 

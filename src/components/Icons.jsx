@@ -413,3 +413,9 @@ export const IconPin = ({ filled = false, className = 'action-icon' }) => (
     <path d="M5 17h14v-2l-2-3V6a1 1 0 0 0-1-1h-8a1 1 0 0 0-1 1v6l-2 3v2z" />
   </svg>
 );
+
+export const IconShield = ({ className = 'action-icon', style = {} }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+);
