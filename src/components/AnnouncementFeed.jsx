@@ -424,8 +424,8 @@ export default function AnnouncementFeed({
                       <VerifiedBadge type={item.verifiedType} />
                       <span className="post-user-handle">{item.handle}</span>
                       {item.collaborators && item.collaborators.length > 0 && (
-                        <span className="post-user-handle">
-                          with {item.collaborators.map((c) => c.name).join(', ')}
+                        <span className="post-collab-with">
+                          with <strong className="post-collab-name">{item.collaborators.map((c) => c.name).join(', ')}</strong>
                         </span>
                       )}
                       <span className="post-dot">·</span>

@@ -1759,6 +1759,156 @@ dialog.x-modal.li-compose-modal {
   color: var(--text-secondary);
 }
 
+/* Enhanced Collaborators Menu */
+.li-collab-menu {
+  left: 0 !important;
+  right: auto !important;
+  min-width: 290px;
+  max-width: min(340px, calc(100vw - 32px));
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
+  padding: 8px;
+  z-index: 50;
+  animation: liMenuFade 0.15s ease;
+}
+
+@keyframes liMenuFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.li-collab-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 8px 8px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 6px;
+}
+
+.li-collab-menu-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.li-collab-clear-btn {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.li-collab-clear-btn:hover {
+  background-color: var(--accent-subtle);
+}
+
+.li-collab-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.li-collab-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.li-collab-item.selected {
+  background-color: var(--accent-subtle);
+  border-color: rgba(29, 155, 240, 0.25);
+}
+
+.li-collab-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.li-collab-name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.li-collab-item .li-menu-item-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.li-collab-item .li-menu-item-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.li-collab-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  background-color: var(--bg-primary);
+}
+
+.li-collab-checkbox.checked {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.li-collab-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.li-collab-arrow.open {
+  transform: rotate(180deg);
+}
+
+.li-pill-button.active {
+  border-color: var(--accent-color);
+  background-color: var(--accent-subtle);
+  color: var(--accent-color);
+}
+
 .li-compose-pills {
   display: flex;
   align-items: center;
@@ -2505,6 +2655,16 @@ html[data-theme="light"] .post-important-badge {
   color: var(--text-secondary);
 }
 
+.post-collab-with {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.post-collab-name {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
 .branch-badge {
   background-color: var(--accent-subtle);
   color: var(--accent-color);
@@ -2976,6 +3136,8 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-top: 4px;
   padding-top: 10px;
   border-top: 1px solid var(--border-color);

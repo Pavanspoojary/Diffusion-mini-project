@@ -12,7 +12,9 @@ import {
   IconPlus,
   IconClock,
   IconVideo,
-  IconArticle
+  IconArticle,
+  IconCheck,
+  VerifiedBadge
 } from './Icons';
 import { BRANCHES, CATEGORIES, USERS } from '../data/initialData';
 
@@ -57,10 +59,23 @@ export default function ComposeModal({
 
   // Hidden file inputs
   const dialogRef = useRef(null);
+  const collabRef = useRef(null);
   const mediaInputRef = useRef(null);
   const photoInputRef = useRef(null);
   const videoInputRef = useRef(null);
   const docInputRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (collabRef.current && !collabRef.current.contains(e.target)) {
+        setShowCollaborators(false);
+      }
+    }
+    if (showCollaborators) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showCollaborators]);
 
   const isArticle = currentMode === 'article';
   const charLimit = isArticle ? MAX_CHARS_ARTICLE : MAX_CHARS;
@@ -402,38 +417,67 @@ export default function ComposeModal({
             <IconChevronDown />
           </label>
 
-          <div className="li-pill-wrap">
+          <div className="li-pill-wrap" ref={collabRef}>
             <button
               type="button"
-              className="li-pill li-pill-button"
+              className={`li-pill li-pill-button ${collaborators.length > 0 ? 'active' : ''}`}
               onClick={() => setShowCollaborators((v) => !v)}
               aria-expanded={showCollaborators}
+              title="Add co-authors or faculty collaborators"
             >
               <IconCollaborate />
-              <span>Add collaborators</span>
+              <span>
+                {collaborators.length > 0
+                  ? `Collaborators (${collaborators.length})`
+                  : 'Add collaborators'}
+              </span>
+              <IconChevronDown className={`li-collab-arrow ${showCollaborators ? 'open' : ''}`} />
             </button>
             {showCollaborators && (
-              <div className="li-menu li-menu-right" role="menu">
+              <div className="li-menu li-collab-menu" role="menu">
+                <div className="li-collab-menu-header">
+                  <span className="li-collab-menu-title">Co-Authors & Faculty</span>
+                  {collaborators.length > 0 && (
+                    <button
+                      type="button"
+                      className="li-collab-clear-btn"
+                      onClick={() => setCollaborators([])}
+                    >
+                      Clear all
+                    </button>
+                  )}
+                </div>
                 {Object.entries(users)
                   .filter(([roleKey, u]) => roleKey !== 'student' && roleKey !== currentUser.roleKey)
-                  .map(([roleKey, u]) => (
-                    <button
-                      key={roleKey}
-                      type="button"
-                      className={`li-menu-item ${collaborators.includes(roleKey) ? 'selected' : ''}`}
-                      onClick={() => toggleCollaborator(roleKey)}
-                      role="menuitemcheckbox"
-                      aria-checked={collaborators.includes(roleKey)}
-                    >
-                      <span className="avatar avatar-sm" style={{ background: u.avatarBg }}>
-                        <span>{u.avatarChar}</span>
-                      </span>
-                      <span>
-                        <span className="li-menu-item-name">{u.name}</span>
-                        <span className="li-menu-item-sub">{u.role}</span>
-                      </span>
-                    </button>
-                  ))}
+                  .map(([roleKey, u]) => {
+                    const isSelected = collaborators.includes(roleKey);
+                    return (
+                      <button
+                        key={roleKey}
+                        type="button"
+                        className={`li-collab-item ${isSelected ? 'selected' : ''}`}
+                        onClick={() => toggleCollaborator(roleKey)}
+                        role="menuitemcheckbox"
+                        aria-checked={isSelected}
+                      >
+                        <span className="avatar avatar-sm" style={{ background: u.avatarBg, flexShrink: 0 }}>
+                          <span>{u.avatarChar}</span>
+                        </span>
+                        <div className="li-collab-item-info">
+                          <div className="li-collab-name-row">
+                            <span className="li-menu-item-name">{u.name}</span>
+                            <VerifiedBadge type={u.verifiedType} />
+                          </div>
+                          <span className="li-menu-item-sub">
+                            {u.department || u.role} · {u.handle}
+                          </span>
+                        </div>
+                        <div className={`li-collab-checkbox ${isSelected ? 'checked' : ''}`}>
+                          {isSelected && <IconCheck style={{ width: 12, height: 12 }} />}
+                        </div>
+                      </button>
+                    );
+                  })}
               </div>
             )}
           </div>
