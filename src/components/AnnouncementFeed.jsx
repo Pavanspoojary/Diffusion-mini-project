@@ -288,7 +288,7 @@ export default function AnnouncementFeed({
 
       {/* Sticky Header */}
       <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
-        {!activeCommunity && (
+        {!activeCommunity ? (
           <div className="header-top-row">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               {isSidebarHidden && (
@@ -325,6 +325,35 @@ export default function AnnouncementFeed({
               </button>
             )}
           </div>
+        ) : (
+          <div className="header-top-row community-sticky-nav">
+            <button
+              type="button"
+              className="community-nav-back-btn"
+              onClick={() => setActiveBranch('ALL')}
+              aria-label="Back to Home"
+              title="Return to Home feed"
+            >
+              <IconArrowLeft style={{ width: 16, height: 16 }} />
+              <span>Back to Home</span>
+            </button>
+            <div className="community-sticky-title">
+              <CommunityAvatar id={activeCommunity.id} size={22} />
+              <span className="community-sticky-slug">{activeCommunity.slug}</span>
+            </div>
+            {onOpenNotifications && (
+              <button
+                type="button"
+                className="header-notif-btn"
+                onClick={onOpenNotifications}
+                title="Notifications"
+                aria-label="Notifications"
+              >
+                <IconNotifications style={{ width: 19, height: 19 }} />
+                {unreadCount > 0 && <span className="badge-dot" style={{ top: 2, right: 2 }} />}
+              </button>
+            )}
+          </div>
         )}
 
         {/* Category & Sort Dropdown Bar */}
@@ -335,10 +364,10 @@ export default function AnnouncementFeed({
                 type="button"
                 className="community-back-pill"
                 onClick={() => setActiveBranch('ALL')}
-                title="Back to all notices"
+                title="Back to Home feed"
               >
                 <IconArrowLeft />
-                <span>All notices</span>
+                <span>Back to Home</span>
               </button>
             )}
             <FilterDropdown

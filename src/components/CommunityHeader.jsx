@@ -1,5 +1,5 @@
 import React from 'react';
-import { CommunityAvatar, IconMore, VerifiedBadge } from './Icons';
+import { CommunityAvatar, IconMore, VerifiedBadge, IconArrowLeft } from './Icons';
 import { USERS } from '../data/initialData';
 
 export default function CommunityHeader({
@@ -24,8 +24,19 @@ export default function CommunityHeader({
       >
         <div className="community-hero-banner-overlay" />
         <div className="community-hero-banner-grid" />
+
+        <button
+          type="button"
+          className="community-banner-back-btn"
+          onClick={onBack}
+          aria-label="Back to home page"
+          title="Return to Home feed"
+        >
+          <IconArrowLeft style={{ width: 14, height: 14 }} />
+          <span>Home</span>
+        </button>
+
         <div className="community-hero-banner-tag">
-          <span className="community-hero-banner-dot" />
           <span>{branch.code || branch.id} · Campus Hub</span>
         </div>
       </div>
@@ -46,32 +57,19 @@ export default function CommunityHeader({
             <span>{branch.members}</span>
             <span className="post-dot">·</span>
             <span>{postCount} notices</span>
-            <span className="post-dot">·</span>
-            <div className="community-online-pill" title={`${moderators.length} campus coordinators and faculty active now`}>
-              <span className="community-online-pulse">
-                <span className="community-online-dot" />
-                <span className="community-online-ping" />
-              </span>
-              <span className="community-online-text">
-                <strong>{moderators.length}</strong> online
-              </span>
-              <div className="community-online-avatars" aria-label="Online staff members">
-                {moderators.map((m) => (
-                  <span
-                    key={m.id}
-                    className="community-online-avatar-chip"
-                    style={{ background: m.avatarBg }}
-                    title={`${m.name} (${m.role}) is online`}
-                  >
-                    {m.avatarChar}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
         <div className="community-hero-actions">
+          <button
+            type="button"
+            className="community-hero-back-btn"
+            onClick={onBack}
+            title="Return to Home feed"
+          >
+            <IconArrowLeft style={{ width: 14, height: 14 }} />
+            <span>Home</span>
+          </button>
           {onCreatePost && (
             <button
               type="button"
@@ -110,29 +108,16 @@ export default function CommunityHeader({
               <strong>{branch.members.replace(' members', '')}</strong>
               <span>Members</span>
             </div>
-            <div className="community-stat">
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                <span className="community-online-dot" style={{ width: 6, height: 6 }} />
-                <strong>{moderators.length}</strong>
-              </div>
-              <span>Online Now</span>
-            </div>
           </div>
           <button type="button" className="community-back-btn" onClick={onBack}>
-            Back to all notices
+            <IconArrowLeft style={{ width: 14, height: 14, marginRight: 6 }} />
+            Back to Home
           </button>
         </div>
 
         <div className="community-about-card">
           <div className="community-online-section-header">
-            <h3 className="community-about-title" style={{ margin: 0 }}>Active Online & Staff</h3>
-            <span className="community-live-pill">
-              <span className="community-online-pulse">
-                <span className="community-online-dot" />
-                <span className="community-online-ping" />
-              </span>
-              <span>{moderators.length} Live</span>
-            </span>
+            <h3 className="community-about-title" style={{ margin: 0 }}>Faculty & Staff</h3>
           </div>
           <div className="community-mod-list">
             {moderators.map((m) => (
@@ -141,7 +126,6 @@ export default function CommunityHeader({
                   <span className="avatar avatar-sm" style={{ background: m.avatarBg }}>
                     <span>{m.avatarChar}</span>
                   </span>
-                  <span className="community-mod-online-dot" title="Active now" />
                 </div>
                 <div className="community-mod-info">
                   <div className="community-mod-name-row">
