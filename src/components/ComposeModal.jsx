@@ -35,6 +35,7 @@ export default function ComposeModal({
   const [branch, setBranch] = useState(currentUser.branch === 'ALL' ? 'ALL' : currentUser.branch);
   const [category, setCategory] = useState('Academic');
   const [currentMode, setCurrentMode] = useState('text');
+  const [isImportant, setIsImportant] = useState(false);
 
   // Media state (strictly user files, no demo images)
   const [media, setMedia] = useState('');
@@ -85,6 +86,7 @@ export default function ComposeModal({
     const targetBranch = intent?.branch || currentUser.branch || 'ALL';
     setBranch(targetBranch === 'ALL' ? 'ALL' : targetBranch);
     setCategory('Academic');
+    setIsImportant(Boolean(intent?.isImportant));
     setCommentAudience('Anyone');
     setCollaborators([]);
     setShowCollaborators(false);
@@ -210,6 +212,7 @@ export default function ComposeModal({
       text: text.trim(),
       branch,
       category,
+      isImportant,
       media: media || null,
       mediaKind: mediaKind || null,
       mediaName: mediaName || null,
@@ -310,7 +313,7 @@ export default function ComposeModal({
                 )}
               </div>
               <div className="li-compose-sub">
-                {currentUser.role} · {currentUser.department}
+                {currentUser.role} · {currentUser.handle}
               </div>
             </div>
           </div>
@@ -356,6 +359,32 @@ export default function ComposeModal({
             </select>
             <IconChevronDown />
           </label>
+
+          <button
+            type="button"
+            className={`li-pill li-pill-important ${isImportant ? 'is-active' : ''}`}
+            onClick={() => setIsImportant((v) => !v)}
+            title="Mark as Important Notice (pins to top of feed in red)"
+            aria-pressed={isImportant}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span className="li-pill-label">Important</span>
+            {isImportant && <span className="li-pill-important-tag">PINNED</span>}
+          </button>
 
           <label className="li-pill" title="Who can comment">
             <IconCommentBubble />
@@ -449,7 +478,7 @@ export default function ComposeModal({
 
           <textarea
             className="li-compose-textarea"
-            placeholder={isArticle ? 'Write the full body of your article here...' : 'Share your thoughts ...'}
+            placeholder={isArticle ? 'Write the full body of your article here...' : 'Share an announcement, academic update, or campus notice...'}
             rows={isArticle ? 8 : 5}
             value={text}
             onChange={(e) => {

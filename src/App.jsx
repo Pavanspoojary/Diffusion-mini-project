@@ -82,7 +82,8 @@ export default function App() {
   const [announcements, setAnnouncements] = useState(() => {
     try {
       localStorage.removeItem('college_hub_notices_v1');
-      const saved = localStorage.getItem('college_hub_notices_v2');
+      localStorage.removeItem('college_hub_notices_v2');
+      const saved = localStorage.getItem('college_hub_notices_v3');
       if (saved) {
         if (!saved.includes('Diffusion') && !saved.includes('Tejaswini')) {
           return JSON.parse(saved);
@@ -150,7 +151,7 @@ export default function App() {
   // Persist Data
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_notices_v2', JSON.stringify(announcements));
+      localStorage.setItem('college_hub_notices_v3', JSON.stringify(announcements));
     } catch {}
   }, [announcements]);
 
@@ -314,6 +315,7 @@ export default function App() {
       avatarBg: currentUser.avatarBg,
       branch: noticeData.branch,
       category: noticeData.category,
+      isImportant: Boolean(noticeData.isImportant),
       time: noticeData.time || 'Just now',
       timestamp: Date.now(),
       articleTitle: noticeData.articleTitle || null,
@@ -342,7 +344,9 @@ export default function App() {
       {
         id: `notif-${Date.now()}`,
         type: 'notice',
-        title: `New Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`,
+        title: noticeData.isImportant
+          ? `Important Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`
+          : `New Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`,
         body: `${currentUser.name} (${currentUser.role}) published: ${noticeData.text.slice(0, 60)}...`,
         time: 'Just now',
         unread: true

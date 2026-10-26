@@ -142,6 +142,7 @@ export const INITIAL_ANNOUNCEMENTS = [
     avatarBg: '#8e24aa',
     branch: 'AI&DS',
     category: 'Academic',
+    isImportant: true,
     time: '2h',
     timestamp: Date.now() - 7200000,
     text: 'Final Year Project Phase-1 Synopsis Submission & Review Schedule: All 7th & 5th semester AI&DS student batches must upload their project proposals along with literature review matrices before Monday 5:00 PM.',

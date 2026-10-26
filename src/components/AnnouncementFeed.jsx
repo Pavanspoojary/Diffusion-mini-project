@@ -103,7 +103,7 @@ function PostShareMenu({ item, isOpen, onClose }) {
   if (!isOpen) return null;
 
   const shareUrl = `${window.location.origin}/#notice-${item.id}`;
-  const shareText = `[SMVITM Campus Hub] Notice from ${item.author} (${item.department}):\n${item.text}\n\n${shareUrl}`;
+  const shareText = `[SMVITM Campus Hub] Notice from ${item.author}:\n${item.text}\n\n${shareUrl}`;
 
   const handleCopyLink = (e) => {
     e.stopPropagation();
@@ -249,6 +249,12 @@ export default function AnnouncementFeed({
 
   // Sort
   const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
+    // Pinned / Important notices always stay on top
+    const aImportant = Boolean(a.isImportant || a.important || a.tag === 'Important');
+    const bImportant = Boolean(b.isImportant || b.important || b.tag === 'Important');
+    if (aImportant && !bImportant) return -1;
+    if (!aImportant && bImportant) return 1;
+
     if (sort === 'New') {
       return (b.timestamp || 0) - (a.timestamp || 0);
     }
@@ -383,60 +389,80 @@ export default function AnnouncementFeed({
             </p>
           </div>
         ) : (
-          sortedAnnouncements.map((item) => (
-            <article key={item.id} className="post-card">
-              <div className="post-avatar-col">
-                <div className="avatar avatar-md" style={{ background: item.avatarBg }}>
-                  <span>{item.avatarChar}</span>
-                </div>
-              </div>
-
-              <div className="post-content-col">
-                <div className="post-header-line">
-                  <div className="post-user-info">
-                    <span className="post-user-name">{item.author}</span>
-                    <VerifiedBadge type={item.verifiedType} />
-                    <span className="post-user-handle">{item.handle}</span>
-                    {item.collaborators && item.collaborators.length > 0 && (
-                      <span className="post-user-handle">
-                        with {item.collaborators.map((c) => c.name).join(', ')}
-                      </span>
-                    )}
-                    <span className="post-dot">·</span>
-                    <span className="post-timestamp">{item.time}</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                    <span className="category-badge">{item.category}</span>
-                    <button
-                      type="button"
-                      className="reddit-sub-badge"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (item.branch === 'ALL') {
-                          setActiveBranch('ALL');
-                        } else if (onOpenCommunity) {
-                          onOpenCommunity(item.branch);
-                        } else {
-                          setActiveBranch(item.branch);
-                        }
-                      }}
-                      title={`Filter by ${item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}`}
-                    >
-                      <CommunityAvatar id={item.branch} size={15} />
-                      <span>{item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}</span>
-                    </button>
+          sortedAnnouncements.map((item) => {
+            const isItemImportant = Boolean(item.isImportant || item.important || item.tag === 'Important');
+            return (
+              <article key={item.id} className={`post-card ${isItemImportant ? 'is-important' : ''}`}>
+                <div className="post-avatar-col">
+                  <div className="avatar avatar-md" style={{ background: item.avatarBg }}>
+                    <span>{item.avatarChar}</span>
                   </div>
                 </div>
 
-                <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>
-                  {item.department}
-                </div>
+                <div className="post-content-col">
+                  {isItemImportant && (
+                    <div className="post-important-badge">
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="13"
+                        height="13"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                      <span>IMPORTANT NOTICE</span>
+                      <span className="post-important-pill">PINNED</span>
+                    </div>
+                  )}
 
-                {item.articleTitle && (
-                  <h3 className="post-article-headline">
-                    {item.articleTitle}
-                  </h3>
-                )}
+                  <div className="post-header-line">
+                    <div className="post-user-info">
+                      <span className="post-user-name">{item.author}</span>
+                      <VerifiedBadge type={item.verifiedType} />
+                      <span className="post-user-handle">{item.handle}</span>
+                      {item.collaborators && item.collaborators.length > 0 && (
+                        <span className="post-user-handle">
+                          with {item.collaborators.map((c) => c.name).join(', ')}
+                        </span>
+                      )}
+                      <span className="post-dot">·</span>
+                      <span className="post-timestamp">{item.time}</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                      <span className="category-badge">{item.category}</span>
+                      <button
+                        type="button"
+                        className="reddit-sub-badge"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (item.branch === 'ALL') {
+                            setActiveBranch('ALL');
+                          } else if (onOpenCommunity) {
+                            onOpenCommunity(item.branch);
+                          } else {
+                            setActiveBranch(item.branch);
+                          }
+                        }}
+                        title={`Filter by ${item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}`}
+                      >
+                        <CommunityAvatar id={item.branch} size={15} />
+                        <span>{item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {item.articleTitle && (
+                    <h3 className="post-article-headline">
+                      {item.articleTitle}
+                    </h3>
+                  )}
 
                 <div className="post-text">{item.text}</div>
 
@@ -533,7 +559,8 @@ export default function AnnouncementFeed({
                 </div>
               </div>
             </article>
-          ))
+          );
+        })
         )}
       </section>
     </div>
