@@ -35,3 +35,8 @@ Thumbs.db
 
 # Agent Memory
 .agents/
+
+
+# Local personal scratchpad / context notes (do not commit)
+contaxt.md
+context.md
