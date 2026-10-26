@@ -391,24 +391,42 @@ export const INITIAL_EVENTS = [
   }
 ];
 
+export const PORTAL_LOGOS = {
+  'web-1': '/portals/printin.png',
+  'web-2': '/portals/edmin.png',
+  'web-3': '/portals/vtu.png',
+  'web-4': '/portals/library.png',
+  'web-5': '/portals/asv.svg',
+  'web-6': '/portals/menntr.ico',
+  'web-7': '/portals/smvitm.png',
+  'web-8': '/portals/aasare.ico',
+  'web-9': '/portals/election.ico',
+  'web-10': '/portals/varnothsava.ico',
+  'web-11': '/portals/vichaara.ico',
+  'web-12': '/portals/techfest.png',
+  'web-13': '/portals/projecthub.svg'
+};
+
 export const INITIAL_WEBSITES = [
   {
     id: 'web-1',
-    name: 'Campus Cloud Printing Service',
+    name: 'PRINTIN PORTAL',
     category: 'Student Utilities',
     description: 'Upload documents from phone or laptop directly to the college reprography centre. Check daily free page quota and queue status.',
-    url: 'https://smvitm.ac.in/printing',
+    url: 'https://printin.buildwithtba.in/',
     badge: 'Campus Service',
-    iconType: 'printer'
+    iconType: 'printer',
+    logo: '/portals/printin.png'
   },
   {
     id: 'web-2',
-    name: 'Student ERP & Attendance Portal',
+    name: 'SMVITM EDMIN PORTAL',
     category: 'Academic',
     description: 'Subject-wise attendance tracking, continuous internal evaluation (CIE) scores, and updated class timetables.',
-    url: 'https://erp.smvitm.ac.in',
+    url: 'https://smvitm.edmin.co/#/login',
     badge: 'Academic ERP',
-    iconType: 'database'
+    iconType: 'database',
+    logo: '/portals/edmin.png'
   },
   {
     id: 'web-3',
@@ -417,7 +435,8 @@ export const INITIAL_WEBSITES = [
     description: 'Official Visvesvaraya Technological University circulars, academic calendar, syllabus schemes, and semester grade cards.',
     url: 'https://vtu.ac.in',
     badge: 'University Portal',
-    iconType: 'external'
+    iconType: 'external',
+    logo: '/portals/vtu.png'
   },
   {
     id: 'web-4',
@@ -426,34 +445,98 @@ export const INITIAL_WEBSITES = [
     description: 'Access 10,000+ technical journals, e-books, previous VTU examination question papers, and reserve library titles.',
     url: 'https://smvitm.ac.in/library',
     badge: 'Library Portal',
-    iconType: 'book'
+    iconType: 'book',
+    logo: '/portals/library.png'
   },
   {
     id: 'web-5',
-    name: 'NSS & Community Volunteering Hub',
+    name: 'ASV PORTAL',
     category: 'Volunteering',
     description: 'Student volunteering hours logging, blood donation camp registrations, environmental drives, and certificate downloads.',
-    url: 'https://smvitm.ac.in/nss',
+    url: 'https://asv.sode-edu.in/login',
     badge: 'Volunteering',
-    iconType: 'users'
+    iconType: 'users',
+    logo: '/portals/asv.svg'
   },
   {
     id: 'web-6',
-    name: 'Training & Placement Office (T&P)',
+    name: 'Menntr Portal',
     category: 'Career',
     description: 'Campus hiring drives, placement test preparation material, mock interviews, and technical internship announcements.',
-    url: 'https://smvitm.ac.in/placements',
+    url: 'https://menntr.in/',
     badge: 'Career & Placement',
-    iconType: 'briefcase'
+    iconType: 'briefcase',
+    logo: '/portals/menntr.ico'
   },
   {
     id: 'web-7',
-    name: 'Online Grievance Redressal Portal',
+    name: 'SMVITM Grievance Portal',
     category: 'Student Utilities',
     description: 'Official SMVITM grievance redressal mechanism for students and staff to submit complaints, inquiries, or feedback securely.',
     url: 'https://sode-edu.in/smvitm/grievance/grievance_form/',
     badge: 'Grievance Portal',
-    iconType: 'shield'
+    iconType: 'shield',
+    logo: '/portals/smvitm.png'
+  },
+  {
+    id: 'web-8',
+    name: 'AASARE PORTAL',
+    category: 'Student Utilities',
+    description: 'Student counseling, mental health guidance, and institutional support services.',
+    url: 'https://aasare.sode-edu.in/',
+    badge: 'Student Support',
+    iconType: 'shield',
+    logo: '/portals/aasare.ico'
+  },
+  {
+    id: 'web-9',
+    name: 'STUDENT COUNCIL ELECTION PORTAL',
+    category: 'Campus Life',
+    description: 'Official SMVITM student council digital election and voting authentication portal.',
+    url: 'https://smvitm-election.vercel.app/auth/signin',
+    badge: 'Elections',
+    iconType: 'users',
+    logo: '/portals/election.ico'
+  },
+  {
+    id: 'web-10',
+    name: 'VARNOTHSAV PORTAL',
+    category: 'Campus Life',
+    description: 'National-level annual intercollegiate cultural and talent fest of SMVITM.',
+    url: 'https://varnothsava.sode-edu.in/',
+    badge: 'Cultural Fest',
+    iconType: 'external',
+    logo: '/portals/varnothsava.ico'
+  },
+  {
+    id: 'web-11',
+    name: 'VICHAARA PORTAL',
+    category: 'Academic',
+    description: 'Research publications, student forum for intellectual discussions, and academic exchange.',
+    url: 'https://vichaara.vercel.app/',
+    badge: 'Academic Forum',
+    iconType: 'book',
+    logo: '/portals/vichaara.ico'
+  },
+  {
+    id: 'web-12',
+    name: 'TECHFEST 2026 PORTAL',
+    category: 'Events',
+    description: 'Annual college technical festival website for hackathons, technical paper presentations, and competitions.',
+    url: 'https://techfest-26.vercel.app/',
+    badge: 'Tech Fest',
+    iconType: 'external',
+    logo: '/portals/techfest.png'
+  },
+  {
+    id: 'web-13',
+    name: 'PROJECT HUB PORTAL',
+    category: 'Academic',
+    description: 'Collaborative student project workspace for code repositories, submission tracking, and project reviews.',
+    url: 'https://wrokspace.vercel.app/',
+    badge: 'Project Workspace',
+    iconType: 'database',
+    logo: '/portals/projecthub.svg'
   }
 ];
 
