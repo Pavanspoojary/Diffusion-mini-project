@@ -15,7 +15,7 @@
   --text-muted: #536471;
   --nav-hover-bg: rgba(231, 233, 234, 0.1);
   --search-bg: #202327;
-  --header-bg: rgba(0, 0, 0, 0.65);
+  --header-bg: #000000;
   --post-btn-bg: #eff3f4;
   --post-btn-color: #0f1419;
   --card-bg: #16181c;
@@ -53,7 +53,7 @@ html[data-theme="dim"] {
   --text-muted: #6e767d;
   --nav-hover-bg: rgba(239, 243, 244, 0.1);
   --search-bg: #273340;
-  --header-bg: rgba(21, 32, 43, 0.75);
+  --header-bg: #15202b;
   --post-btn-bg: #eff3f4;
   --post-btn-color: #0f1419;
   --card-bg: #1e2732;
@@ -74,7 +74,7 @@ html[data-theme="light"] {
   --text-muted: #8b98a5;
   --nav-hover-bg: rgba(15, 20, 25, 0.1);
   --search-bg: #eff3f4;
-  --header-bg: rgba(255, 255, 255, 0.85);
+  --header-bg: #ffffff;
   --post-btn-bg: #0f1419;
   --post-btn-color: #ffffff;
   --card-bg: #f7f9f9;
@@ -499,13 +499,11 @@ html[data-theme="light"] .auth-hero-x-logo {
   position: relative;
 }
 
-/* Frosted Sticky Header */
+/* Solid Sticky Header */
 .sticky-header {
   position: sticky;
   top: 0;
   background-color: var(--header-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   z-index: 20;
   border-bottom: 1px solid var(--border-color);
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
@@ -522,6 +520,7 @@ html[data-theme="light"] .auth-hero-x-logo {
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px 4px 16px;
+  background-color: var(--header-bg);
 }
 
 .header-title-block {
@@ -670,7 +669,7 @@ html[data-theme="light"] .auth-hero-x-logo {
   gap: 12px;
   padding: 8px 16px;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-primary);
+  background-color: var(--header-bg);
 }
 
 .feed-filter-group {

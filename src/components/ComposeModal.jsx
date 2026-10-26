@@ -338,6 +338,7 @@ export default function ComposeModal({
               value={branch}
               onChange={(e) => setBranch(e.target.value)}
             >
+              <option value="ALL">s/all (All Departments)</option>
               {BRANCHES.map((b) => (
                 <option key={b.id} value={b.id}>{b.slug}</option>
               ))}

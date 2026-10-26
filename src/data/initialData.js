@@ -5,15 +5,6 @@
 
 export const BRANCHES = [
   {
-    id: 'ALL',
-    label: 'All Campus',
-    code: 'ALL',
-    slug: 's/all',
-    members: '1.4k members',
-    description: 'All campus announcements & broadcasts',
-    avatarBg: 'linear-gradient(135deg, #1d9bf0, #00ba7c)'
-  },
-  {
     id: 'AI&DS',
     label: 'AI & Data Science',
     code: 'AI&DS',

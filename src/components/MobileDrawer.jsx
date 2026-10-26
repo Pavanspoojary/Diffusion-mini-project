@@ -107,7 +107,7 @@ export default function MobileDrawer({
               <CommunityAvatar id="ALL" size={24} />
               <div className="mobile-drawer-comm-text">
                 <span className="mobile-drawer-comm-slug">s/all</span>
-                <span className="mobile-drawer-comm-sub">Campus Broadcasts</span>
+                <span className="mobile-drawer-comm-sub">General Feed</span>
               </div>
             </button>
             {BRANCHES.map((b) => (

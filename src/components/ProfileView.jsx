@@ -98,20 +98,6 @@ export default function ProfileView({
         <div className="profile-section">
           <span className="profile-section-title">Branch Communities</span>
           <div className="profile-community-grid">
-            <button
-              type="button"
-              className="profile-community-chip"
-              onClick={() => {
-                onOpenCommunity('ALL');
-                onSelectNav('announcements');
-              }}
-            >
-              <CommunityAvatar id="ALL" size={24} />
-              <div className="profile-comm-meta">
-                <span className="profile-comm-slug">s/all</span>
-                <span className="profile-comm-sub">Campus Broadcasts</span>
-              </div>
-            </button>
             {BRANCHES.map((b) => (
               <button
                 key={b.id}
