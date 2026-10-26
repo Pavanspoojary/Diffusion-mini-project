@@ -476,6 +476,16 @@ html[data-theme="light"] .auth-hero-x-logo {
   transition: background-color 0.15s ease;
 }
 
+.dropdown-item svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  flex-shrink: 0 !important;
+}
+
 .dropdown-item:hover {
   background-color: var(--bg-hover);
 }
@@ -1514,6 +1524,36 @@ html[data-theme="light"] .community-live-pill {
 .li-icon-lg {
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.icon-default {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.icon-sm {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.tool-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.dir-icon {
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
 }
 
@@ -2858,7 +2898,9 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   position: absolute;
   bottom: calc(100% + 8px);
   right: 0;
-  min-width: 200px;
+  min-width: 190px;
+  max-width: 240px;
+  width: max-content;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 14px;
@@ -2901,7 +2943,13 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 }
 
 .share-menu-item svg {
-  flex-shrink: 0;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0 !important;
 }
 
 /* Event Specific Cards */
