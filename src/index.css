@@ -5469,3 +5469,200 @@ dialog::backdrop {
   justify-content: center;
   flex-shrink: 0;
 }
+
+/* ==========================================================================
+   Bookmarks View Styles
+   ========================================================================== */
+
+.bookmarks-container {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.bookmarks-empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.bookmarks-empty-icon-wrap {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background-color: var(--accent-subtle);
+  border: 1px solid rgba(29, 155, 240, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.bookmarks-empty-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.bookmarks-empty-desc {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.bookmarks-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.bookmarks-explore-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.bookmarks-explore-btn:active {
+  transform: translateY(0);
+}
+
+.bookmarks-hints-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-top: 32px;
+  text-align: left;
+}
+
+.bookmarks-hint-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.bookmarks-hint-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.bookmarks-clear-all-btn {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f4212e;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  transition: background-color 0.15s ease;
+}
+
+.bookmarks-clear-all-btn:hover {
+  background-color: rgba(244, 33, 46, 0.1);
+}
+
+.bookmarks-clear-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.bookmarks-confirm-yes {
+  background-color: #f4212e;
+  color: #ffffff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bookmarks-confirm-no {
+  background-color: var(--bg-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bookmarks-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.bookmarks-search-input {
+  width: 100%;
+  padding: 6px 28px 6px 30px;
+  border-radius: 9999px;
+  background-color: var(--bg-input, var(--bg-hover));
+  border: 1px solid var(--border-color);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.bookmarks-search-input:focus {
+  border-color: var(--accent-color);
+}
+
+.bookmarks-search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.bookmarks-search-clear {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.bookmarks-search-clear:hover {
+  color: var(--text-primary);
+}
+

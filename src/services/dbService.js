@@ -279,6 +279,20 @@ export async function toggleNoticeBookmark(noticeId, currentUserId, currentIsBoo
   }
 }
 
+export async function clearAllNoticeBookmarks(currentUserId) {
+  try {
+    const { error } = await supabase
+      .from('notice_bookmarks')
+      .delete()
+      .eq('user_id', currentUserId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Supabase:clearAllNoticeBookmarks fallback]', err.message);
+    return false;
+  }
+}
+
 export async function toggleNoticePin(noticeId, nextPinned) {
   try {
     const { error } = await supabase

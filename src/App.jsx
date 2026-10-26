@@ -6,6 +6,7 @@ import EventsView from './components/EventsView';
 import WebsitesView from './components/WebsitesView';
 import ProfileView from './components/ProfileView';
 import NotificationsView from './components/NotificationsView';
+import BookmarksView from './components/BookmarksView';
 import ComposeModal from './components/ComposeModal';
 import CreateEventModal from './components/CreateEventModal';
 import DisplayModal from './components/DisplayModal';
@@ -33,6 +34,7 @@ import {
   createAnnouncement,
   toggleNoticeLike,
   toggleNoticeBookmark,
+  clearAllNoticeBookmarks,
   toggleNoticePin,
   fetchEvents,
   createEvent,
@@ -388,6 +390,17 @@ export default function App() {
 
     // Persist to Supabase
     await toggleNoticeBookmark(id, currentUser.id, wasBookmarked);
+  };
+
+  const handleClearAllBookmarks = async () => {
+    const bookmarkedCount = announcements.filter((a) => a.isBookmarked).length;
+    if (bookmarkedCount === 0) return;
+
+    setAnnouncements((prev) =>
+      prev.map((item) => (item.isBookmarked ? { ...item, isBookmarked: false } : item))
+    );
+    showToast('All bookmarks cleared');
+    await clearAllNoticeBookmarks(currentUser.id);
   };
 
   const handleTogglePin = async (noticeId) => {
@@ -776,26 +789,23 @@ export default function App() {
         )}
 
         {activeNav === 'bookmarks' && (
-          <AnnouncementFeed
+          <BookmarksView
             announcements={announcements.filter((a) => a.isBookmarked)}
-            onLike={handleLike}
             onBookmark={handleBookmark}
             onShare={handleShare}
             onOpenImage={(img) => setLightboxImg(img)}
             currentUser={currentUser}
-            onOpenCompose={openCompose}
-            activeBranch="ALL"
-            setActiveBranch={() => {}}
-            activeCategory="All"
-            setActiveCategory={() => {}}
-            searchQuery={searchQuery}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
-            joinedCommunities={joinedCommunities}
-            onToggleJoin={handleToggleJoin}
-            onOpenCommunity={openCommunity}
+            onBack={() => {
+              setActiveNav('announcements');
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }}
+            onSelectNav={setActiveNav}
             isHeaderHidden={isHeaderHidden}
             onTogglePin={handleTogglePin}
+            onOpenCommunity={openCommunity}
+            onClearAll={handleClearAllBookmarks}
           />
         )}
       </main>
@@ -875,7 +885,7 @@ export default function App() {
       </nav>
 
       {/* MOBILE FLOATING ACTION BUTTON (POST: Faculty, Coordinator, Admin only) */}
-      {currentUser.roleKey !== 'student' && (
+      {currentUser.roleKey !== 'student' && activeNav !== 'bookmarks' && (
         <button
           type="button"
           className={`mobile-fab-btn ${isBottomNavHidden ? 'nav-hidden' : ''}`}
