@@ -24,8 +24,8 @@ export default function AuthPage({
   const [signupPassword, setSignupPassword] = useState('');
   const [signupError, setSignupError] = useState('');
 
-  // Handle Quick Demo Login
-  const handleQuickDemo = (roleKey) => {
+  // Handle Quick Role Authentication
+  const handleQuickRole = (roleKey) => {
     const user = users[roleKey];
     if (user) {
       onLogin(user);
@@ -44,7 +44,7 @@ export default function AuthPage({
 
     const idLower = loginIdentifier.trim().toLowerCase();
 
-    // Check if matches known demo user (by USN, handle, or role)
+    // Check if matches known user account (by USN, handle, or role)
     let matchedUser = Object.values(users).find(
       (u) =>
         u.usn.toLowerCase() === idLower ||
@@ -170,43 +170,43 @@ export default function AuthPage({
               </button>
             </div>
 
-            {/* Evaluator / Quick Demo Roster */}
-            <div className="auth-quick-demo-box">
+            {/* Quick Role Portal Selection */}
+            <div className="auth-quick-role-box">
               <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                1-Click Role Login
+                Role-Based Portal Access
               </div>
-              <div className="quick-demo-chips">
+              <div className="quick-role-chips">
                 <button
                   type="button"
-                  className="demo-chip"
-                  onClick={() => handleQuickDemo('student')}
-                  title="Student (AI&DS)"
+                  className="role-access-chip"
+                  onClick={() => handleQuickRole('student')}
+                  title="Student Portal (AI&DS)"
                 >
-                  Student (AI&DS)
+                  Student
                 </button>
                 <button
                   type="button"
-                  className="demo-chip"
-                  onClick={() => handleQuickDemo('faculty')}
-                  title="Faculty"
+                  className="role-access-chip"
+                  onClick={() => handleQuickRole('faculty')}
+                  title="Faculty Portal"
                 >
                   Faculty
                 </button>
                 <button
                   type="button"
-                  className="demo-chip"
-                  onClick={() => handleQuickDemo('coordinator')}
-                  title="Event Coordinator"
+                  className="role-access-chip"
+                  onClick={() => handleQuickRole('coordinator')}
+                  title="Event Coordinator Portal"
                 >
                   Coordinator
                 </button>
                 <button
                   type="button"
-                  className="demo-chip"
-                  onClick={() => handleQuickDemo('admin')}
-                  title="Campus Admin"
+                  className="role-access-chip"
+                  onClick={() => handleQuickRole('admin')}
+                  title="Campus Administrator Portal"
                 >
-                  Admin
+                  Administrator
                 </button>
               </div>
             </div>

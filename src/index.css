@@ -4090,30 +4090,31 @@ dialog::backdrop {
   background-color: var(--accent-subtle);
 }
 
-.auth-quick-demo-box {
+.auth-quick-role-box {
   margin-top: 32px;
   padding-top: 20px;
   border-top: 1px solid var(--border-color);
 }
 
-.quick-demo-chips {
+.quick-role-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
 
-.demo-chip {
+.role-access-chip {
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 9999px;
+  cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.demo-chip:hover {
+.role-access-chip:hover {
   background-color: var(--accent-subtle);
   color: var(--accent-color);
   border-color: var(--accent-color);
