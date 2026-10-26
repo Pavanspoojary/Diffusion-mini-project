@@ -1,5 +1,5 @@
 import React from 'react';
-import { CommunityAvatar, IconMore, IconArrowLeft } from './Icons';
+import { CommunityAvatar, IconArrowLeft } from './Icons';
 
 export default function CommunityHeader({
   branch,
@@ -58,15 +58,6 @@ export default function CommunityHeader({
         </div>
 
         <div className="community-hero-actions">
-          <button
-            type="button"
-            className="community-hero-back-btn"
-            onClick={onBack}
-            title="Return to Home feed"
-          >
-            <IconArrowLeft style={{ width: 14, height: 14 }} />
-            <span>Home</span>
-          </button>
           {onCreatePost && (
             <button
               type="button"
@@ -84,9 +75,6 @@ export default function CommunityHeader({
             onClick={onToggleJoin}
           >
             {isJoined ? 'Joined' : 'Join'}
-          </button>
-          <button type="button" className="community-more-btn" aria-label="More community options">
-            <IconMore />
           </button>
         </div>
       </div>
@@ -106,10 +94,6 @@ export default function CommunityHeader({
               <span>Members</span>
             </div>
           </div>
-          <button type="button" className="community-back-btn" onClick={onBack}>
-            <IconArrowLeft style={{ width: 14, height: 14, marginRight: 6 }} />
-            Back to Home
-          </button>
         </div>
       </div>
     </section>
