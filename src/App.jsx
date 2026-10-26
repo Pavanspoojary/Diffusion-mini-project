@@ -28,6 +28,22 @@ import {
   INITIAL_WEBSITES,
   INITIAL_NOTIFICATIONS
 } from './data/initialData';
+import {
+  fetchAnnouncements,
+  createAnnouncement,
+  toggleNoticeLike,
+  toggleNoticeBookmark,
+  fetchEvents,
+  createEvent,
+  toggleEventRegistration,
+  recordAttendanceInDB,
+  fetchWebsites,
+  createWebsite,
+  fetchNotifications,
+  createNotification,
+  markAllNotificationsReadInDB,
+  subscribeToTable
+} from './services/dbService';
 
 export default function App() {
   // Theme & Styling
@@ -136,6 +152,59 @@ export default function App() {
   const [lightboxImg, setLightboxImg] = useState(null);
   const [qrModal, setQrModal] = useState({ isOpen: false, event: null, mode: 'student' });
   const [toastMessage, setToastMessage] = useState('');
+
+  // Initial Data Sync & Realtime Listeners with Supabase
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadBackendData() {
+      try {
+        const [noticesData, eventsData, websitesData, notifsData] = await Promise.all([
+          fetchAnnouncements(currentUser.id),
+          fetchEvents(currentUser.id),
+          fetchWebsites(),
+          fetchNotifications(currentUser.id)
+        ]);
+
+        if (isMounted) {
+          if (noticesData) setAnnouncements(noticesData);
+          if (eventsData) setEvents(eventsData);
+          if (websitesData) setWebsites(websitesData);
+          if (notifsData) setNotifications(notifsData);
+        }
+      } catch (err) {
+        console.info('[Supabase:initSync fallback]', err.message);
+      }
+    }
+
+    loadBackendData();
+
+    // Realtime channel subscriptions
+    const unsubNotices = subscribeToTable('announcements', () => {
+      fetchAnnouncements(currentUser.id).then((data) => {
+        if (isMounted && data) setAnnouncements(data);
+      });
+    });
+
+    const unsubEvents = subscribeToTable('events', () => {
+      fetchEvents(currentUser.id).then((data) => {
+        if (isMounted && data) setEvents(data);
+      });
+    });
+
+    const unsubWebsites = subscribeToTable('websites', () => {
+      fetchWebsites().then((data) => {
+        if (isMounted && data) setWebsites(data);
+      });
+    });
+
+    return () => {
+      isMounted = false;
+      unsubNotices();
+      unsubEvents();
+      unsubWebsites();
+    };
+  }, [currentUser.id]);
 
   // Persist Theme & Color
   useEffect(() => {
@@ -273,7 +342,12 @@ export default function App() {
   };
 
   // --- Handlers ---
-  const handleLike = (id) => {
+  const handleLike = async (id) => {
+    const target = announcements.find((item) => item.id === id);
+    const wasLiked = target ? Boolean(target.isLiked) : false;
+    const currentLikes = target ? (target.likes || 0) : 0;
+
+    // Optimistic UI update
     setAnnouncements((prev) =>
       prev.map((item) => {
         if (item.id === id) {
@@ -281,15 +355,22 @@ export default function App() {
           return {
             ...item,
             isLiked,
-            likes: (item.likes || 0) + (isLiked ? 1 : -1)
+            likes: Math.max(0, (item.likes || 0) + (isLiked ? 1 : -1))
           };
         }
         return item;
       })
     );
+
+    // Persist to Supabase
+    await toggleNoticeLike(id, currentUser.id, wasLiked, currentLikes);
   };
 
-  const handleBookmark = (id) => {
+  const handleBookmark = async (id) => {
+    const target = announcements.find((item) => item.id === id);
+    const wasBookmarked = target ? Boolean(target.isBookmarked) : false;
+
+    // Optimistic UI update
     setAnnouncements((prev) =>
       prev.map((item) => {
         if (item.id === id) {
@@ -300,6 +381,9 @@ export default function App() {
         return item;
       })
     );
+
+    // Persist to Supabase
+    await toggleNoticeBookmark(id, currentUser.id, wasBookmarked);
   };
 
   const handleShare = (item) => {
@@ -312,7 +396,7 @@ export default function App() {
     }
   };
 
-  const handlePublishNotice = (noticeData) => {
+  const handlePublishNotice = async (noticeData) => {
     if (currentUser.roleKey === 'student') return;
     const newNotice = {
       id: `post-${Date.now()}`,
@@ -351,22 +435,28 @@ export default function App() {
     showToast('Notice published successfully');
 
     // Add in-app notification
-    setNotifications([
-      {
-        id: `notif-${Date.now()}`,
-        type: 'notice',
-        title: noticeData.isImportant
-          ? `Important Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`
-          : `New Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`,
-        body: `${currentUser.name} (${currentUser.role}) published: ${noticeData.text.slice(0, 60)}...`,
-        time: 'Just now',
-        unread: true
-      },
-      ...notifications
-    ]);
+    const newNotif = {
+      id: `notif-${Date.now()}`,
+      type: 'notice',
+      title: noticeData.isImportant
+        ? `Important Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`
+        : `New Notice for ${noticeData.branch === 'ALL' ? 'All Branches' : noticeData.branch}`,
+      body: `${currentUser.name} (${currentUser.role}) published: ${noticeData.text.slice(0, 60)}...`,
+      time: 'Just now',
+      unread: true
+    };
+    setNotifications([newNotif, ...notifications]);
+
+    // Persist asynchronously
+    await createAnnouncement(newNotice);
+    await createNotification(newNotif);
   };
 
-  const handleRegisterEvent = (eventId) => {
+  const handleRegisterEvent = async (eventId) => {
+    const target = events.find((evt) => evt.id === eventId);
+    const wasRegistered = target ? Boolean(target.isRegistered) : false;
+    const currentCount = target ? (target.registeredCount || 0) : 0;
+
     setEvents((prev) =>
       prev.map((evt) => {
         if (evt.id === eventId) {
@@ -375,15 +465,18 @@ export default function App() {
           return {
             ...evt,
             isRegistered,
-            registeredCount: evt.registeredCount + (isRegistered ? 1 : -1)
+            registeredCount: Math.max(0, (evt.registeredCount || 0) + (isRegistered ? 1 : -1))
           };
         }
         return evt;
       })
     );
+
+    // Persist to Supabase
+    await toggleEventRegistration(eventId, currentUser, wasRegistered, currentCount);
   };
 
-  const handleRecordAttendance = (eventId, record) => {
+  const handleRecordAttendance = async (eventId, record) => {
     setEvents((prev) =>
       prev.map((evt) => {
         if (evt.id === eventId) {
@@ -412,20 +505,22 @@ export default function App() {
     showToast(`Attendance verified for ${record.name} (${record.usn})`);
 
     // In-app notification for student
-    setNotifications([
-      {
-        id: `notif-${Date.now()}`,
-        type: 'attendance',
-        title: 'Attendance Confirmed',
-        body: `${record.status} recorded for ${record.name} at ${record.checkIn || record.checkOut}`,
-        time: 'Just now',
-        unread: true
-      },
-      ...notifications
-    ]);
+    const newNotif = {
+      id: `notif-${Date.now()}`,
+      type: 'attendance',
+      title: 'Attendance Confirmed',
+      body: `${record.status} recorded for ${record.name} at ${record.checkIn || record.checkOut}`,
+      time: 'Just now',
+      unread: true
+    };
+    setNotifications([newNotif, ...notifications]);
+
+    // Persist to Supabase
+    await recordAttendanceInDB(eventId, record);
+    await createNotification(newNotif);
   };
 
-  const handleCreateEvent = (eventData) => {
+  const handleCreateEvent = async (eventData) => {
     if (currentUser.roleKey === 'student') return;
     const newEvent = {
       id: `evt-${Date.now()}`,
@@ -439,9 +534,12 @@ export default function App() {
 
     setEvents([newEvent, ...events]);
     showToast('New event published');
+
+    // Persist to Supabase
+    await createEvent(newEvent);
   };
 
-  const handleAddWebsite = (websiteData) => {
+  const handleAddWebsite = async (websiteData) => {
     if (currentUser.roleKey === 'student') return;
     const newWeb = {
       id: `web-${Date.now()}`,
@@ -450,6 +548,9 @@ export default function App() {
 
     setWebsites([newWeb, ...websites]);
     showToast('Website added to directory');
+
+    // Persist to Supabase
+    await createWebsite(newWeb);
   };
 
   // Persist Auth
@@ -489,9 +590,10 @@ export default function App() {
     showToast(`Switched active role: ${u.role} (${u.name})`);
   };
 
-  const handleMarkAllRead = () => {
+  const handleMarkAllRead = async () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
     showToast('All notifications marked as read');
+    await markAllNotificationsReadInDB();
   };
 
   const unreadCount = notifications.filter((n) => n.unread).length;
