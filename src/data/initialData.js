@@ -403,10 +403,10 @@ export const INITIAL_WEBSITES = [
   },
   {
     id: 'web-2',
-    name: 'Student ERP & Attendance Portal',
+    name: 'SMVITM EDMIN PORTAL',
     category: 'Academic',
     description: 'Subject-wise attendance tracking, continuous internal evaluation (CIE) scores, and updated class timetables.',
-    url: 'https://erp.smvitm.ac.in',
+    url: 'https://smvitm.edmin.co/#/login',
     badge: 'Academic ERP',
     iconType: 'database'
   },
