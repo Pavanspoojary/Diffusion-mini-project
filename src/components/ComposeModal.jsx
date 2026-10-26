@@ -10,18 +10,14 @@ import {
   IconProofread,
   IconLink,
   IconPlus,
-  IconClock
+  IconClock,
+  IconVideo,
+  IconArticle
 } from './Icons';
 import { BRANCHES, CATEGORIES, USERS } from '../data/initialData';
 
 const MAX_CHARS = 500;
 const MAX_CHARS_ARTICLE = 3000;
-
-const SAMPLE_NOTICE_IMAGES = [
-  'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80'
-];
 
 const COMMENT_OPTIONS = ['Anyone', 'People you mention', 'My connections'];
 
@@ -35,10 +31,17 @@ export default function ComposeModal({
   onSwitchUser
 }) {
   const [text, setText] = useState('');
+  const [articleTitle, setArticleTitle] = useState('');
   const [branch, setBranch] = useState(currentUser.branch === 'ALL' ? 'ALL' : currentUser.branch);
   const [category, setCategory] = useState('Academic');
+  const [currentMode, setCurrentMode] = useState('text');
+
+  // Media state (strictly user files, no demo images)
   const [media, setMedia] = useState('');
-  const [mediaKind, setMediaKind] = useState(null);
+  const [mediaKind, setMediaKind] = useState(null); // 'photo' | 'video' | 'document'
+  const [mediaName, setMediaName] = useState('');
+  const [mediaSize, setMediaSize] = useState('');
+
   const [commentAudience, setCommentAudience] = useState('Anyone');
   const [collaborators, setCollaborators] = useState([]);
   const [showCollaborators, setShowCollaborators] = useState(false);
@@ -49,10 +52,16 @@ export default function ComposeModal({
   const [proofreadMsg, setProofreadMsg] = useState('');
   const [scheduledAt, setScheduledAt] = useState('');
   const [showSchedule, setShowSchedule] = useState(false);
-  const dialogRef = useRef(null);
+  const [showPlusMenu, setShowPlusMenu] = useState(false);
 
-  const mode = intent?.mode || 'text';
-  const isArticle = mode === 'article';
+  // Hidden file inputs
+  const dialogRef = useRef(null);
+  const mediaInputRef = useRef(null);
+  const photoInputRef = useRef(null);
+  const videoInputRef = useRef(null);
+  const docInputRef = useRef(null);
+
+  const isArticle = currentMode === 'article';
   const charLimit = isArticle ? MAX_CHARS_ARTICLE : MAX_CHARS;
   const charCount = text.length;
   const charOver = charCount > charLimit;
@@ -65,10 +74,14 @@ export default function ComposeModal({
     }
   }, [isOpen]);
 
-  // Reset the composer each time it is opened (honouring the entry point).
+  // Reset or initialize modal state when opened
   useEffect(() => {
     if (!isOpen) return;
+
+    const initialMode = intent?.mode || 'text';
+    setCurrentMode(initialMode);
     setText('');
+    setArticleTitle('');
     const targetBranch = intent?.branch || currentUser.branch || 'ALL';
     setBranch(targetBranch === 'ALL' ? 'ALL' : targetBranch);
     setCategory('Academic');
@@ -82,22 +95,52 @@ export default function ComposeModal({
     setProofreadMsg('');
     setScheduledAt('');
     setShowSchedule(false);
+    setShowPlusMenu(false);
 
-    if (mode === 'photo' || mode === 'video') {
-      setMedia(SAMPLE_NOTICE_IMAGES[Math.floor(Math.random() * SAMPLE_NOTICE_IMAGES.length)]);
-      setMediaKind(mode);
+    // If a real file was passed from the opener, use it; otherwise media starts clean
+    if (intent?.initialMedia) {
+      setMedia(intent.initialMedia);
+      setMediaKind(intent.initialMediaKind || initialMode);
+      setMediaName(intent.initialMediaName || '');
+      setMediaSize(intent.initialMediaSize || '');
     } else {
       setMedia('');
       setMediaKind(null);
+      setMediaName('');
+      setMediaSize('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, mode]);
+  }, [isOpen, intent]);
 
   if (!isOpen) return null;
 
-  const attachImage = () => {
-    setMedia(SAMPLE_NOTICE_IMAGES[Math.floor(Math.random() * SAMPLE_NOTICE_IMAGES.length)]);
-    setMediaKind('photo');
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '';
+    return bytes > 1024 * 1024
+      ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+      : `${Math.round(bytes / 1024)} KB`;
+  };
+
+  const handleFileUpload = (e, explicitKind = null) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    let kind = explicitKind;
+    if (!kind) {
+      if (file.type.startsWith('video/')) kind = 'video';
+      else if (file.type.startsWith('image/')) kind = 'photo';
+      else kind = 'document';
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setMedia(event.target.result);
+      setMediaKind(kind);
+      setMediaName(file.name);
+      setMediaSize(formatFileSize(file.size));
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   const handleAddLink = () => {
@@ -107,21 +150,48 @@ export default function ComposeModal({
     setLinkUrl(url);
     setLinkInput('');
     setShowLinkInput(false);
-    if (!text.includes(url)) {
-      setText((prev) => (prev ? `${prev}\n${url}` : url));
-    }
   };
 
   const runProofread = () => {
     if (!text.trim()) {
-      setProofreadMsg('Nothing to check yet');
+      setProofreadMsg('Type some text before checking');
       return;
     }
+
+    let cleaned = text;
     const issues = [];
-    if (/\s{3,}/.test(text)) issues.push('extra spaces');
-    if (/\s+[.,;:!?]/.test(text)) issues.push('spacing before punctuation');
-    if (/(.)\1{4,}/.test(text)) issues.push('repeated characters');
-    setProofreadMsg(issues.length ? `Review: ${issues.join(', ')}` : 'Looks good — no issues found');
+
+    // Redundant spaces
+    if (/[ \t]{2,}/.test(cleaned)) {
+      issues.push('spacing');
+      cleaned = cleaned.replace(/[ \t]{2,}/g, ' ');
+    }
+
+    // Punctuation spacing
+    if (/\s+([.,;:!?])/.test(cleaned)) {
+      issues.push('punctuation');
+      cleaned = cleaned.replace(/\s+([.,;:!?])/g, '$1');
+    }
+
+    // Capitalize beginning of sentences
+    const capitalized = cleaned.replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, prefix, char) => prefix + char.toUpperCase());
+    if (capitalized !== cleaned) {
+      issues.push('capitalization');
+      cleaned = capitalized;
+    }
+
+    // Repeated words
+    if (/\b(\w+)\s+\1\b/i.test(cleaned)) {
+      issues.push('duplicate words');
+      cleaned = cleaned.replace(/\b(\w+)\s+\1\b/gi, '$1');
+    }
+
+    if (issues.length > 0) {
+      setText(cleaned);
+      setProofreadMsg(`Polished: ${issues.join(', ')}`);
+    } else {
+      setProofreadMsg('Text looks clean and ready');
+    }
   };
 
   const toggleCollaborator = (roleKey) => {
@@ -132,15 +202,18 @@ export default function ComposeModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!text.trim() && !media) return;
+    if (!text.trim() && !media && !articleTitle.trim()) return;
     if (charOver) return;
 
     onPublishNotice({
+      articleTitle: isArticle ? articleTitle.trim() : null,
       text: text.trim(),
       branch,
       category,
       media: media || null,
-      mediaKind,
+      mediaKind: mediaKind || null,
+      mediaName: mediaName || null,
+      mediaSize: mediaSize || null,
       linkUrl: linkUrl || null,
       comments: commentAudience,
       collaborators: collaborators.map((k) => users[k]).filter(Boolean),
@@ -150,7 +223,7 @@ export default function ComposeModal({
     onClose();
   };
 
-  const postDisabled = (!text.trim() && !media) || charOver;
+  const postDisabled = (!text.trim() && !media && !articleTitle.trim()) || charOver;
 
   return (
     <dialog
@@ -159,6 +232,36 @@ export default function ComposeModal({
       className="x-modal li-compose-modal"
       onClose={onClose}
     >
+      {/* Hidden file pickers */}
+      <input
+        type="file"
+        ref={mediaInputRef}
+        accept="image/*,video/*"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileUpload(e)}
+      />
+      <input
+        type="file"
+        ref={photoInputRef}
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileUpload(e, 'photo')}
+      />
+      <input
+        type="file"
+        ref={videoInputRef}
+        accept="video/*"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileUpload(e, 'video')}
+      />
+      <input
+        type="file"
+        ref={docInputRef}
+        accept=".pdf,.doc,.docx,.txt"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileUpload(e, 'document')}
+      />
+
       <div className="modal-dialog-content">
         {/* Identity row */}
         <div className="li-compose-top">
@@ -332,10 +435,22 @@ export default function ComposeModal({
         )}
 
         <form onSubmit={handleSubmit} className="li-compose-form">
+          {/* Article mode headline */}
+          {isArticle && (
+            <input
+              type="text"
+              className="li-article-title-input"
+              placeholder="Headline / Article Title..."
+              value={articleTitle}
+              onChange={(e) => setArticleTitle(e.target.value)}
+              autoFocus
+            />
+          )}
+
           <textarea
             className="li-compose-textarea"
-            placeholder="Share your thoughts ..."
-            rows={isArticle ? 10 : 6}
+            placeholder={isArticle ? 'Write the full body of your article here...' : 'Share your thoughts ...'}
+            rows={isArticle ? 8 : 5}
             value={text}
             onChange={(e) => {
               setText(e.target.value);
@@ -343,22 +458,72 @@ export default function ComposeModal({
             }}
           />
 
+          {/* Empty Upload Zone if in photo or video mode without media */}
+          {!media && currentMode === 'photo' && (
+            <div className="li-upload-zone" onClick={() => photoInputRef.current?.click()}>
+              <IconMedia className="li-upload-zone-icon" />
+              <div className="li-upload-zone-text">
+                <strong>Click to choose a photo</strong>
+                <span>Supports PNG, JPG, WebP, GIF from your device</span>
+              </div>
+              <button type="button" className="li-upload-zone-btn">Browse Photo</button>
+            </div>
+          )}
+
+          {!media && currentMode === 'video' && (
+            <div className="li-upload-zone" onClick={() => videoInputRef.current?.click()}>
+              <IconVideo className="li-upload-zone-icon video" />
+              <div className="li-upload-zone-text">
+                <strong>Click to choose a video</strong>
+                <span>Supports MP4, WebM, MOV video files</span>
+              </div>
+              <button type="button" className="li-upload-zone-btn">Browse Video</button>
+            </div>
+          )}
+
+          {/* Media Preview: Real Photo, Video, or Document */}
           {media && (
             <div className="li-compose-preview">
-              <img src={media} alt="Notice attachment preview" />
+              {mediaKind === 'video' ? (
+                <video
+                  src={media}
+                  controls
+                  playsInline
+                  className="li-preview-video"
+                />
+              ) : mediaKind === 'document' ? (
+                <div className="li-compose-preview-doc">
+                  <div className="li-compose-preview-doc-icon">
+                    <IconArticle style={{ width: 22, height: 22 }} />
+                  </div>
+                  <div className="li-compose-preview-doc-info">
+                    <span className="li-compose-preview-doc-title">{mediaName || 'Attached Document'}</span>
+                    <span className="li-compose-preview-doc-meta">{mediaSize || 'File'}</span>
+                  </div>
+                </div>
+              ) : (
+                <img src={media} alt="Attachment preview" />
+              )}
+
               <div className="li-compose-preview-bar">
                 <span className="li-compose-preview-label">
                   {mediaKind === 'video'
-                    ? 'Video poster attached'
+                    ? `Video attached ${mediaName ? `· ${mediaName}` : ''} ${mediaSize ? `(${mediaSize})` : ''}`
                     : mediaKind === 'document'
-                      ? 'Document attached'
-                      : 'Image attached'}
+                      ? `Document attached ${mediaName ? `· ${mediaName}` : ''}`
+                      : `Photo attached ${mediaName ? `· ${mediaName}` : ''} ${mediaSize ? `(${mediaSize})` : ''}`}
                 </span>
                 <button
                   type="button"
                   className="li-preview-remove"
-                  onClick={() => { setMedia(''); setMediaKind(null); }}
+                  onClick={() => {
+                    setMedia('');
+                    setMediaKind(null);
+                    setMediaName('');
+                    setMediaSize('');
+                  }}
                   aria-label="Remove attachment"
+                  title="Remove attachment"
                 >
                   <IconClose className="li-icon" />
                 </button>
@@ -366,12 +531,29 @@ export default function ComposeModal({
             </div>
           )}
 
+          {/* Attached Link Chip */}
+          {linkUrl && (
+            <div className="li-link-chip">
+              <IconLink />
+              <span>{linkUrl}</span>
+              <button
+                type="button"
+                onClick={() => setLinkUrl('')}
+                title="Remove link"
+                aria-label="Remove link"
+              >
+                <IconClose style={{ width: 14, height: 14 }} />
+              </button>
+            </div>
+          )}
+
+          {/* Link Input Row */}
           {showLinkInput && (
             <div className="li-link-row">
               <input
                 type="text"
                 className="li-link-input"
-                placeholder="Paste a link (e.g. vtu.ac.in)"
+                placeholder="Paste URL (e.g. vtu.ac.in or github.com/...)"
                 value={linkInput}
                 autoFocus
                 onChange={(e) => setLinkInput(e.target.value)}
@@ -380,87 +562,123 @@ export default function ComposeModal({
                   if (e.key === 'Escape') { e.preventDefault(); setShowLinkInput(false); }
                 }}
               />
-              <button type="button" className="li-link-add" onClick={handleAddLink}>Add</button>
+              <button type="button" className="li-link-add" onClick={handleAddLink}>Add Link</button>
             </div>
           )}
 
-        {/* Toolbar */}
-        <div className="li-compose-toolbar">
-          <button
-            type="button"
-            className="li-proofread-pill"
-            onClick={runProofread}
-            title="Check spelling & formatting"
-          >
-            <IconProofread />
-            <span>Proofread</span>
-          </button>
-
-          <span className={`compose-char-counter ${charOver ? 'over' : charCount > charLimit * 0.8 ? 'warn' : ''}`}>
-            {charCount}/{charLimit}
-          </span>
-
-          {proofreadMsg && <span className="li-proofread-msg">{proofreadMsg}</span>}
-
-          <div className="li-compose-tools">
+          {/* Toolbar */}
+          <div className="li-compose-toolbar">
             <button
               type="button"
-              className="li-tool-btn"
-              onClick={attachImage}
-              title="Add image"
-              aria-label="Add image"
+              className="li-proofread-pill"
+              onClick={runProofread}
+              title="Clean formatting, spacing & capitalization"
             >
-              <IconMedia className="li-icon" />
+              <IconProofread />
+              <span>Proofread</span>
             </button>
+
+            <span className={`compose-char-counter ${charOver ? 'over' : charCount > charLimit * 0.8 ? 'warn' : ''}`}>
+              {charCount}/{charLimit}
+            </span>
+
+            {proofreadMsg && <span className="li-proofread-msg">{proofreadMsg}</span>}
+
+            <div className="li-compose-tools">
+              {/* Media Picker Button: opens native device file chooser */}
+              <button
+                type="button"
+                className="li-tool-btn"
+                onClick={() => mediaInputRef.current?.click()}
+                title="Upload Photo or Video"
+                aria-label="Upload Photo or Video"
+              >
+                <IconMedia className="li-icon" />
+              </button>
+
+              {/* Link Button */}
+              <button
+                type="button"
+                className={`li-tool-btn ${showLinkInput || linkUrl ? 'active' : ''}`}
+                onClick={() => setShowLinkInput((v) => !v)}
+                title="Attach link"
+                aria-label="Attach link"
+              >
+                <IconLink />
+              </button>
+
+              {/* Plus Menu Button */}
+              <div style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  className={`li-tool-btn ${showPlusMenu ? 'active' : ''}`}
+                  onClick={() => setShowPlusMenu((v) => !v)}
+                  title="More attachments"
+                  aria-label="More attachments"
+                >
+                  <IconPlus />
+                </button>
+
+                {showPlusMenu && (
+                  <div className="li-menu li-menu-right" style={{ bottom: 'calc(100% + 8px)', top: 'auto', minWidth: 200 }} role="menu">
+                    <button
+                      type="button"
+                      className="li-menu-item"
+                      onClick={() => {
+                        setShowPlusMenu(false);
+                        docInputRef.current?.click();
+                      }}
+                      role="menuitem"
+                    >
+                      <IconArticle style={{ width: 18, height: 18 }} />
+                      <span className="li-menu-item-name">Attach PDF / Document</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className="li-menu-item"
+                      onClick={() => {
+                        setShowPlusMenu(false);
+                        setCurrentMode((m) => (m === 'article' ? 'text' : 'article'));
+                      }}
+                      role="menuitem"
+                    >
+                      <IconTag style={{ width: 18, height: 18 }} />
+                      <span className="li-menu-item-name">
+                        {isArticle ? 'Switch to Standard Post' : 'Switch to Article Mode'}
+                      </span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="li-compose-footer">
+            {showSchedule && (
+              <input
+                type="datetime-local"
+                className="li-schedule-input"
+                value={scheduledAt}
+                onChange={(e) => setScheduledAt(e.target.value)}
+              />
+            )}
+
             <button
               type="button"
-              className="li-tool-btn"
-              onClick={() => setShowLinkInput((v) => !v)}
-              title="Add link"
-              aria-label="Add link"
+              className={`li-schedule-btn ${showSchedule ? 'active' : ''}`}
+              onClick={() => setShowSchedule((v) => !v)}
+              title="Schedule notice publication"
+              aria-label="Schedule notice publication"
             >
-              <IconLink />
+              <IconClock />
             </button>
-            <button
-              type="button"
-              className="li-tool-btn"
-              onClick={() => {
-                setMedia(SAMPLE_NOTICE_IMAGES[Math.floor(Math.random() * SAMPLE_NOTICE_IMAGES.length)]);
-                setMediaKind('document');
-              }}
-              title="Add attachment"
-              aria-label="Add attachment"
-            >
-              <IconPlus />
+
+            <button type="submit" className="li-post-btn" disabled={postDisabled}>
+              {scheduledAt ? 'Schedule' : 'Post'}
             </button>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="li-compose-footer">
-          {showSchedule && (
-            <input
-              type="datetime-local"
-              className="li-schedule-input"
-              value={scheduledAt}
-              onChange={(e) => setScheduledAt(e.target.value)}
-            />
-          )}
-
-          <button
-            type="button"
-            className={`li-schedule-btn ${showSchedule ? 'active' : ''}`}
-            onClick={() => setShowSchedule((v) => !v)}
-            title="Schedule post"
-            aria-label="Schedule post"
-          >
-            <IconClock />
-          </button>
-
-          <button type="submit" className="li-post-btn" disabled={postDisabled}>
-            {scheduledAt ? 'Schedule' : 'Post'}
-          </button>
-        </div>
         </form>
       </div>
     </dialog>

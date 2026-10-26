@@ -18,6 +18,7 @@ export default function CreateEventModal({
   const [poster, setPoster] = useState('');
   const [link, setLink] = useState('');
   const dialogRef = useRef(null);
+  const posterInputRef = useRef(null);
 
   useEffect(() => {
     if (isOpen && dialogRef.current) {
@@ -42,7 +43,7 @@ export default function CreateEventModal({
       venue: venue.trim() || 'College Auditorium',
       deadline: deadline.trim() || 'Registration open',
       description: description.trim(),
-      poster: poster || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
+      poster: poster || null,
       link: link.trim() || null
     });
 
@@ -170,6 +171,75 @@ export default function CreateEventModal({
               />
             </label>
           )}
+
+          <div>
+            <span style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6 }}>
+              Event Poster (Optional):
+            </span>
+            <input
+              type="file"
+              ref={posterInputRef}
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (ev) => setPoster(ev.target.result);
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+            {poster ? (
+              <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', maxHeight: 180, border: '1px solid var(--border-color)' }}>
+                <img src={poster} alt="Event poster" style={{ width: '100%', maxHeight: 180, objectFit: 'cover', display: 'block' }} />
+                <button
+                  type="button"
+                  onClick={() => setPoster('')}
+                  style={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    background: 'rgba(0,0,0,0.65)',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: 28,
+                    height: 28,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer'
+                  }}
+                  title="Remove poster"
+                >
+                  <IconClose style={{ width: 16, height: 16 }} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => posterInputRef.current?.click()}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: 8,
+                  border: '1px dashed var(--border-color)',
+                  background: 'transparent',
+                  color: 'var(--text-secondary)',
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8
+                }}
+              >
+                <IconMedia style={{ width: 18, height: 18 }} />
+                <span>Upload Event Poster from device</span>
+              </button>
+            )}
+          </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
             <button type="button" onClick={onClose} className="btn-primary-post" style={{ background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>

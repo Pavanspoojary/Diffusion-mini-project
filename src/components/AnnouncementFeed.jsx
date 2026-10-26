@@ -14,7 +14,8 @@ import {
   IconCheck,
   IconArrowLeft,
   IconCopy,
-  IconWhatsApp
+  IconWhatsApp,
+  IconArticle
 } from './Icons';
 import LinkedInComposer from './LinkedInComposer';
 import CommunityHeader from './CommunityHeader';
@@ -428,6 +429,12 @@ export default function AnnouncementFeed({
                   {item.department}
                 </div>
 
+                {item.articleTitle && (
+                  <h3 className="post-article-headline">
+                    {item.articleTitle}
+                  </h3>
+                )}
+
                 <div className="post-text">{item.text}</div>
 
                 {item.linkUrl && (
@@ -444,11 +451,38 @@ export default function AnnouncementFeed({
                   </div>
                 )}
 
-                {item.media && (
-                  <div className="post-media-container" onClick={() => onOpenImage(item.media)}>
-                    <img src={item.media} alt="Notice poster attachment" className="post-media-img" />
+                {item.media && item.mediaKind === 'video' ? (
+                  <div className="post-media-container post-video-container" onClick={(e) => e.stopPropagation()}>
+                    <video
+                      src={item.media}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="post-media-video"
+                    />
                   </div>
-                )}
+                ) : item.media && item.mediaKind === 'document' ? (
+                  <div className="post-doc-attachment">
+                    <div className="post-doc-icon-wrap">
+                      <IconArticle style={{ width: 22, height: 22 }} />
+                    </div>
+                    <div className="post-doc-details">
+                      <span className="post-doc-title">{item.mediaName || 'Attached Document'}</span>
+                      <span className="post-doc-meta">{item.mediaSize || 'File attachment'}</span>
+                    </div>
+                    <a
+                      href={item.media}
+                      download={item.mediaName || 'document'}
+                      className="post-doc-download-btn"
+                    >
+                      Download
+                    </a>
+                  </div>
+                ) : item.media ? (
+                  <div className="post-media-container" onClick={() => onOpenImage(item.media)}>
+                    <img src={item.media} alt="Notice attachment" className="post-media-img" />
+                  </div>
+                ) : null}
 
                 {/* X.com-style action bar */}
                 <div className="post-actions-row">
