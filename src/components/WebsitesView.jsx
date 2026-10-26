@@ -13,6 +13,7 @@ import {
   IconChevronDown,
   IconCheck,
   IconCopy,
+  IconNotifications,
   VerifiedBadge
 } from './Icons';
 
@@ -95,7 +96,9 @@ export default function WebsitesView({
   onAddWebsite,
   searchQuery: globalSearchQuery = '',
   isSidebarHidden,
-  onToggleSidebar
+  onToggleSidebar,
+  unreadCount = 0,
+  onOpenNotifications
 }) {
   const [selectedCat, setSelectedCat] = useState('All');
   const [localSearch, setLocalSearch] = useState('');
@@ -197,16 +200,30 @@ export default function WebsitesView({
               <span className="header-sub-title">Centralized directory of verified institutional resources</span>
             </div>
           </div>
-          {currentUser.roleKey === 'admin' && (
-            <button
-              type="button"
-              className="btn-primary-post"
-              onClick={() => setShowAddForm(!showAddForm)}
-              style={{ fontSize: 13, padding: '6px 14px' }}
-            >
-              {showAddForm ? 'Cancel' : '+ Add Portal'}
-            </button>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {onOpenNotifications && (
+              <button
+                type="button"
+                className="header-notif-btn"
+                onClick={onOpenNotifications}
+                title="Notifications"
+                aria-label="Notifications"
+              >
+                <IconNotifications style={{ width: 19, height: 19 }} />
+                {unreadCount > 0 && <span className="badge-dot" style={{ top: 2, right: 2 }} />}
+              </button>
+            )}
+            {currentUser.roleKey === 'admin' && (
+              <button
+                type="button"
+                className="btn-primary-post"
+                onClick={() => setShowAddForm(!showAddForm)}
+                style={{ fontSize: 13, padding: '6px 14px' }}
+              >
+                {showAddForm ? 'Cancel' : '+ Add Portal'}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Search & Filter Controls */}

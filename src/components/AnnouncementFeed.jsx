@@ -4,6 +4,7 @@ import {
   IconBookmarkAction,
   IconShare,
   IconSidebarToggle,
+  IconNotifications,
   VerifiedBadge,
   CommunityAvatar,
   IconChevronDown,
@@ -201,7 +202,9 @@ export default function AnnouncementFeed({
   onToggleSidebar,
   joinedCommunities = [],
   onToggleJoin,
-  onOpenCommunity
+  onOpenCommunity,
+  unreadCount = 0,
+  onOpenNotifications
 }) {
   const canPublish = currentUser.roleKey !== 'student';
   const [sort, setSort] = useState('Best');
@@ -298,6 +301,19 @@ export default function AnnouncementFeed({
                 )}
               </div>
             </div>
+
+            {onOpenNotifications && (
+              <button
+                type="button"
+                className="header-notif-btn"
+                onClick={onOpenNotifications}
+                title="Notifications"
+                aria-label="Notifications"
+              >
+                <IconNotifications style={{ width: 19, height: 19 }} />
+                {unreadCount > 0 && <span className="badge-dot" style={{ top: 2, right: 2 }} />}
+              </button>
+            )}
           </div>
         )}
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle } from './Icons';
+import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications } from './Icons';
 
 export default function EventsView({
   events,
@@ -11,7 +11,9 @@ export default function EventsView({
   onOpenImage,
   searchQuery,
   isSidebarHidden,
-  onToggleSidebar
+  onToggleSidebar,
+  unreadCount = 0,
+  onOpenNotifications
 }) {
   const [activeTab, setActiveTab] = useState('internal'); // 'internal' | 'external'
 
@@ -53,16 +55,30 @@ export default function EventsView({
               <span className="header-sub-title">Internal QR Attendance & External Opportunities</span>
             </div>
           </div>
-          {canCreateEvent && (
-            <button
-              type="button"
-              className="btn-primary-post"
-              onClick={onOpenCreateEvent}
-              style={{ fontSize: 13, padding: '6px 14px' }}
-            >
-              + Create Event
-            </button>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {onOpenNotifications && (
+              <button
+                type="button"
+                className="header-notif-btn"
+                onClick={onOpenNotifications}
+                title="Notifications"
+                aria-label="Notifications"
+              >
+                <IconNotifications style={{ width: 19, height: 19 }} />
+                {unreadCount > 0 && <span className="badge-dot" style={{ top: 2, right: 2 }} />}
+              </button>
+            )}
+            {canCreateEvent && (
+              <button
+                type="button"
+                className="btn-primary-post"
+                onClick={onOpenCreateEvent}
+                style={{ fontSize: 13, padding: '6px 14px' }}
+              >
+                + Create Event
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Internal vs External Tabs */}

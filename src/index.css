@@ -533,6 +533,32 @@ html[data-theme="light"] .auth-hero-x-logo {
   color: var(--text-secondary);
 }
 
+.header-notif-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.header-notif-btn:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--text-muted);
+  color: var(--accent-color);
+}
+
+.header-notif-btn:active {
+  transform: scale(0.93);
+}
+
 .header-actions-right {
   display: flex;
   align-items: center;

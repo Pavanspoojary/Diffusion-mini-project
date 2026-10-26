@@ -5,6 +5,7 @@ import AnnouncementFeed from './components/AnnouncementFeed';
 import EventsView from './components/EventsView';
 import WebsitesView from './components/WebsitesView';
 import ProfileView from './components/ProfileView';
+import NotificationsView from './components/NotificationsView';
 import ComposeModal from './components/ComposeModal';
 import CreateEventModal from './components/CreateEventModal';
 import DisplayModal from './components/DisplayModal';
@@ -562,6 +563,8 @@ export default function App() {
             joinedCommunities={joinedCommunities}
             onToggleJoin={handleToggleJoin}
             onOpenCommunity={openCommunity}
+            unreadCount={unreadCount}
+            onOpenNotifications={() => setActiveNav('notifications')}
           />
         )}
 
@@ -578,6 +581,8 @@ export default function App() {
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
             currentUser={currentUser}
+            unreadCount={unreadCount}
+            onOpenNotifications={() => setActiveNav('notifications')}
           />
         )}
 
@@ -590,16 +595,27 @@ export default function App() {
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
             currentUser={currentUser}
+            unreadCount={unreadCount}
+            onOpenNotifications={() => setActiveNav('notifications')}
           />
         )}
 
-        {(activeNav === 'profile' || activeNav === 'notifications') && (
+        {activeNav === 'notifications' && (
+          <NotificationsView
+            notifications={notifications}
+            onMarkAllRead={handleMarkAllRead}
+            isSidebarHidden={isSidebarHidden}
+            onToggleSidebar={handleToggleSidebar}
+            currentUser={currentUser}
+            onBack={() => setActiveNav('announcements')}
+          />
+        )}
+
+        {activeNav === 'profile' && (
           <ProfileView
             currentUser={currentUser}
             users={USERS}
             onSwitchUser={handleSwitchUser}
-            notifications={notifications}
-            onMarkAllRead={handleMarkAllRead}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
             onSelectNav={(nav) => setActiveNav(nav)}

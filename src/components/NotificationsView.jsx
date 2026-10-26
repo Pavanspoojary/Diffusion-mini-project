@@ -1,12 +1,19 @@
 import React from 'react';
-import { IconAnnouncements, IconEvents, IconCheck, IconSidebarToggle } from './Icons';
+import {
+  IconAnnouncements,
+  IconEvents,
+  IconCheck,
+  IconSidebarToggle,
+  IconArrowLeft
+} from './Icons';
 
 export default function NotificationsView({
   notifications,
   onMarkAllRead,
   isSidebarHidden,
   onToggleSidebar,
-  currentUser
+  currentUser,
+  onBack
 }) {
   const getNotifIcon = (type) => {
     switch (type) {
@@ -18,6 +25,8 @@ export default function NotificationsView({
         return <IconCheck style={{ width: 18, height: 18, color: '#00ba7c' }} />;
     }
   };
+
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
     <div>
@@ -36,29 +45,41 @@ export default function NotificationsView({
                 <IconSidebarToggle style={{ width: 18, height: 18 }} />
               </button>
             )}
-            <button
-              type="button"
-              className="mobile-header-avatar-btn mobile-only"
-              onClick={() => onToggleSidebar && onToggleSidebar(true)}
-              title="Open profile & menu"
-              aria-label="Open profile & menu"
-            >
-              <span className="avatar avatar-sm" style={{ background: currentUser?.avatarBg || 'var(--card-bg)' }}>
-                <span>{currentUser?.avatarChar || 'U'}</span>
-              </span>
-            </button>
+
+            {onBack && (
+              <button
+                type="button"
+                className="community-back-pill"
+                onClick={onBack}
+                title="Back to Notices"
+              >
+                <IconArrowLeft />
+                <span>Back</span>
+              </button>
+            )}
+
             <div className="header-title-block">
               <h1 className="header-main-title">Notifications & Reminders</h1>
               <span className="header-sub-title">Important academic circulars and event deadlines</span>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onMarkAllRead}
-            style={{ fontSize: 13, color: 'var(--accent-color)', fontWeight: 600 }}
-          >
-            Mark all as read
-          </button>
+
+          {unreadCount > 0 && (
+            <button
+              type="button"
+              onClick={onMarkAllRead}
+              style={{
+                fontSize: 13,
+                color: 'var(--accent-color)',
+                fontWeight: 600,
+                cursor: 'pointer',
+                background: 'transparent',
+                border: 'none'
+              }}
+            >
+              Mark all as read
+            </button>
+          )}
         </div>
       </div>
 
@@ -98,7 +119,7 @@ export default function NotificationsView({
               >
                 {getNotifIcon(n.type)}
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--text-primary)' }}>
                     {n.title}
