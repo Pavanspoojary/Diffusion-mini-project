@@ -229,6 +229,9 @@ export default function BookmarksView({
   }, [filteredAnnouncements, sort]);
 
   const totalBookmarks = announcements.length;
+  const userHandle = currentUser?.handle
+    ? (currentUser.handle.startsWith('@') ? currentUser.handle : `@${currentUser.handle}`)
+    : '';
 
   return (
     <div className="bookmarks-container">
@@ -248,22 +251,10 @@ export default function BookmarksView({
               </button>
             )}
 
-            {onBack && (
-              <button
-                type="button"
-                className="community-back-pill"
-                onClick={onBack}
-                title="Back to Announcements Feed"
-              >
-                <IconArrowLeft />
-                <span>Feed</span>
-              </button>
-            )}
-
             <div className="header-title-block">
               <h1 className="header-main-title">Bookmarks</h1>
               <span className="header-sub-title">
-                {currentUser?.handle ? `@${currentUser.handle} · ` : ''}
+                {userHandle ? `${userHandle} · ` : ''}
                 {totalBookmarks} saved {totalBookmarks === 1 ? 'notice' : 'notices'}
               </span>
             </div>
@@ -379,12 +370,11 @@ export default function BookmarksView({
           /* Empty State: Zero Bookmarks */
           <div className="bookmarks-empty-card">
             <div className="bookmarks-empty-icon-wrap">
-              <IconBookmarks style={{ width: 38, height: 38, color: 'var(--accent-color)' }} />
+              <IconBookmarks style={{ width: 28, height: 28, color: 'var(--accent-color)' }} />
             </div>
             <h2 className="bookmarks-empty-title">Save notices for later</h2>
             <p className="bookmarks-empty-desc">
-              Do not let important announcements, academic circulars, or placement alerts slip away.
-              Tap the bookmark icon on any notice in the feed to save it here for quick reference.
+              Tap the bookmark icon on any announcement to save it here for quick reference.
             </p>
             {onBack && (
               <button
@@ -392,24 +382,9 @@ export default function BookmarksView({
                 className="bookmarks-explore-btn"
                 onClick={onBack}
               >
-                Browse Announcements
+                Browse Feed
               </button>
             )}
-
-            <div className="bookmarks-hints-grid">
-              <div className="bookmarks-hint-item">
-                <span className="bookmarks-hint-dot" />
-                <span>Save exam timetables, fee circulars, and academic calendars</span>
-              </div>
-              <div className="bookmarks-hint-item">
-                <span className="bookmarks-hint-dot" />
-                <span>Track placement drives, recruitment notices, and internship deadlines</span>
-              </div>
-              <div className="bookmarks-hint-item">
-                <span className="bookmarks-hint-dot" />
-                <span>Store technical symposiums, hackathons, and cultural fest updates</span>
-              </div>
-            </div>
           </div>
         ) : sortedAnnouncements.length === 0 ? (
           /* Empty State: Filter/Search yielded 0 matches */
