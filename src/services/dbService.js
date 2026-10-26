@@ -415,7 +415,7 @@ export async function fetchWebsites() {
   } catch (err) {
     console.info('[Supabase:fetchWebsites fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_websites_v6') || localStorage.getItem('college_hub_websites_v5');
+      const saved = localStorage.getItem('college_hub_websites_v7') || localStorage.getItem('college_hub_websites_v6');
       if (saved) return JSON.parse(saved);
     } catch {}
     return INITIAL_WEBSITES;

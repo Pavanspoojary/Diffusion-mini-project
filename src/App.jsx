@@ -129,10 +129,10 @@ export default function App() {
 
   const [websites, setWebsites] = useState(() => {
     try {
+      const savedV7 = localStorage.getItem('college_hub_websites_v7');
+      if (savedV7) return JSON.parse(savedV7);
       const savedV6 = localStorage.getItem('college_hub_websites_v6');
-      if (savedV6) return JSON.parse(savedV6);
-      const savedV5 = localStorage.getItem('college_hub_websites_v5');
-      if (savedV5 && savedV5.includes('PRINTIN')) return JSON.parse(savedV5);
+      if (savedV6 && savedV6.includes('AASARE')) return JSON.parse(savedV6);
       return INITIAL_WEBSITES;
     } catch {
       return INITIAL_WEBSITES;
@@ -236,7 +236,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_websites_v6', JSON.stringify(websites));
+      localStorage.setItem('college_hub_websites_v7', JSON.stringify(websites));
     } catch {}
   }, [websites]);
 

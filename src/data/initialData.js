@@ -454,6 +454,60 @@ export const INITIAL_WEBSITES = [
     url: 'https://sode-edu.in/smvitm/grievance/grievance_form/',
     badge: 'Grievance Portal',
     iconType: 'shield'
+  },
+  {
+    id: 'web-8',
+    name: 'AASARE PORTAL',
+    category: 'Student Utilities',
+    description: 'Student counseling, mental health guidance, and institutional support services.',
+    url: 'https://aasare.sode-edu.in/',
+    badge: 'Student Support',
+    iconType: 'shield'
+  },
+  {
+    id: 'web-9',
+    name: 'STUDENT COUNCIL ELECTION PORTAL',
+    category: 'Campus Life',
+    description: 'Official SMVITM student council digital election and voting authentication portal.',
+    url: 'https://smvitm-election.vercel.app/auth/signin',
+    badge: 'Elections',
+    iconType: 'users'
+  },
+  {
+    id: 'web-10',
+    name: 'VARNOTHSAV PORTAL',
+    category: 'Campus Life',
+    description: 'National-level annual intercollegiate cultural and talent fest of SMVITM.',
+    url: 'https://varnothsava.sode-edu.in/',
+    badge: 'Cultural Fest',
+    iconType: 'external'
+  },
+  {
+    id: 'web-11',
+    name: 'VICHAARA PORTAL',
+    category: 'Academic',
+    description: 'Research publications, student forum for intellectual discussions, and academic exchange.',
+    url: 'https://vichaara.vercel.app/',
+    badge: 'Academic Forum',
+    iconType: 'book'
+  },
+  {
+    id: 'web-12',
+    name: 'TECHFEST 2026 PORTAL',
+    category: 'Events',
+    description: 'Annual college technical festival website for hackathons, technical paper presentations, and competitions.',
+    url: 'https://techfest-26.vercel.app/',
+    badge: 'Tech Fest',
+    iconType: 'external'
+  },
+  {
+    id: 'web-13',
+    name: 'PROJECT HUB PORTAL',
+    category: 'Academic',
+    description: 'Collaborative student project workspace for code repositories, submission tracking, and project reviews.',
+    url: 'https://wrokspace.vercel.app/',
+    badge: 'Project Workspace',
+    iconType: 'database'
   }
 ];
 
