@@ -116,10 +116,12 @@ export default function EventsView({
               <article key={evt.id} className="event-card">
                 <div className="event-header">
                   <div>
-                    <span className={`event-type-badge ${evt.type === 'internal' ? 'badge-internal' : 'badge-external'}`}>
-                      {evt.type === 'internal' ? 'Internal Event · QR Check-In' : 'External Competition'}
-                    </span>
-                    <h2 className="event-title" style={{ marginTop: 8 }}>
+                    {evt.type !== 'internal' && (
+                      <span className="event-type-badge badge-external">
+                        External Competition
+                      </span>
+                    )}
+                    <h2 className="event-title" style={{ marginTop: evt.type !== 'internal' ? 8 : 0 }}>
                       {evt.title}
                     </h2>
                     <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>

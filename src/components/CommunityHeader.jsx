@@ -2,14 +2,6 @@ import React from 'react';
 import { CommunityAvatar, IconMore } from './Icons';
 import { USERS } from '../data/initialData';
 
-const COMMUNITY_RULES = [
-  'Keep notices relevant to the department and academic calendar.',
-  'Use the correct category so students can filter announcements.',
-  'No spam, promotional links or forwarded chain messages.',
-  'Do not post personal data of students — respect privacy.',
-  'Faculty posts must include the venue, date and reporting time.'
-];
-
 export default function CommunityHeader({
   branch,
   postCount,
@@ -101,14 +93,7 @@ export default function CommunityHeader({
         </div>
 
         <div className="community-about-card">
-          <h3 className="community-about-title">Community rules</h3>
-          <ol className="community-rules">
-            {COMMUNITY_RULES.map((rule) => (
-              <li key={rule}>{rule}</li>
-            ))}
-          </ol>
-
-          <h3 className="community-about-title" style={{ marginTop: 14 }}>Moderators</h3>
+          <h3 className="community-about-title">Moderators</h3>
           <div className="community-mod-list">
             {moderators.map((m) => (
               <div key={m.id} className="community-mod">

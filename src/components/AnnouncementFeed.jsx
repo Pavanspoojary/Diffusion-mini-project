@@ -12,7 +12,9 @@ import {
   IconTag,
   IconSort,
   IconCheck,
-  IconArrowLeft
+  IconArrowLeft,
+  IconCopy,
+  IconWhatsApp
 } from './Icons';
 import LinkedInComposer from './LinkedInComposer';
 import CommunityHeader from './CommunityHeader';
@@ -81,6 +83,108 @@ function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
   );
 }
 
+function PostShareMenu({ item, isOpen, onClose }) {
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedText, setCopiedText] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        onClose();
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const shareUrl = `${window.location.origin}/#notice-${item.id}`;
+  const shareText = `[SMVITM Campus Hub] Notice from ${item.author} (${item.department}):\n${item.text}\n\n${shareUrl}`;
+
+  const handleCopyLink = (e) => {
+    e.stopPropagation();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareUrl);
+      setCopiedLink(true);
+      setTimeout(() => {
+        setCopiedLink(false);
+        onClose();
+      }, 1200);
+    }
+  };
+
+  const handleCopyText = (e) => {
+    e.stopPropagation();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(item.text);
+      setCopiedText(true);
+      setTimeout(() => {
+        setCopiedText(false);
+        onClose();
+      }, 1200);
+    }
+  };
+
+  const handleWhatsApp = (e) => {
+    e.stopPropagation();
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    onClose();
+  };
+
+  const handleNativeShare = (e) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      navigator.share({
+        title: `${item.author} - SMVITM Notice`,
+        text: item.text,
+        url: shareUrl
+      }).catch(() => {});
+    }
+    onClose();
+  };
+
+  const supportsNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
+
+  return (
+    <div className="post-share-popover" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+      <button type="button" className="share-menu-item" onClick={handleCopyLink}>
+        {copiedLink ? (
+          <IconCheck style={{ color: '#00ba7c', width: 16, height: 16 }} />
+        ) : (
+          <IconCopy style={{ width: 16, height: 16 }} />
+        )}
+        <span>{copiedLink ? 'Link copied!' : 'Copy link'}</span>
+      </button>
+
+      <button type="button" className="share-menu-item whatsapp-item" onClick={handleWhatsApp}>
+        <IconWhatsApp style={{ color: '#25D366', width: 16, height: 16 }} />
+        <span>Share to WhatsApp</span>
+      </button>
+
+      {supportsNativeShare && (
+        <button type="button" className="share-menu-item" onClick={handleNativeShare}>
+          <IconShare style={{ width: 16, height: 16 }} />
+          <span>Share via apps...</span>
+        </button>
+      )}
+
+      <button type="button" className="share-menu-item" onClick={handleCopyText}>
+        {copiedText ? (
+          <IconCheck style={{ color: '#00ba7c', width: 16, height: 16 }} />
+        ) : (
+          <IconCopy style={{ width: 16, height: 16 }} />
+        )}
+        <span>{copiedText ? 'Text copied!' : 'Copy notice text'}</span>
+      </button>
+    </div>
+  );
+}
+
 export default function AnnouncementFeed({
   announcements,
   onLike,
@@ -102,6 +206,7 @@ export default function AnnouncementFeed({
 }) {
   const canPublish = currentUser.roleKey !== 'student';
   const [sort, setSort] = useState('Best');
+  const [activeShareId, setActiveShareId] = useState(null);
 
   const activeCommunity = activeBranch !== 'ALL'
     ? BRANCHES.find((b) => b.id === activeBranch)
@@ -313,8 +418,8 @@ export default function AnnouncementFeed({
                       }}
                       title={`Filter by ${item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}`}
                     >
-                      <CommunityAvatar id={item.branch} size={14} />
-                      <span style={{ marginLeft: 5 }}>{item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}</span>
+                      <CommunityAvatar id={item.branch} size={15} />
+                      <span>{item.branch === 'ALL' ? 's/all' : `s/${item.branch}`}</span>
                     </button>
                   </div>
                 </div>
@@ -385,14 +490,26 @@ export default function AnnouncementFeed({
                       <span className="x-action-icon-wrap"><IconBookmarkAction filled={item.isBookmarked} /></span>
                     </button>
 
-                    <button
-                      type="button"
-                      className="x-action-btn x-share"
-                      onClick={(e) => { e.stopPropagation(); onShare(item); }}
-                      aria-label="Share"
-                    >
-                      <span className="x-action-icon-wrap"><IconShare /></span>
-                    </button>
+                    <div style={{ position: 'relative' }}>
+                      <button
+                        type="button"
+                        className={`x-action-btn x-share ${activeShareId === item.id ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveShareId((prev) => (prev === item.id ? null : item.id));
+                        }}
+                        aria-label="Share notice"
+                        aria-expanded={activeShareId === item.id}
+                      >
+                        <span className="x-action-icon-wrap"><IconShare /></span>
+                      </button>
+
+                      <PostShareMenu
+                        item={item}
+                        isOpen={activeShareId === item.id}
+                        onClose={() => setActiveShareId(null)}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
