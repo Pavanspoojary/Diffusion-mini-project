@@ -9,13 +9,13 @@
   "icons": [
     {
       "src": "smvitm-logo.png",
-      "sizes": "128x128",
+      "sizes": "130x125",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
       "src": "apple-touch-icon.png",
-      "sizes": "180x180",
+      "sizes": "130x125",
       "type": "image/png"
     }
   ]
