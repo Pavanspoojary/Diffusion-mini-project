@@ -17,7 +17,7 @@ export default function EventsView({
 }) {
   const [activeTab, setActiveTab] = useState('internal'); // 'internal' | 'external'
 
-  const canCreateEvent = currentUser.roleKey === 'coordinator' || currentUser.roleKey === 'admin';
+  const canCreateEvent = currentUser.roleKey !== 'student';
 
   const filteredEvents = events.filter((evt) => {
     if (activeTab === 'internal' && evt.type !== 'internal') return false;

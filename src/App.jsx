@@ -303,6 +303,7 @@ export default function App() {
   };
 
   const handlePublishNotice = (noticeData) => {
+    if (currentUser.roleKey === 'student') return;
     const newNotice = {
       id: `post-${Date.now()}`,
       author: currentUser.name,
@@ -415,6 +416,7 @@ export default function App() {
   };
 
   const handleCreateEvent = (eventData) => {
+    if (currentUser.roleKey === 'student') return;
     const newEvent = {
       id: `evt-${Date.now()}`,
       ...eventData,
@@ -430,6 +432,7 @@ export default function App() {
   };
 
   const handleAddWebsite = (websiteData) => {
+    if (currentUser.roleKey === 'student') return;
     const newWeb = {
       id: `web-${Date.now()}`,
       ...websiteData
@@ -484,6 +487,7 @@ export default function App() {
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   const openCompose = (intent) => {
+    if (currentUser.roleKey === 'student') return;
     setComposeIntent(intent || { mode: 'text' });
     setIsComposeOpen(true);
   };
@@ -532,6 +536,7 @@ export default function App() {
         onSwitchUser={handleSwitchUser}
         users={USERS}
         onOpenCompose={() => {
+          if (currentUser.roleKey === 'student') return;
           if (currentUser.roleKey === 'coordinator') {
             setIsCreateEventOpen(true);
           } else {
@@ -727,21 +732,23 @@ export default function App() {
         </button>
       </nav>
 
-      {/* MOBILE FLOATING ACTION BUTTON (POST) */}
-      <button
-        type="button"
-        className={`mobile-fab-btn ${isBottomNavHidden ? 'nav-hidden' : ''}`}
-        onClick={() => {
-          if (currentUser.roleKey === 'coordinator') {
-            setIsCreateEventOpen(true);
-          } else {
-            openCompose();
-          }
-        }}
-        aria-label="Create item"
-      >
-        <span style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}>+</span>
-      </button>
+      {/* MOBILE FLOATING ACTION BUTTON (POST: Faculty, Coordinator, Admin only) */}
+      {currentUser.roleKey !== 'student' && (
+        <button
+          type="button"
+          className={`mobile-fab-btn ${isBottomNavHidden ? 'nav-hidden' : ''}`}
+          onClick={() => {
+            if (currentUser.roleKey === 'coordinator') {
+              setIsCreateEventOpen(true);
+            } else {
+              openCompose();
+            }
+          }}
+          aria-label="Create item"
+        >
+          <span style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}>+</span>
+        </button>
+      )}
 
       {/* MODALS & DIALOGS */}
       <ComposeModal

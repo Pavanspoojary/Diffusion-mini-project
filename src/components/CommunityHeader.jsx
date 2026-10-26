@@ -46,15 +46,17 @@ export default function CommunityHeader({
         </div>
 
         <div className="community-hero-actions">
-          <button
-            type="button"
-            className="community-create-btn"
-            onClick={onCreatePost}
-            title="Create a post in this community"
-          >
-            <span className="community-create-plus">+</span>
-            Create Post
-          </button>
+          {onCreatePost && (
+            <button
+              type="button"
+              className="community-create-btn"
+              onClick={onCreatePost}
+              title="Create a post in this community"
+            >
+              <span className="community-create-plus">+</span>
+              Create Post
+            </button>
+          )}
           <button
             type="button"
             className={`community-join-btn ${isJoined ? 'joined' : ''}`}

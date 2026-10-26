@@ -146,18 +146,20 @@ export default function LeftSidebar({
             </div>
           </nav>
 
-          {/* Post / Publish CTA Button */}
-          <button
-            type="button"
-            className="post-cta-btn"
-            onClick={onOpenCompose}
-            title={canPublish ? 'Publish notice' : 'Submit student notice inquiry'}
-          >
-            <span className="post-cta-text">
-              {currentUser.roleKey === 'coordinator' ? 'Create Event' : 'Publish Notice'}
-            </span>
-            <span className="post-cta-icon">+</span>
-          </button>
+          {/* Post / Publish CTA Button (Faculty, Coordinator, Admin only) */}
+          {canPublish && (
+            <button
+              type="button"
+              className="post-cta-btn"
+              onClick={onOpenCompose}
+              title="Publish notice"
+            >
+              <span className="post-cta-text">
+                {currentUser.roleKey === 'coordinator' ? 'Create Event' : 'Publish Notice'}
+              </span>
+              <span className="post-cta-icon">+</span>
+            </button>
+          )}
         </div>
 
         {/* User Card with Role Switcher Popover */}

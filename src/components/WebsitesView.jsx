@@ -152,6 +152,7 @@ export default function WebsitesView({
 
   const handleCreateWebsite = (e) => {
     e.preventDefault();
+    if (currentUser.roleKey === 'student') return;
     if (!newSiteName.trim() || !newSiteUrl.trim()) return;
 
     onAddWebsite({
@@ -213,7 +214,7 @@ export default function WebsitesView({
                 {unreadCount > 0 && <span className="badge-dot" style={{ top: 2, right: 2 }} />}
               </button>
             )}
-            {currentUser.roleKey === 'admin' && (
+            {currentUser.roleKey !== 'student' && (
               <button
                 type="button"
                 className="btn-primary-post"

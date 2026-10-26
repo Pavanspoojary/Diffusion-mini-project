@@ -275,7 +275,7 @@ export default function AnnouncementFeed({
           postCount={filteredAnnouncements.length}
           isJoined={joinedCommunities.includes(activeCommunity.id)}
           onToggleJoin={() => onToggleJoin && onToggleJoin(activeCommunity.id)}
-          onCreatePost={() => onOpenCompose({ mode: 'text', branch: activeCommunity.id })}
+          onCreatePost={canPublish ? () => onOpenCompose({ mode: 'text', branch: activeCommunity.id }) : null}
           onBack={() => setActiveBranch('ALL')}
           sort={sort}
           setSort={setSort}
@@ -384,7 +384,7 @@ export default function AnnouncementFeed({
             </h3>
             <p style={{ fontSize: 14 }}>
               {activeCommunity
-                ? 'Be the first to post a notice in this community.'
+                ? (canPublish ? 'Be the first to post a notice in this community.' : 'No notices have been published in this community yet.')
                 : 'Try selecting "All Branches" or clearing your search term to see other college announcements.'}
             </p>
           </div>
