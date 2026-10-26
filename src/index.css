@@ -2393,20 +2393,27 @@ html[data-theme="light"] .li-schedule-input {
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
+  flex-wrap: nowrap;
 }
 
 .web-copy-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 13px;
   border-radius: 9999px;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
+  user-select: none;
   transition: all 0.15s ease;
 }
 
@@ -2414,6 +2421,10 @@ html[data-theme="light"] .li-schedule-input {
   background-color: var(--bg-hover);
   color: var(--text-primary);
   border-color: var(--text-secondary);
+}
+
+.web-copy-btn:active {
+  transform: scale(0.97);
 }
 
 .web-copy-btn.copied {
@@ -2425,22 +2436,35 @@ html[data-theme="light"] .li-schedule-input {
 .web-launch-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 6px 14px;
+  height: 32px;
+  padding: 0 14px;
   border-radius: 9999px;
   background-color: var(--accent-color);
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
+  color: #ffffff !important;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
   text-decoration: none;
   cursor: pointer;
+  user-select: none;
   transition: all 0.15s ease;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .web-launch-btn:hover {
-  opacity: 0.92;
+  opacity: 0.94;
   transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  color: #ffffff !important;
+}
+
+.web-launch-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 /* ==========================================================================
