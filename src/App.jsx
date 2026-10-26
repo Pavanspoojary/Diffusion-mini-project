@@ -102,11 +102,11 @@ export default function App() {
     try {
       localStorage.removeItem('college_hub_notices_v1');
       localStorage.removeItem('college_hub_notices_v2');
+      const savedV4 = localStorage.getItem('college_hub_notices_v4');
+      if (savedV4) return JSON.parse(savedV4);
       const saved = localStorage.getItem('college_hub_notices_v3');
-      if (saved) {
-        if (!saved.includes('Diffusion') && !saved.includes('Tejaswini')) {
-          return JSON.parse(saved);
-        }
+      if (saved && saved.includes('algorhythm')) {
+        return JSON.parse(saved);
       }
       return INITIAL_ANNOUNCEMENTS;
     } catch {
@@ -117,11 +117,11 @@ export default function App() {
   const [events, setEvents] = useState(() => {
     try {
       localStorage.removeItem('college_hub_events_v1');
+      const savedV3 = localStorage.getItem('college_hub_events_v3');
+      if (savedV3) return JSON.parse(savedV3);
       const saved = localStorage.getItem('college_hub_events_v2');
-      if (saved) {
-        if (!saved.includes('Diffusion') && !saved.includes('Tejaswini')) {
-          return JSON.parse(saved);
-        }
+      if (saved && saved.includes('algorhythm')) {
+        return JSON.parse(saved);
       }
       return INITIAL_EVENTS;
     } catch {
@@ -226,13 +226,13 @@ export default function App() {
   // Persist Data
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_notices_v3', JSON.stringify(announcements));
+      localStorage.setItem('college_hub_notices_v4', JSON.stringify(announcements));
     } catch {}
   }, [announcements]);
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v2', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v3', JSON.stringify(events));
     } catch {}
   }, [events]);
 
