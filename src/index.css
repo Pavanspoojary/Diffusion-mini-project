@@ -2993,12 +2993,6 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   border: 1px solid #00ba7c;
 }
 
-.badge-external {
-  background-color: rgba(120, 86, 255, 0.15);
-  color: #7856ff;
-  border: 1px solid #7856ff;
-}
-
 .event-meta-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
