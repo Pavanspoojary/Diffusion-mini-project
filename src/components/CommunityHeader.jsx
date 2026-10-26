@@ -1,6 +1,5 @@
 import React from 'react';
-import { CommunityAvatar, IconMore, VerifiedBadge, IconArrowLeft } from './Icons';
-import { USERS } from '../data/initialData';
+import { CommunityAvatar, IconMore, IconArrowLeft } from './Icons';
 
 export default function CommunityHeader({
   branch,
@@ -12,8 +11,6 @@ export default function CommunityHeader({
   sort,
   setSort
 }) {
-  const moderators = Object.values(USERS).filter((u) => u.roleKey !== 'student');
-
   return (
     <section className="community-hero" aria-label={`${branch.slug} community`}>
       {/* Banner with gradient mesh, tech grid texture, and campus tag */}
@@ -94,7 +91,7 @@ export default function CommunityHeader({
         </div>
       </div>
 
-      {/* About + staff grid */}
+      {/* About community */}
       <div className="community-about-grid">
         <div className="community-about-card">
           <h3 className="community-about-title">About community</h3>
@@ -113,30 +110,6 @@ export default function CommunityHeader({
             <IconArrowLeft style={{ width: 14, height: 14, marginRight: 6 }} />
             Back to Home
           </button>
-        </div>
-
-        <div className="community-about-card">
-          <div className="community-online-section-header">
-            <h3 className="community-about-title" style={{ margin: 0 }}>Faculty & Staff</h3>
-          </div>
-          <div className="community-mod-list">
-            {moderators.map((m) => (
-              <div key={m.id} className="community-mod-card">
-                <div className="community-mod-avatar-wrap">
-                  <span className="avatar avatar-sm" style={{ background: m.avatarBg }}>
-                    <span>{m.avatarChar}</span>
-                  </span>
-                </div>
-                <div className="community-mod-info">
-                  <div className="community-mod-name-row">
-                    <span className="community-mod-name">{m.name}</span>
-                    <VerifiedBadge type={m.verifiedType} />
-                  </div>
-                  <span className="community-mod-role">{m.role} · {m.handle}</span>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
