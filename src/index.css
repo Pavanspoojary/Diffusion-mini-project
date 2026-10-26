@@ -3963,38 +3963,222 @@ dialog::backdrop {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-.qr-canvas-box canvas, .qr-canvas-box img {
+.qr-canvas-box canvas, .qr-canvas-box img, .qr-code-img {
   display: block;
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+}
+
+.qr-helper-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Attendance Roster Summary */
+.attendance-roster-section {
+  width: 100%;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.attendance-roster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.attendance-roster-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.attendance-export-btn {
+  font-size: 12px !important;
+  padding: 5px 12px !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.attendance-table-container {
+  width: 100%;
+  max-width: 100%;
+  max-height: 220px;
+  min-height: 180px;
+  overflow-y: auto;
+  overflow-x: hidden !important; /* Disables horizontal scroll completely */
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--card-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.attendance-logs-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 0;
+}
+
+.attendance-col-usn { width: 23%; }
+.attendance-col-name { width: 23%; }
+.attendance-col-in { width: 18%; }
+.attendance-col-out { width: 18%; }
+.attendance-col-status { width: 18%; }
+
+.attendance-logs-table th,
+.attendance-logs-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attendance-logs-table th {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background-color: var(--card-bg);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 1px 0 var(--border-color);
+}
+
+.attendance-th-in,
+.attendance-th-out,
+.attendance-cell-in,
+.attendance-cell-out {
+  text-align: center !important;
+}
+
+.attendance-th-status,
+.attendance-cell-status {
+  text-align: right !important;
+}
+
+.attendance-cell-usn {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.attendance-cell-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.attendance-cell-in,
+.attendance-cell-out {
+  font-size: 11px;
+  color: var(--text-secondary);
 }
 
 .qr-status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   background-color: rgba(0, 186, 124, 0.15);
   color: #00ba7c;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 4px 14px;
+  padding: 3px 8px;
   border-radius: 9999px;
+  white-space: nowrap;
 }
 
-.attendance-logs-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
-  font-size: 13px;
-}
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .qr-modal-body {
+    padding: 10px 6px 14px 6px;
+    gap: 10px;
+  }
 
-.attendance-logs-table th, .attendance-logs-table td {
-  padding: 8px 12px;
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
-}
+  .qr-canvas-box {
+    padding: 10px;
+  }
 
-.attendance-logs-table th {
-  color: var(--text-secondary);
-  font-weight: 700;
+  .qr-canvas-box canvas, .qr-canvas-box img, .qr-code-img {
+    width: 125px !important;
+    height: 125px !important;
+  }
+
+  .qr-helper-text {
+    font-size: 11px;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .attendance-roster-section {
+    margin-top: 10px;
+  }
+
+  .attendance-roster-title {
+    font-size: 13px;
+  }
+
+  .attendance-export-btn {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+
+  .attendance-table-container {
+    max-height: 200px;
+    min-height: 172px; /* comfortably displays 4 student rows at once */
+    overflow-x: hidden !important;
+  }
+
+  .attendance-logs-table {
+    font-size: 11px;
+  }
+
+  .attendance-col-usn { width: 23%; }
+  .attendance-col-name { width: 22%; }
+  .attendance-col-in { width: 18%; }
+  .attendance-col-out { width: 18%; }
+  .attendance-col-status { width: 19%; }
+
+  .attendance-logs-table th,
+  .attendance-logs-table td {
+    padding: 6px 3px;
+  }
+
+  .attendance-logs-table th {
+    font-size: 9.5px;
+    letter-spacing: 0;
+  }
+
+  .attendance-cell-usn {
+    font-size: 10px;
+  }
+
+  .attendance-cell-name {
+    font-size: 10.5px;
+  }
+
+  .attendance-cell-in,
+  .attendance-cell-out {
+    font-size: 9.5px;
+  }
+
+  .qr-status-pill {
+    font-size: 9.5px;
+    padding: 2px 5px;
+    font-weight: 700;
+  }
 }
 
 /* Display modal */
