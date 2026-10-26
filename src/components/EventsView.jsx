@@ -13,7 +13,8 @@ export default function EventsView({
   isSidebarHidden,
   onToggleSidebar,
   unreadCount = 0,
-  onOpenNotifications
+  onOpenNotifications,
+  isHeaderHidden = false
 }) {
   const [activeTab, setActiveTab] = useState('internal'); // 'internal' | 'external'
 
@@ -36,7 +37,7 @@ export default function EventsView({
   return (
     <div>
       {/* Sticky Top Header */}
-      <div className="sticky-header">
+      <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
         <div className="header-top-row">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {isSidebarHidden && (

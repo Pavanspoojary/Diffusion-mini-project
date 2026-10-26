@@ -76,7 +76,7 @@ function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
 function getCategoryColor(category) {
   switch (category) {
     case 'Academic':
-      return { bg: 'rgba(29, 155, 240, 0.12)', border: 'rgba(29, 155, 240, 0.3)', color: '#1d9bf0' };
+      return { bg: 'rgba(255, 112, 67, 0.14)', border: 'rgba(255, 112, 67, 0.4)', color: '#ff7043' };
     case 'Student Utilities':
       return { bg: 'rgba(0, 186, 124, 0.12)', border: 'rgba(0, 186, 124, 0.3)', color: '#00ba7c' };
     case 'University':
@@ -86,7 +86,7 @@ function getCategoryColor(category) {
     case 'Career':
       return { bg: 'rgba(255, 212, 0, 0.12)', border: 'rgba(255, 212, 0, 0.3)', color: '#ffd400' };
     default:
-      return { bg: 'rgba(29, 155, 240, 0.12)', border: 'rgba(29, 155, 240, 0.3)', color: 'var(--accent-color)' };
+      return { bg: 'rgba(148, 163, 184, 0.14)', border: 'rgba(148, 163, 184, 0.35)', color: '#94a3b8' };
   }
 }
 
@@ -98,7 +98,8 @@ export default function WebsitesView({
   isSidebarHidden,
   onToggleSidebar,
   unreadCount = 0,
-  onOpenNotifications
+  onOpenNotifications,
+  isHeaderHidden = false
 }) {
   const [selectedCat, setSelectedCat] = useState('All');
   const [localSearch, setLocalSearch] = useState('');
@@ -182,7 +183,7 @@ export default function WebsitesView({
   return (
     <div>
       {/* Sticky Header */}
-      <div className="sticky-header">
+      <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
         <div className="header-top-row">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {isSidebarHidden && (

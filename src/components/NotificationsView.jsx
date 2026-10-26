@@ -13,7 +13,8 @@ export default function NotificationsView({
   isSidebarHidden,
   onToggleSidebar,
   currentUser,
-  onBack
+  onBack,
+  isHeaderHidden = false
 }) {
   const getNotifIcon = (type) => {
     switch (type) {
@@ -31,7 +32,7 @@ export default function NotificationsView({
   return (
     <div>
       {/* Sticky Header */}
-      <div className="sticky-header">
+      <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
         <div className="header-top-row">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {isSidebarHidden && (

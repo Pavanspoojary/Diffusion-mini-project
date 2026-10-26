@@ -17,12 +17,13 @@ export default function ProfileView({
   onSelectNav,
   onOpenDisplay,
   onOpenCommunity,
-  onLogout
+  onLogout,
+  isHeaderHidden = false
 }) {
   return (
     <div className="profile-view-container">
       {/* Sticky Header */}
-      <div className="sticky-header">
+      <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
         <div className="header-top-row">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             {isSidebarHidden && (

@@ -508,6 +508,13 @@ html[data-theme="light"] .auth-hero-x-logo {
   -webkit-backdrop-filter: blur(12px);
   z-index: 20;
   border-bottom: 1px solid var(--border-color);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.sticky-header.header-hidden {
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 
 .header-top-row {
@@ -2405,14 +2412,13 @@ html[data-theme="light"] .post-important-badge {
 .category-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
   background-color: var(--card-bg);
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 9999px;
   line-height: 1.35;
   cursor: pointer;
@@ -2420,31 +2426,21 @@ html[data-theme="light"] .post-important-badge {
   white-space: nowrap;
 }
 
-.category-badge::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: currentColor;
-  flex-shrink: 0;
-}
-
 .category-badge:hover {
   filter: brightness(1.15);
   transform: translateY(-0.5px);
 }
 
-/* Academic - Sky Blue */
+/* Academic - Warm Coral / Terracotta (Zero blue) */
 .category-badge.cat-academic {
-  background-color: rgba(29, 155, 240, 0.14);
-  border-color: rgba(29, 155, 240, 0.4);
-  color: #38bdf8;
+  background-color: rgba(255, 112, 67, 0.16);
+  border-color: rgba(255, 112, 67, 0.45);
+  color: #ff8a65;
 }
 html[data-theme="light"] .category-badge.cat-academic {
-  background-color: #e0f2fe;
-  border-color: #bae6fd;
-  color: #0284c7;
+  background-color: #fbe9e7;
+  border-color: #ffccbc;
+  color: #d84315;
 }
 
 /* Exam - Amber / Golden Orange */
@@ -2507,22 +2503,22 @@ html[data-theme="light"] .category-badge.cat-placement {
   color: #047857;
 }
 
-/* General / Fallback Categories */
+/* General / Fallback Categories - Cool Slate (Zero blue) */
 .category-badge.cat-general,
 .category-badge.cat-career,
 .category-badge.cat-university,
 .category-badge.cat-studentutilities {
-  background-color: rgba(99, 102, 241, 0.14);
-  border-color: rgba(99, 102, 241, 0.35);
-  color: #818cf8;
+  background-color: rgba(148, 163, 184, 0.16);
+  border-color: rgba(148, 163, 184, 0.4);
+  color: #cbd5e1;
 }
 html[data-theme="light"] .category-badge.cat-general,
 html[data-theme="light"] .category-badge.cat-career,
 html[data-theme="light"] .category-badge.cat-university,
 html[data-theme="light"] .category-badge.cat-studentutilities {
-  background-color: #e0e7ff;
-  border-color: #c7d2fe;
-  color: #4338ca;
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
 }
 
 .post-dot {

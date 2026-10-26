@@ -221,8 +221,9 @@ export default function App() {
     }
   }, []);
 
-  // Auto-hide mobile dock on scroll down (swipe up), show on scroll up (swipe down)
+  // Auto-hide mobile dock and top sticky header on scroll
   const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const lastScrollYRef = useRef(0);
 
   useEffect(() => {
@@ -235,12 +236,15 @@ export default function App() {
 
           if (currentScrollY <= 60) {
             setIsBottomNavHidden(false);
+            setIsHeaderHidden(false);
           } else if (diff > 8) {
-            // Scrolling down feed (swiping up) -> auto hide dock
+            // Scrolling down feed (swiping up) -> auto hide dock & top header
             setIsBottomNavHidden(true);
+            setIsHeaderHidden(true);
           } else if (diff < -8) {
-            // Scrolling up feed (swiping down) -> show dock
+            // Scrolling up feed (swiping down) -> show dock & top header
             setIsBottomNavHidden(false);
+            setIsHeaderHidden(false);
           }
 
           lastScrollYRef.current = currentScrollY;
@@ -253,6 +257,12 @@ export default function App() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // When switching views/tabs, always restore top header and bottom nav
+  useEffect(() => {
+    setIsHeaderHidden(false);
+    setIsBottomNavHidden(false);
+  }, [activeNav]);
 
   // Toast Helper
   const showToast = (msg) => {
@@ -568,12 +578,12 @@ export default function App() {
             searchQuery={searchQuery}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
-            currentUser={currentUser}
             joinedCommunities={joinedCommunities}
             onToggleJoin={handleToggleJoin}
             onOpenCommunity={openCommunity}
             unreadCount={unreadCount}
             onOpenNotifications={() => setActiveNav('notifications')}
+            isHeaderHidden={isHeaderHidden}
           />
         )}
 
@@ -589,9 +599,9 @@ export default function App() {
             searchQuery={searchQuery}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
-            currentUser={currentUser}
             unreadCount={unreadCount}
             onOpenNotifications={() => setActiveNav('notifications')}
+            isHeaderHidden={isHeaderHidden}
           />
         )}
 
@@ -603,9 +613,9 @@ export default function App() {
             searchQuery={searchQuery}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
-            currentUser={currentUser}
             unreadCount={unreadCount}
             onOpenNotifications={() => setActiveNav('notifications')}
+            isHeaderHidden={isHeaderHidden}
           />
         )}
 
@@ -617,6 +627,7 @@ export default function App() {
             onToggleSidebar={handleToggleSidebar}
             currentUser={currentUser}
             onBack={() => setActiveNav('announcements')}
+            isHeaderHidden={isHeaderHidden}
           />
         )}
 
@@ -631,6 +642,7 @@ export default function App() {
             onOpenDisplay={() => setIsDisplayOpen(true)}
             onOpenCommunity={openCommunity}
             onLogout={handleLogout}
+            isHeaderHidden={isHeaderHidden}
           />
         )}
 
@@ -650,10 +662,10 @@ export default function App() {
             searchQuery={searchQuery}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
-            currentUser={currentUser}
             joinedCommunities={joinedCommunities}
             onToggleJoin={handleToggleJoin}
             onOpenCommunity={openCommunity}
+            isHeaderHidden={isHeaderHidden}
           />
         )}
       </main>

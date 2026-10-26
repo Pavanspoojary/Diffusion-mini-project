@@ -204,7 +204,8 @@ export default function AnnouncementFeed({
   onToggleJoin,
   onOpenCommunity,
   unreadCount = 0,
-  onOpenNotifications
+  onOpenNotifications,
+  isHeaderHidden = false
 }) {
   const canPublish = currentUser.roleKey !== 'student';
   const [sort, setSort] = useState('Best');
@@ -283,7 +284,7 @@ export default function AnnouncementFeed({
       )}
 
       {/* Sticky Header */}
-      <div className="sticky-header">
+      <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
         {!activeCommunity && (
           <div className="header-top-row">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
