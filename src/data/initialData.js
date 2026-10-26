@@ -394,10 +394,10 @@ export const INITIAL_EVENTS = [
 export const INITIAL_WEBSITES = [
   {
     id: 'web-1',
-    name: 'Campus Cloud Printing Service',
+    name: 'PRINTIN PORTAL',
     category: 'Student Utilities',
     description: 'Upload documents from phone or laptop directly to the college reprography centre. Check daily free page quota and queue status.',
-    url: 'https://smvitm.ac.in/printing',
+    url: 'https://printin.buildwithtba.in/',
     badge: 'Campus Service',
     iconType: 'printer'
   },
