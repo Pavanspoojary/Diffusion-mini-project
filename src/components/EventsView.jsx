@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications } from './Icons';
+import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
 
 export default function EventsView({
   events,
@@ -14,9 +14,11 @@ export default function EventsView({
   onToggleSidebar,
   unreadCount = 0,
   onOpenNotifications,
-  isHeaderHidden = false
+  isHeaderHidden = false,
+  onDeleteEvent
 }) {
   const [activeTab, setActiveTab] = useState('internal'); // 'internal' | 'external'
+  const [confirmDeleteEvent, setConfirmDeleteEvent] = useState(null);
 
   const canCreateEvent = currentUser.roleKey !== 'student';
 
@@ -117,6 +119,12 @@ export default function EventsView({
             const hasCheckedIn = evt.attendance?.some(
               (a) => a.usn === currentUser.usn && a.status === 'Checked In'
             );
+            const canDelete =
+              Boolean(currentUser) &&
+              (currentUser.roleKey === 'admin' ||
+                evt.creatorId === currentUser.id ||
+                evt.organizer === currentUser.name ||
+                (currentUser.roleKey === 'coordinator' && evt.type === 'internal'));
 
             return (
               <article key={evt.id} className="event-card">
@@ -129,6 +137,19 @@ export default function EventsView({
                       Organized by: <strong style={{ color: 'var(--text-primary)' }}>{evt.organizer}</strong>
                     </div>
                   </div>
+
+                  {canDelete && onDeleteEvent && (
+                    <button
+                      type="button"
+                      className="btn-event-delete"
+                      onClick={() => setConfirmDeleteEvent(evt)}
+                      aria-label="Delete event"
+                      title="Delete event"
+                    >
+                      <IconTrash style={{ width: 14, height: 14 }} />
+                      <span>Delete</span>
+                    </button>
+                  )}
                 </div>
 
                 {/* Event Metadata Grid */}
@@ -223,6 +244,37 @@ export default function EventsView({
           })
         )}
       </section>
+
+      {/* Delete Event Confirmation Modal */}
+      {confirmDeleteEvent && (
+        <div className="confirm-modal-overlay" onClick={() => setConfirmDeleteEvent(null)}>
+          <div className="confirm-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h3 className="confirm-modal-title">Delete event?</h3>
+            <p className="confirm-modal-desc">
+              &quot;{confirmDeleteEvent.title}&quot; will be permanently removed. This action cannot be undone.
+            </p>
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="btn-confirm-delete"
+                onClick={() => {
+                  onDeleteEvent(confirmDeleteEvent.id);
+                  setConfirmDeleteEvent(null);
+                }}
+              >
+                Delete Event
+              </button>
+              <button
+                type="button"
+                className="btn-confirm-cancel"
+                onClick={() => setConfirmDeleteEvent(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

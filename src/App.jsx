@@ -32,12 +32,14 @@ import {
 import {
   fetchAnnouncements,
   createAnnouncement,
+  deleteAnnouncementFromDB,
   toggleNoticeLike,
   toggleNoticeBookmark,
   clearAllNoticeBookmarks,
   toggleNoticePin,
   fetchEvents,
   createEvent,
+  deleteEventFromDB,
   toggleEventRegistration,
   recordAttendanceInDB,
   fetchWebsites,
@@ -438,6 +440,7 @@ export default function App() {
     if (currentUser.roleKey === 'student') return;
     const newNotice = {
       id: `post-${Date.now()}`,
+      userId: currentUser.id,
       author: currentUser.name,
       authorRole: currentUser.role,
       handle: currentUser.handle,
@@ -488,6 +491,27 @@ export default function App() {
     // Persist asynchronously
     await createAnnouncement(newNotice);
     await createNotification(newNotif);
+  };
+
+  const handleDeleteNotice = async (noticeId) => {
+    const target = announcements.find((n) => n.id === noticeId);
+    if (!target) return;
+
+    const canDelete =
+      currentUser.roleKey === 'admin' ||
+      target.userId === currentUser.id ||
+      target.handle === currentUser.handle ||
+      target.author === currentUser.name;
+
+    if (!canDelete) {
+      showToast('You can only remove notices that you posted');
+      return;
+    }
+
+    setAnnouncements((prev) => prev.filter((n) => n.id !== noticeId));
+    showToast('Notice deleted');
+
+    await deleteAnnouncementFromDB(noticeId);
   };
 
   const handleRegisterEvent = async (eventId) => {
@@ -562,6 +586,8 @@ export default function App() {
     if (currentUser.roleKey === 'student') return;
     const newEvent = {
       id: `evt-${Date.now()}`,
+      creatorId: currentUser.id,
+      organizer: eventData.organizer || currentUser.name,
       ...eventData,
       registeredCount: 0,
       maxCapacity: 150,
@@ -575,6 +601,27 @@ export default function App() {
 
     // Persist to Supabase
     await createEvent(newEvent);
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    const target = events.find((e) => e.id === eventId);
+    if (!target) return;
+
+    const canDelete =
+      currentUser.roleKey === 'admin' ||
+      target.creatorId === currentUser.id ||
+      target.organizer === currentUser.name ||
+      (currentUser.roleKey === 'coordinator' && target.type === 'internal');
+
+    if (!canDelete) {
+      showToast('You can only remove events that you posted');
+      return;
+    }
+
+    setEvents((prev) => prev.filter((e) => e.id !== eventId));
+    showToast('Event deleted');
+
+    await deleteEventFromDB(eventId);
   };
 
   const handleAddWebsite = async (websiteData) => {
@@ -726,6 +773,7 @@ export default function App() {
             onOpenNotifications={() => setActiveNav('notifications')}
             isHeaderHidden={isHeaderHidden}
             onTogglePin={handleTogglePin}
+            onDeleteNotice={handleDeleteNotice}
           />
         )}
 
@@ -738,6 +786,7 @@ export default function App() {
             onOpenQRGenerator={(evt) => setQrModal({ isOpen: true, event: evt, mode: 'coordinator' })}
             onOpenCreateEvent={() => setIsCreateEventOpen(true)}
             onOpenImage={(img) => setLightboxImg(img)}
+            onDeleteEvent={handleDeleteEvent}
             searchQuery={searchQuery}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
@@ -806,6 +855,7 @@ export default function App() {
             onTogglePin={handleTogglePin}
             onOpenCommunity={openCommunity}
             onClearAll={handleClearAllBookmarks}
+            onDeleteNotice={handleDeleteNotice}
           />
         )}
       </main>

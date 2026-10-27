@@ -225,6 +225,20 @@ export async function createAnnouncement(newNotice) {
   }
 }
 
+export async function deleteAnnouncementFromDB(noticeId) {
+  try {
+    const { error } = await supabase
+      .from('announcements')
+      .delete()
+      .eq('id', noticeId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Supabase:deleteAnnouncement fallback]', err.message);
+    return false;
+  }
+}
+
 export async function toggleNoticeLike(noticeId, currentUserId, currentIsLiked, currentLikes) {
   try {
     const nextIsLiked = !currentIsLiked;
@@ -360,6 +374,20 @@ export async function createEvent(newEvent) {
   } catch (err) {
     console.warn('[Supabase:createEvent fallback to local]', err.message);
     return newEvent;
+  }
+}
+
+export async function deleteEventFromDB(eventId) {
+  try {
+    const { error } = await supabase
+      .from('events')
+      .delete()
+      .eq('id', eventId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Supabase:deleteEvent fallback]', err.message);
+    return false;
   }
 }
 

@@ -16,7 +16,8 @@ import {
   IconArticle,
   VerifiedBadge,
   CommunityAvatar,
-  IconChevronDown
+  IconChevronDown,
+  IconTrash
 } from './Icons';
 
 function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
@@ -169,13 +170,15 @@ export default function BookmarksView({
   isHeaderHidden = false,
   onTogglePin,
   onOpenCommunity,
-  onClearAll
+  onClearAll,
+  onDeleteNotice
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sort, setSort] = useState('New');
   const [activeShareId, setActiveShareId] = useState(null);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [confirmDeleteNotice, setConfirmDeleteNotice] = useState(null);
 
   const canManagePin = currentUser && ['admin', 'principal', 'hod', 'faculty'].includes(currentUser.roleKey);
 
@@ -408,6 +411,12 @@ export default function BookmarksView({
           /* List of Bookmarked Post Cards */
           sortedAnnouncements.map((item) => {
             const isItemImportant = Boolean(item.isImportant || item.important || item.tag === 'Important');
+            const canDelete =
+              Boolean(currentUser) &&
+              (currentUser.roleKey === 'admin' ||
+                item.userId === currentUser.id ||
+                item.handle === currentUser.handle ||
+                item.author === currentUser.name);
 
             return (
               <article key={item.id} className={`post-card ${isItemImportant ? 'is-important' : ''}`}>
@@ -600,6 +609,25 @@ export default function BookmarksView({
                         onClose={() => setActiveShareId(null)}
                       />
                     </div>
+
+                    {/* Delete notice action (author or admin only) */}
+                    {canDelete && onDeleteNotice && (
+                      <button
+                        type="button"
+                        className="x-action-btn x-delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmDeleteNotice(item);
+                        }}
+                        aria-label="Delete notice"
+                        title="Delete notice"
+                      >
+                        <span className="x-action-icon-wrap">
+                          <IconTrash />
+                        </span>
+                        <span className="x-action-count">Delete</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </article>
@@ -607,6 +635,37 @@ export default function BookmarksView({
           })
         )}
       </section>
+
+      {/* Delete Notice Confirmation Modal */}
+      {confirmDeleteNotice && (
+        <div className="confirm-modal-overlay" onClick={() => setConfirmDeleteNotice(null)}>
+          <div className="confirm-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h3 className="confirm-modal-title">Delete notice?</h3>
+            <p className="confirm-modal-desc">
+              This notice will be permanently removed from the announcements feed. This action cannot be undone.
+            </p>
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="btn-confirm-delete"
+                onClick={() => {
+                  onDeleteNotice(confirmDeleteNotice.id);
+                  setConfirmDeleteNotice(null);
+                }}
+              >
+                Delete Notice
+              </button>
+              <button
+                type="button"
+                className="btn-confirm-cancel"
+                onClick={() => setConfirmDeleteNotice(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
