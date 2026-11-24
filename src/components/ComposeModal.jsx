@@ -14,7 +14,8 @@ import {
   IconVideo,
   IconArticle,
   IconCheck,
-  VerifiedBadge
+  VerifiedBadge,
+  UserAvatar
 } from './Icons';
 import { BRANCHES, CATEGORIES, USERS } from '../data/initialData';
 
@@ -284,9 +285,7 @@ export default function ComposeModal({
         {/* Identity row */}
         <div className="li-compose-top">
           <div className="li-compose-identity">
-            <div className="avatar avatar-lg" style={{ background: currentUser.avatarBg }}>
-              <span>{currentUser.avatarChar}</span>
-            </div>
+            <UserAvatar user={currentUser} sizeClass="avatar-lg" />
             <div className="li-compose-identity-text">
               <div className="li-compose-name-wrap">
                 <button

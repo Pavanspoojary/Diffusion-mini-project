@@ -16,11 +16,13 @@ import {
   IconWhatsApp,
   IconArticle,
   IconPin,
-  IconTrash
+  IconTrash,
+  UserAvatar
 } from './Icons';
 import LinkedInComposer from './LinkedInComposer';
 import CommunityHeader from './CommunityHeader';
 import { BRANCHES, CATEGORIES } from '../data/initialData';
+import { findLecturerProfile } from '../services/dbService';
 
 function formatCount(n) {
   if (!n) return '0';
@@ -209,7 +211,9 @@ export default function AnnouncementFeed({
   onOpenNotifications,
   isHeaderHidden = false,
   onTogglePin,
-  onDeleteNotice
+  onDeleteNotice,
+  lecturers = [],
+  onOpenLecturer
 }) {
   const canPublish = currentUser.roleKey !== 'student';
   const canManagePin = currentUser?.roleKey !== 'student';
@@ -390,6 +394,11 @@ export default function AnnouncementFeed({
         ) : (
           sortedAnnouncements.map((item) => {
             const isItemImportant = Boolean(item.isImportant || item.important || item.tag === 'Important');
+            const matchedLecturer = findLecturerProfile(lecturers, {
+              userId: item.userId,
+              handle: item.handle,
+              author: item.author
+            });
             const canDelete = Boolean(
               onDeleteNotice && currentUser && (
                 currentUser.roleKey === 'admin' ||
@@ -401,9 +410,12 @@ export default function AnnouncementFeed({
             return (
               <article key={item.id} className={`post-card ${isItemImportant ? 'is-important' : ''}`}>
                 <div className="post-avatar-col">
-                  <div className="avatar avatar-md" style={{ background: item.avatarBg }}>
-                    <span>{item.avatarChar}</span>
-                  </div>
+                  <UserAvatar
+                    user={matchedLecturer || item}
+                    sizeClass="avatar-md"
+                    onClick={matchedLecturer && onOpenLecturer ? () => onOpenLecturer(matchedLecturer.id) : undefined}
+                    style={matchedLecturer && onOpenLecturer ? { cursor: 'pointer' } : undefined}
+                  />
                 </div>
 
                 <div className="post-content-col">
@@ -431,7 +443,21 @@ export default function AnnouncementFeed({
 
                   <div className="post-header-line">
                     <div className="post-user-info">
-                      <span className="post-user-name">{item.author}</span>
+                      {matchedLecturer && onOpenLecturer ? (
+                        <button
+                          type="button"
+                          className="post-author-link"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenLecturer(matchedLecturer.id);
+                          }}
+                          title={`View ${matchedLecturer.name}'s profile`}
+                        >
+                          {matchedLecturer.name}
+                        </button>
+                      ) : (
+                        <span className="post-user-name">{item.author}</span>
+                      )}
                       <VerifiedBadge type={item.verifiedType} />
                       <span className="post-user-handle">{item.handle}</span>
                       {item.collaborators && item.collaborators.length > 0 && (

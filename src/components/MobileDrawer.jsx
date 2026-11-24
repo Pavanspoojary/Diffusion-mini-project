@@ -3,8 +3,10 @@ import {
   IconClose,
   IconSettings,
   IconBookmarks,
+  IconGraduationCap,
   CommunityAvatar,
-  VerifiedBadge
+  VerifiedBadge,
+  UserAvatar
 } from './Icons';
 import { BRANCHES } from '../data/initialData';
 
@@ -43,9 +45,7 @@ export default function MobileDrawer({
 
         {/* User Profile Card */}
         <div className="mobile-drawer-profile">
-          <div className="avatar avatar-lg" style={{ background: currentUser.avatarBg }}>
-            <span>{currentUser.avatarChar}</span>
-          </div>
+          <UserAvatar user={currentUser} sizeClass="avatar-lg" />
           <div className="mobile-drawer-user-info">
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <strong className="mobile-drawer-name">{currentUser.name}</strong>
@@ -134,6 +134,18 @@ export default function MobileDrawer({
 
         {/* Quick Actions */}
         <div className="mobile-drawer-section">
+          <button
+            type="button"
+            className="mobile-drawer-action-btn"
+            onClick={() => {
+              onSelectNav('faculty');
+              onClose();
+            }}
+          >
+            <IconGraduationCap className="mobile-drawer-action-icon" />
+            <span>Faculty & Lecturers</span>
+          </button>
+
           <button
             type="button"
             className="mobile-drawer-action-btn"

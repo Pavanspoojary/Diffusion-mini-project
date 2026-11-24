@@ -78,17 +78,18 @@ export const USERS = {
   },
   faculty: {
     id: 'user-faculty',
-    name: 'Faculty Coordinator',
+    name: 'Dr. Raghavendra Bhat',
     usn: 'FAC-AI-012',
     role: 'Faculty',
     roleKey: 'faculty',
     branch: 'AI&DS',
     department: 'Dept. of AI & Data Science',
     handle: '@faculty_aids',
-    avatarChar: 'F',
+    avatarChar: 'R',
     avatarBg: '#8e24aa',
     verified: true,
-    verifiedType: 'gold'
+    verifiedType: 'gold',
+    lecturerId: 'lec-aids-1'
   },
   coordinator: {
     id: 'user-coordinator',
@@ -119,6 +120,658 @@ export const USERS = {
     verifiedType: 'gold'
   }
 };
+
+export const TEACHING_YEAR_OPTIONS = [
+  '1st Year',
+  '2nd Year',
+  '3rd Year',
+  '4th Year'
+];
+
+export const INITIAL_LECTURERS = [
+  {
+    id: 'lec-aids-1',
+    userId: 'user-faculty',
+    name: 'Dr. Raghavendra Bhat',
+    handle: '@faculty_aids',
+    aliases: ['Faculty Coordinator'],
+    employeeId: 'FAC-AI-012',
+    designation: 'Associate Professor & Faculty Coordinator',
+    headline: 'Associate Professor & Faculty Coordinator · Dept. of AI & Data Science | Deep Learning & Edge Vision',
+    branch: 'AI&DS',
+    department: 'Dept. of AI & Data Science',
+    location: 'SMVITM Campus, Bantakal, Udupi',
+    experienceYears: '11+ years',
+    avatarChar: 'R',
+    avatarBg: '#8e24aa',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #4f46e5 0%, #7856ff 55%, #1d9bf0 100%)',
+    verified: true,
+    verifiedType: 'gold',
+    about: 'Educator and AI researcher focused on bridging foundational machine learning theory with real-world engineering deployment. Mentors final-year B.E. capstone teams and coordinates departmental technical workshops and industry-academia collaborations.',
+    contact: {
+      email: 'raghavendra.bhat@smvitm.ac.in',
+      phone: '+91 98450 11201',
+      office: 'Academic Block B · Room 304',
+      officeHours: 'Mon – Fri · 3:00 PM – 4:30 PM',
+      linkedin: 'https://linkedin.com/in/raghavendra-bhat-smvitm',
+      scholar: 'https://scholar.google.com',
+      website: 'https://smvitm.ac.in'
+    },
+    yearsTaught: ['2nd Year', '3rd Year', '4th Year'],
+    semestersTaught: ['3rd Sem', '5th Sem', '7th Sem'],
+    subjects: [
+      { code: 'BAD502', name: 'Machine Learning & Pattern Recognition', year: '3rd Year', semester: '5th Sem', type: 'Theory + Lab' },
+      { code: 'BAD701', name: 'Deep Learning & Generative AI', year: '4th Year', semester: '7th Sem', type: 'Theory' },
+      { code: 'BAD304', name: 'Data Structures & Algorithms', year: '2nd Year', semester: '3rd Sem', type: 'Theory + Lab' }
+    ],
+    education: [
+      {
+        degree: 'Ph.D. in Artificial Intelligence & Computer Vision',
+        institution: 'National Institute of Technology Karnataka (NITK), Surathkal',
+        year: '2017 – 2021',
+        details: 'Thesis: Lightweight Deep Neural Architectures for Edge Vision Systems'
+      },
+      {
+        degree: 'M.Tech in Computer Science & Engineering',
+        institution: 'Visvesvaraya Technological University (VTU), Belagavi',
+        year: '2013 – 2015',
+        details: 'First Class with Distinction'
+      },
+      {
+        degree: 'B.E. in Information Science & Engineering',
+        institution: 'SMVITM, Bantakal (VTU)',
+        year: '2009 – 2013',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Associate Professor & Faculty Coordinator',
+        organization: 'SMVITM, Bantakal',
+        duration: '2021 – Present',
+        description: 'Leading undergraduate AI & Data Science courses, final-year project reviews, and AI research lab mentoring.'
+      },
+      {
+        role: 'Assistant Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2015 – 2021',
+        description: 'Taught core computer science and analytics subjects and supervised 20+ funded student projects.'
+      }
+    ],
+    skills: ['Machine Learning', 'Deep Learning', 'Computer Vision', 'PyTorch', 'Data Structures', 'Research Mentoring']
+  },
+  {
+    id: 'lec-aids-2',
+    userId: 'user-lec-aids-2',
+    name: 'Prof. Ananya Shetty',
+    handle: '@ananya_aids',
+    aliases: [],
+    employeeId: 'FAC-AI-019',
+    designation: 'Assistant Professor (Sr. Scale)',
+    headline: 'Assistant Professor · Dept. of AI & Data Science | Big Data Analytics, DBMS & Cloud Data Pipelines',
+    branch: 'AI&DS',
+    department: 'Dept. of AI & Data Science',
+    location: 'SMVITM Campus, Bantakal, Udupi',
+    experienceYears: '8 years',
+    avatarChar: 'A',
+    avatarBg: '#1d9bf0',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #1d9bf0 0%, #0ea5e9 50%, #6366f1 100%)',
+    verified: true,
+    verifiedType: 'blue',
+    about: 'Passionate about scalable data systems, SQL optimization, and statistical modeling. Guides 1st and 2nd year students in building strong programming and database foundations, and leads the department Data Science Study Circle.',
+    contact: {
+      email: 'ananya.shetty@smvitm.ac.in',
+      phone: '+91 98452 22310',
+      office: 'Academic Block B · Room 308',
+      officeHours: 'Tue – Thu · 2:30 PM – 4:15 PM',
+      linkedin: 'https://linkedin.com/in/ananya-shetty-aids',
+      scholar: 'https://scholar.google.com',
+      website: ''
+    },
+    yearsTaught: ['1st Year', '2nd Year', '3rd Year'],
+    semestersTaught: ['2nd Sem', '4th Sem', '6th Sem'],
+    subjects: [
+      { code: 'BAD403', name: 'Database Management Systems', year: '2nd Year', semester: '4th Sem', type: 'Theory + Lab' },
+      { code: 'BAD601', name: 'Big Data Analytics & Spark', year: '3rd Year', semester: '6th Sem', type: 'Theory + Lab' },
+      { code: 'BPOPS203', name: 'Principles of Programming using C', year: '1st Year', semester: '2nd Sem', type: 'Theory + Lab' }
+    ],
+    education: [
+      {
+        degree: 'M.Tech in Data Science & Engineering',
+        institution: 'Manipal Institute of Technology (MIT), Manipal',
+        year: '2016 – 2018',
+        details: 'Specialization in Distributed Data Warehousing'
+      },
+      {
+        degree: 'B.E. in Computer Science & Engineering',
+        institution: 'NMAM Institute of Technology, Nitte',
+        year: '2012 – 2016',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Assistant Professor (Sr. Scale)',
+        organization: 'SMVITM, Bantakal',
+        duration: '2018 – Present',
+        description: 'Delivering undergraduate courses in DBMS, Python for Data Science, and Big Data frameworks.'
+      }
+    ],
+    skills: ['DBMS & SQL', 'Big Data Analytics', 'Apache Spark', 'Python', 'Data Visualization', 'Statistics']
+  },
+  {
+    id: 'lec-aiml-1',
+    userId: 'user-lec-aiml-1',
+    name: 'Dr. Suma Kamath',
+    handle: '@aiml_research',
+    aliases: ['AI Research Lab'],
+    employeeId: 'FAC-ML-004',
+    designation: 'Professor & Research Lead',
+    headline: 'Professor & AI Research Lab Lead · Dept. of AI & Machine Learning | Diffusion Models, NLP & RLHF',
+    branch: 'AI-ML',
+    department: 'Dept. of AI & Machine Learning',
+    location: 'Turing Lab, SMVITM Bantakal',
+    experienceYears: '14 years',
+    avatarChar: 'S',
+    avatarBg: '#f91880',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #f91880 0%, #ff7a00 100%)',
+    verified: true,
+    verifiedType: 'gold',
+    about: 'Heads the Turing AI Research Circle at SMVITM. Actively publishes in IEEE and Springer venues on generative models, natural language understanding, and reinforcement learning. Welcomes motivated students for research paper reading groups and funded projects.',
+    contact: {
+      email: 'suma.kamath@smvitm.ac.in',
+      phone: '+91 98451 33409',
+      office: 'Turing Research Block · Room 202',
+      officeHours: 'Mon, Wed, Thu · 3:30 PM – 5:00 PM',
+      linkedin: 'https://linkedin.com/in/suma-kamath-aiml',
+      scholar: 'https://scholar.google.com',
+      website: 'https://smvitm.ac.in'
+    },
+    yearsTaught: ['3rd Year', '4th Year'],
+    semestersTaught: ['5th Sem', '6th Sem', '7th Sem', '8th Sem'],
+    subjects: [
+      { code: 'BAI501', name: 'Artificial Intelligence & Expert Systems', year: '3rd Year', semester: '5th Sem', type: 'Theory' },
+      { code: 'BAI602', name: 'Natural Language Processing & LLMs', year: '3rd Year', semester: '6th Sem', type: 'Theory + Lab' },
+      { code: 'BAI702', name: 'Reinforcement Learning & Generative Models', year: '4th Year', semester: '7th Sem', type: 'Theory' }
+    ],
+    education: [
+      {
+        degree: 'Ph.D. in Machine Learning & Natural Language Processing',
+        institution: 'Indian Institute of Science (IISc) / VTU Research Centre',
+        year: '2013 – 2017',
+        details: 'Research on Multilingual Neural Sequence Models'
+      },
+      {
+        degree: 'M.Tech in Artificial Intelligence',
+        institution: 'University of Hyderabad',
+        year: '2009 – 2011',
+        details: 'University Topper'
+      },
+      {
+        degree: 'B.E. in Computer Science & Engineering',
+        institution: 'SJCE, Mysuru',
+        year: '2005 – 2009',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Professor & Research Lead',
+        organization: 'SMVITM, Bantakal',
+        duration: '2019 – Present',
+        description: 'Directing the Turing AI Research Circle and teaching senior-year AI&ML specializations.'
+      },
+      {
+        role: 'Associate Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2012 – 2019',
+        description: 'Established the Pattern Recognition Lab and guided 30+ peer-reviewed student publications.'
+      }
+    ],
+    skills: ['Generative AI', 'Diffusion Models', 'NLP', 'Reinforcement Learning', 'TensorFlow', 'Academic Publishing']
+  },
+  {
+    id: 'lec-aiml-2',
+    userId: 'user-lec-aiml-2',
+    name: 'Prof. Karthik Hegde',
+    handle: '@karthik_aiml',
+    aliases: [],
+    employeeId: 'FAC-ML-014',
+    designation: 'Assistant Professor',
+    headline: 'Assistant Professor · Dept. of AI & Machine Learning | Robotics, Python & Linear Algebra for AI',
+    branch: 'AI-ML',
+    department: 'Dept. of AI & Machine Learning',
+    location: 'SMVITM Campus, Bantakal, Udupi',
+    experienceYears: '6 years',
+    avatarChar: 'K',
+    avatarBg: '#ff7a00',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #ff4500 0%, #f91880 100%)',
+    verified: true,
+    verifiedType: 'blue',
+    about: 'Focuses on mathematical foundations for machine learning, autonomous robotics simulation, and hands-on Python engineering for 1st and 2nd year students.',
+    contact: {
+      email: 'karthik.hegde@smvitm.ac.in',
+      phone: '+91 97410 44120',
+      office: 'Academic Block B · Room 215',
+      officeHours: 'Mon – Fri · 1:30 PM – 3:00 PM',
+      linkedin: 'https://linkedin.com/in/karthik-hegde-robotics',
+      scholar: '',
+      website: ''
+    },
+    yearsTaught: ['1st Year', '2nd Year'],
+    semestersTaught: ['1st Sem', '3rd Sem', '4th Sem'],
+    subjects: [
+      { code: 'BAI301', name: 'Mathematics for Machine Learning', year: '2nd Year', semester: '3rd Sem', type: 'Theory' },
+      { code: 'BAI402', name: 'Python Programming & Autonomous Robotics', year: '2nd Year', semester: '4th Sem', type: 'Theory + Lab' },
+      { code: 'BPLCK105', name: 'Introduction to Python Programming', year: '1st Year', semester: '1st Sem', type: 'Theory + Lab' }
+    ],
+    education: [
+      {
+        degree: 'M.Tech in Robotics & Artificial Intelligence',
+        institution: 'PES University, Bengaluru',
+        year: '2018 – 2020',
+        details: 'ROS2 & Autonomous Path Planning'
+      },
+      {
+        degree: 'B.E. in Electronics & Communication Engineering',
+        institution: 'SMVITM, Bantakal',
+        year: '2014 – 2018',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Assistant Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2020 – Present',
+        description: 'Teaches foundational AI mathematics, Python, and coordinates robotics hackathon teams.'
+      }
+    ],
+    skills: ['Python', 'ROS2', 'Linear Algebra', 'Probability & Statistics', 'OpenCV', 'Robotics']
+  },
+  {
+    id: 'lec-cs-1',
+    userId: 'user-lec-cs-1',
+    name: 'Dr. Vivek Acharya',
+    handle: '@cse_dept',
+    aliases: ['CSE Department HOD'],
+    employeeId: 'FAC-CS-001',
+    designation: 'Professor & Head of Department (HOD)',
+    headline: 'Professor & HOD · Dept. of Computer Science & Engg. | Cloud Native Systems, Kubernetes & Distributed OS',
+    branch: 'CS',
+    department: 'Dept. of Computer Science & Engg.',
+    location: 'Main Academic Block · CS Wing, SMVITM',
+    experienceYears: '17 years',
+    avatarChar: 'V',
+    avatarBg: '#00ba7c',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #00ba7c 0%, #0ea5e9 100%)',
+    verified: true,
+    verifiedType: 'gold',
+    about: 'Head of Computer Science & Engineering at SMVITM with 17+ years of teaching, academic leadership, and distributed systems research. Committed to preparing students for cloud-native software engineering and open-source excellence.',
+    contact: {
+      email: 'hod.cse@smvitm.ac.in',
+      phone: '+91 98455 77880',
+      office: 'Main Block · CS HOD Cabin (Room 101)',
+      officeHours: 'Mon – Fri · 11:30 AM – 1:00 PM',
+      linkedin: 'https://linkedin.com/in/dr-vivek-acharya-cse',
+      scholar: 'https://scholar.google.com',
+      website: 'https://smvitm.ac.in/cse'
+    },
+    yearsTaught: ['3rd Year', '4th Year'],
+    semestersTaught: ['5th Sem', '6th Sem', '7th Sem'],
+    subjects: [
+      { code: 'BCS503', name: 'Operating Systems & Kernel Architecture', year: '3rd Year', semester: '5th Sem', type: 'Theory + Lab' },
+      { code: 'BCS601', name: 'Cloud Computing & Kubernetes', year: '3rd Year', semester: '6th Sem', type: 'Theory + Lab' },
+      { code: 'BCS701', name: 'Distributed Systems & Microservices', year: '4th Year', semester: '7th Sem', type: 'Theory' }
+    ],
+    education: [
+      {
+        degree: 'Ph.D. in Distributed Systems & Cloud Security',
+        institution: 'Visvesvaraya Technological University (VTU), Belagavi',
+        year: '2012 – 2016',
+        details: 'Fault-Tolerant Scheduling in Multi-Tenant Cloud Clusters'
+      },
+      {
+        degree: 'M.Tech in Computer Network Engineering',
+        institution: 'RV College of Engineering, Bengaluru',
+        year: '2007 – 2009',
+        details: 'First Class with Distinction'
+      },
+      {
+        degree: 'B.E. in Computer Science & Engineering',
+        institution: 'MIT, Manipal',
+        year: '2003 – 2007',
+        details: 'First Class'
+      }
+    ],
+    experience: [
+      {
+        role: 'Professor & Head of Department',
+        organization: 'SMVITM, Bantakal',
+        duration: '2020 – Present',
+        description: 'Oversees curriculum delivery, accreditation (NBA/NAAC), placement readiness, and industry MoUs for CSE.'
+      },
+      {
+        role: 'Associate Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2013 – 2020',
+        description: 'Taught Operating Systems, Computer Networks, and Cloud Architecture.'
+      }
+    ],
+    skills: ['Cloud Native', 'Kubernetes', 'Docker', 'Operating Systems', 'Distributed Computing', 'System Design']
+  },
+  {
+    id: 'lec-cs-2',
+    userId: 'user-lec-cs-2',
+    name: 'Prof. Priya Nayak',
+    handle: '@priya_cse',
+    aliases: [],
+    employeeId: 'FAC-CS-018',
+    designation: 'Assistant Professor',
+    headline: 'Assistant Professor · Dept. of Computer Science & Engg. | Full-Stack Web Systems, Algorithms & Software Engg.',
+    branch: 'CS',
+    department: 'Dept. of Computer Science & Engg.',
+    location: 'Main Academic Block · CS Wing, SMVITM',
+    experienceYears: '7 years',
+    avatarChar: 'P',
+    avatarBg: '#0284c7',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #0284c7 0%, #00ba7c 100%)',
+    verified: true,
+    verifiedType: 'blue',
+    about: 'Specializes in algorithms, web engineering, and software testing. Mentors student developer clubs, competitive programming squads, and full-stack mini-project cohorts.',
+    contact: {
+      email: 'priya.nayak@smvitm.ac.in',
+      phone: '+91 99001 55213',
+      office: 'Main Block · Room 114',
+      officeHours: 'Mon, Tue, Fri · 2:30 PM – 4:00 PM',
+      linkedin: 'https://linkedin.com/in/priya-nayak-cse',
+      scholar: '',
+      website: ''
+    },
+    yearsTaught: ['1st Year', '2nd Year', '3rd Year'],
+    semestersTaught: ['2nd Sem', '3rd Sem', '4th Sem', '5th Sem'],
+    subjects: [
+      { code: 'BCS401', name: 'Analysis & Design of Algorithms', year: '2nd Year', semester: '4th Sem', type: 'Theory + Lab' },
+      { code: 'BCS502', name: 'Full-Stack Web Engineering', year: '3rd Year', semester: '5th Sem', type: 'Theory + Lab' },
+      { code: 'BCS302', name: 'Object Oriented Programming with Java', year: '2nd Year', semester: '3rd Sem', type: 'Theory + Lab' }
+    ],
+    education: [
+      {
+        degree: 'M.Tech in Software Engineering',
+        institution: 'MS Ramaiah Institute of Technology, Bengaluru',
+        year: '2017 – 2019',
+        details: 'First Class with Distinction'
+      },
+      {
+        degree: 'B.E. in Computer Science & Engineering',
+        institution: 'Canara Engineering College, Mangaluru',
+        year: '2013 – 2017',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Assistant Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2019 – Present',
+        description: 'Teaches Algorithms, Java, and Web Engineering; faculty advisor for Web & Coding Club.'
+      }
+    ],
+    skills: ['Algorithms', 'Java', 'React & Node.js', 'Software Engineering', 'TypeScript', 'Competitive Coding']
+  },
+  {
+    id: 'lec-ec-1',
+    userId: 'user-lec-ec-1',
+    name: 'Dr. Rajesh Prabhu',
+    handle: '@rajesh_ece',
+    aliases: ['Robotics & IoT Club'],
+    employeeId: 'FAC-EC-003',
+    designation: 'Professor & Lab Director',
+    headline: 'Professor · Dept. of Electronics & Comm. | VLSI Design, ARM Cortex Embedded Systems & IoT',
+    branch: 'EC',
+    department: 'Dept. of Electronics & Comm.',
+    location: 'EC Block · IoT Lab 3, SMVITM Bantakal',
+    experienceYears: '15 years',
+    avatarChar: 'R',
+    avatarBg: '#2e7d32',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #0284c7 0%, #2e7d32 100%)',
+    verified: true,
+    verifiedType: 'gold',
+    about: 'Leads the Embedded Systems & VLSI Research Lab at SMVITM and serves as Faculty Advisor to the Robotics & IoT Club. Focuses on low-power ASIC design, FPGA prototyping, and edge IoT sensor networks.',
+    contact: {
+      email: 'rajesh.prabhu@smvitm.ac.in',
+      phone: '+91 98453 66702',
+      office: 'EC Block · Room 201',
+      officeHours: 'Tue – Fri · 3:00 PM – 4:30 PM',
+      linkedin: 'https://linkedin.com/in/rajesh-prabhu-vlsi',
+      scholar: 'https://scholar.google.com',
+      website: 'https://smvitm.ac.in/ece'
+    },
+    yearsTaught: ['2nd Year', '3rd Year', '4th Year'],
+    semestersTaught: ['4th Sem', '5th Sem', '7th Sem'],
+    subjects: [
+      { code: 'BEC402', name: 'Microcontrollers & ARM Embedded Systems', year: '2nd Year', semester: '4th Sem', type: 'Theory + Lab' },
+      { code: 'BEC501', name: 'Digital VLSI Design & Verilog', year: '3rd Year', semester: '5th Sem', type: 'Theory + Lab' },
+      { code: 'BEC703', name: 'Industrial IoT & Edge Hardware', year: '4th Year', semester: '7th Sem', type: 'Theory' }
+    ],
+    education: [
+      {
+        degree: 'Ph.D. in VLSI & Embedded Systems',
+        institution: 'NITK Surathkal',
+        year: '2013 – 2018',
+        details: 'Low-Power CMOS Architecture for Biomedical Wearables'
+      },
+      {
+        degree: 'M.Tech in Microelectronics & VLSI',
+        institution: 'Manipal Institute of Technology, Manipal',
+        year: '2009 – 2011',
+        details: 'First Class with Distinction'
+      },
+      {
+        degree: 'B.E. in Electronics & Communication',
+        institution: 'SDM College of Engineering, Dharwad',
+        year: '2005 – 2009',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Professor & Embedded Lab Director',
+        organization: 'SMVITM, Bantakal',
+        duration: '2018 – Present',
+        description: 'Heads IoT Lab 3 and teaches core VLSI & Microcontroller courses.'
+      }
+    ],
+    skills: ['VLSI Design', 'ARM Cortex', 'Verilog / SystemVerilog', 'Embedded C', 'FPGA', 'IoT Systems']
+  },
+  {
+    id: 'lec-ec-2',
+    userId: 'user-lec-ec-2',
+    name: 'Dr. Meera Shenoy',
+    handle: '@meera_ece',
+    aliases: [],
+    employeeId: 'FAC-EC-011',
+    designation: 'Associate Professor',
+    headline: 'Associate Professor · Dept. of Electronics & Comm. | Signal Processing, 5G Wireless & Antenna Design',
+    branch: 'EC',
+    department: 'Dept. of Electronics & Comm.',
+    location: 'EC Block · Room 210, SMVITM Bantakal',
+    experienceYears: '10 years',
+    avatarChar: 'M',
+    avatarBg: '#7856ff',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #7856ff 0%, #0284c7 100%)',
+    verified: true,
+    verifiedType: 'blue',
+    about: 'Specializes in digital signal processing, wireless communications, and RF engineering. Guides first-year basic electronics and third-year communication labs.',
+    contact: {
+      email: 'meera.shenoy@smvitm.ac.in',
+      phone: '+91 98441 90876',
+      office: 'EC Block · Room 210',
+      officeHours: 'Mon, Wed, Fri · 2:00 PM – 3:45 PM',
+      linkedin: 'https://linkedin.com/in/meera-shenoy-ece',
+      scholar: 'https://scholar.google.com',
+      website: ''
+    },
+    yearsTaught: ['1st Year', '3rd Year'],
+    semestersTaught: ['1st Sem', '2nd Sem', '5th Sem', '6th Sem'],
+    subjects: [
+      { code: 'BESCK104', name: 'Introduction to Electronics & Communication', year: '1st Year', semester: '1st Sem', type: 'Theory' },
+      { code: 'BEC502', name: 'Digital Signal Processing', year: '3rd Year', semester: '5th Sem', type: 'Theory + Lab' },
+      { code: 'BEC601', name: 'Wireless & 5G Communication Systems', year: '3rd Year', semester: '6th Sem', type: 'Theory' }
+    ],
+    education: [
+      {
+        degree: 'Ph.D. in Wireless Communications & Signal Processing',
+        institution: 'VTU Belagavi',
+        year: '2016 – 2020',
+        details: 'Massive MIMO Beamforming Algorithms'
+      },
+      {
+        degree: 'M.Tech in Digital Electronics & Communication',
+        institution: 'NMAMIT, Nitte',
+        year: '2012 – 2014',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Associate Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2015 – Present',
+        description: 'Teaches DSP, Communication Systems, and mentors IEEE student paper teams.'
+      }
+    ],
+    skills: ['Digital Signal Processing', 'MATLAB', '5G Wireless', 'RF Engineering', 'Communication Theory']
+  },
+  {
+    id: 'lec-mech-1',
+    userId: 'user-lec-mech-1',
+    name: 'Prof. Arjun Pai',
+    handle: '@mech_cad',
+    aliases: ['Mech Design Center'],
+    employeeId: 'FAC-ME-006',
+    designation: 'Associate Professor & CAD Center Lead',
+    headline: 'Associate Professor & CAD Center Lead · Dept. of Mechanical Engg. | SolidWorks, FEA & Automotive Design',
+    branch: 'MECH',
+    department: 'Dept. of Mechanical Engineering',
+    location: 'Mechanical Block · CAD Center, SMVITM',
+    experienceYears: '12 years',
+    avatarChar: 'A',
+    avatarBg: '#ff7a00',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #d97706 0%, #ff7a00 50%, #ffd400 100%)',
+    verified: true,
+    verifiedType: 'blue',
+    about: 'Leads the SMVITM CAD/CAM & Finite Element Analysis Certification Center. Mentors SAE BAJA and Go-Kart student fabrication teams and teaches core mechanical design.',
+    contact: {
+      email: 'arjun.pai@smvitm.ac.in',
+      phone: '+91 98456 12098',
+      office: 'Mechanical Block · CAD Center',
+      officeHours: 'Mon – Fri · 3:00 PM – 4:30 PM',
+      linkedin: 'https://linkedin.com/in/arjun-pai-mech',
+      scholar: 'https://scholar.google.com',
+      website: 'https://smvitm.ac.in/mech'
+    },
+    yearsTaught: ['2nd Year', '3rd Year', '4th Year'],
+    semestersTaught: ['3rd Sem', '5th Sem', '7th Sem'],
+    subjects: [
+      { code: 'BME302', name: 'Computer Aided Machine Drawing (CAD)', year: '2nd Year', semester: '3rd Sem', type: 'Theory + Lab' },
+      { code: 'BME501', name: 'Design of Machine Elements', year: '3rd Year', semester: '5th Sem', type: 'Theory' },
+      { code: 'BME701', name: 'Finite Element Analysis (FEA) & ANSYS', year: '4th Year', semester: '7th Sem', type: 'Theory + Lab' }
+    ],
+    education: [
+      {
+        degree: 'M.Tech in Machine Design',
+        institution: 'BMS College of Engineering, Bengaluru',
+        year: '2012 – 2014',
+        details: 'Structural Crashworthiness & Composite Materials'
+      },
+      {
+        degree: 'B.E. in Mechanical Engineering',
+        institution: 'NIE, Mysuru',
+        year: '2008 – 2012',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Associate Professor & CAD Center Lead',
+        organization: 'SMVITM, Bantakal',
+        duration: '2014 – Present',
+        description: 'Conducts SolidWorks & ANSYS certifications and teaches Machine Design & FEA.'
+      }
+    ],
+    skills: ['SolidWorks', 'ANSYS FEA', 'CAD/CAM', 'Machine Design', 'Automotive Chassis', 'Additive Manufacturing']
+  },
+  {
+    id: 'lec-mech-2',
+    userId: 'user-lec-mech-2',
+    name: 'Dr. Deepika Kulkarni',
+    handle: '@deepika_mech',
+    aliases: [],
+    employeeId: 'FAC-ME-015',
+    designation: 'Assistant Professor',
+    headline: 'Assistant Professor · Dept. of Mechanical Engg. | Thermodynamics, Fluid Mechanics & Green Energy',
+    branch: 'MECH',
+    department: 'Dept. of Mechanical Engineering',
+    location: 'Mechanical Block · Room 108, SMVITM',
+    experienceYears: '9 years',
+    avatarChar: 'D',
+    avatarBg: '#d97706',
+    photoUrl: null,
+    bannerBg: 'linear-gradient(135deg, #b45309 0%, #f59e0b 100%)',
+    verified: true,
+    verifiedType: 'blue',
+    about: 'Researcher in thermal engineering, CFD simulations, and sustainable solar-thermal energy systems. Teaches first-year engineering mechanics and thermal sciences.',
+    contact: {
+      email: 'deepika.kulkarni@smvitm.ac.in',
+      phone: '+91 98804 77123',
+      office: 'Mechanical Block · Room 108',
+      officeHours: 'Tue, Thu, Fri · 2:30 PM – 4:00 PM',
+      linkedin: 'https://linkedin.com/in/deepika-kulkarni-thermal',
+      scholar: 'https://scholar.google.com',
+      website: ''
+    },
+    yearsTaught: ['1st Year', '2nd Year', '3rd Year'],
+    semestersTaught: ['1st Sem', '4th Sem', '6th Sem'],
+    subjects: [
+      { code: 'BESCK104D', name: 'Elements of Mechanical Engineering', year: '1st Year', semester: '1st Sem', type: 'Theory' },
+      { code: 'BME401', name: 'Applied Thermodynamics', year: '2nd Year', semester: '4th Sem', type: 'Theory + Lab' },
+      { code: 'BME602', name: 'Computational Fluid Dynamics (CFD)', year: '3rd Year', semester: '6th Sem', type: 'Theory + Lab' }
+    ],
+    education: [
+      {
+        degree: 'Ph.D. in Thermal & Fluid Engineering',
+        institution: 'NITK Surathkal',
+        year: '2017 – 2022',
+        details: 'Heat Transfer Enhancement in Solar Collectors'
+      },
+      {
+        degree: 'M.Tech in Thermal Power Engineering',
+        institution: 'PDA College of Engineering, Kalaburagi',
+        year: '2013 – 2015',
+        details: 'First Class with Distinction'
+      }
+    ],
+    experience: [
+      {
+        role: 'Assistant Professor',
+        organization: 'SMVITM, Bantakal',
+        duration: '2015 – Present',
+        description: 'Teaches Thermodynamics, Fluid Mechanics, and guides renewable energy capstone projects.'
+      }
+    ],
+    skills: ['Thermodynamics', 'CFD', 'Heat Transfer', 'Renewable Energy', 'Fluid Mechanics', 'Engineering Mechanics']
+  }
+];
 
 export const INITIAL_ANNOUNCEMENTS = [
   {

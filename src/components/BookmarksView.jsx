@@ -17,8 +17,10 @@ import {
   VerifiedBadge,
   CommunityAvatar,
   IconChevronDown,
-  IconTrash
+  IconTrash,
+  UserAvatar
 } from './Icons';
+import { findLecturerProfile } from '../services/dbService';
 
 function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
   const [open, setOpen] = useState(false);
@@ -171,7 +173,9 @@ export default function BookmarksView({
   onTogglePin,
   onOpenCommunity,
   onClearAll,
-  onDeleteNotice
+  onDeleteNotice,
+  lecturers = [],
+  onOpenLecturer
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -411,6 +415,11 @@ export default function BookmarksView({
           /* List of Bookmarked Post Cards */
           sortedAnnouncements.map((item) => {
             const isItemImportant = Boolean(item.isImportant || item.important || item.tag === 'Important');
+            const matchedLecturer = findLecturerProfile(lecturers, {
+              userId: item.userId,
+              handle: item.handle,
+              author: item.author
+            });
             const canDelete =
               Boolean(currentUser) &&
               (currentUser.roleKey === 'admin' ||
@@ -421,9 +430,12 @@ export default function BookmarksView({
             return (
               <article key={item.id} className={`post-card ${isItemImportant ? 'is-important' : ''}`}>
                 <div className="post-avatar-col">
-                  <div className="avatar avatar-md" style={{ background: item.avatarBg }}>
-                    <span>{item.avatarChar}</span>
-                  </div>
+                  <UserAvatar
+                    user={matchedLecturer || item}
+                    sizeClass="avatar-md"
+                    onClick={matchedLecturer && onOpenLecturer ? () => onOpenLecturer(matchedLecturer.id) : undefined}
+                    style={matchedLecturer && onOpenLecturer ? { cursor: 'pointer' } : undefined}
+                  />
                 </div>
 
                 <div className="post-content-col">
@@ -451,7 +463,21 @@ export default function BookmarksView({
 
                   <div className="post-header-line">
                     <div className="post-user-info">
-                      <span className="post-user-name">{item.author}</span>
+                      {matchedLecturer && onOpenLecturer ? (
+                        <button
+                          type="button"
+                          className="post-author-link"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenLecturer(matchedLecturer.id);
+                          }}
+                          title={`View ${matchedLecturer.name}'s profile`}
+                        >
+                          {matchedLecturer.name}
+                        </button>
+                      ) : (
+                        <span className="post-user-name">{item.author}</span>
+                      )}
                       <VerifiedBadge type={item.verifiedType} />
                       <span className="post-user-handle">{item.handle}</span>
                       {item.collaborators && item.collaborators.length > 0 && (
