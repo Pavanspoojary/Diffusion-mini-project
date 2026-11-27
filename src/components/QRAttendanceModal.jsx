@@ -18,7 +18,8 @@ export default function QRAttendanceModal({
   const [scanResult, setScanResult] = useState(null);
   const [scanError, setScanError] = useState('');
   const [isCameraActive, setIsCameraActive] = useState(false);
-  const [cameraFacing, setCameraFacing] = useState('environment'); // 'environment' | 'user'
+  const [cameraDevices, setCameraDevices] = useState([]);
+  const [selectedCameraIdx, setSelectedCameraIdx] = useState(0);
 
   const dialogRef = useRef(null);
   const scannerRef = useRef(null);
@@ -32,6 +33,21 @@ export default function QRAttendanceModal({
       dialogRef.current.close();
     }
   }, [isOpen]);
+
+  // Query available cameras on mount/open
+  useEffect(() => {
+    if (isOpen && mode === 'student') {
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          if (devices && devices.length > 0) {
+            setCameraDevices(devices);
+          }
+        })
+        .catch((err) => {
+          console.info('Camera discovery note:', err);
+        });
+    }
+  }, [isOpen, mode]);
 
   // Coordinator: Generate QR code when event or qrType changes
   useEffect(() => {
@@ -129,52 +145,102 @@ export default function QRAttendanceModal({
   };
 
   // Start live device camera scanner
-  const handleStartCamera = async (facing = cameraFacing) => {
+  const handleStartCamera = async (targetCameraOverride) => {
     setScanError('');
     setScanStep('starting');
 
     await stopScannerSafely();
+    // Allow hardware camera stream to release
+    await new Promise((resolve) => setTimeout(resolve, 150));
 
     const elementId = 'qr-camera-viewport';
     const scanner = new Html5Qrcode(elementId);
     scannerRef.current = scanner;
 
-    const config = {
+    const qrConfig = {
       fps: 10,
       qrbox: { width: 220, height: 220 }
     };
 
+    // Determine target camera: explicit device ID or facing mode
+    let targetCamera = targetCameraOverride;
+    if (!targetCamera) {
+      if (cameraDevices.length > 0 && cameraDevices[selectedCameraIdx]?.id) {
+        targetCamera = cameraDevices[selectedCameraIdx].id;
+      } else {
+        targetCamera = { facingMode: 'environment' };
+      }
+    }
+
     try {
       await scanner.start(
-        { facingMode: facing },
-        config,
+        targetCamera,
+        qrConfig,
         (decodedText) => {
           handleVerifyDecodedQR(decodedText);
         },
         () => {
-          // Frame decode misses are normal in video streams
+          // Routine frame decode misses
         }
       );
       setIsCameraActive(true);
       setScanStep('scanning');
+
+      // Refresh camera devices with permission granted
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          if (devices && devices.length > 0) {
+            setCameraDevices(devices);
+          }
+        })
+        .catch(() => {});
     } catch (err) {
-      console.warn('Camera launch note:', err);
+      console.warn('Primary camera start error:', err);
+
+      // Fallback for single-webcam laptops (e.g. MacBook) where { facingMode: 'environment' } fails:
+      if (typeof targetCamera === 'object' && targetCamera.facingMode === 'environment') {
+        try {
+          await scanner.start(
+            { facingMode: 'user' },
+            qrConfig,
+            (decodedText) => handleVerifyDecodedQR(decodedText),
+            () => {}
+          );
+          setIsCameraActive(true);
+          setScanStep('scanning');
+          Html5Qrcode.getCameras().then((devs) => devs?.length && setCameraDevices(devs)).catch(() => {});
+          return;
+        } catch (fallbackErr) {
+          console.warn('Fallback camera start error:', fallbackErr);
+        }
+      }
+
       setIsCameraActive(false);
       setScanStep('error');
       const msg = err?.name === 'NotAllowedError'
-        ? 'Camera permission denied. Please allow camera access in browser settings or upload a QR image below.'
+        ? 'Camera permission denied. Allow camera access in your browser address bar.'
         : (err?.message || 'Camera is unavailable or unsupported on this device.');
       setScanError(msg);
     }
   };
 
-  // Switch between front & back camera
+  // Flip camera between available devices
   const handleFlipCamera = async () => {
-    const nextFacing = cameraFacing === 'environment' ? 'user' : 'environment';
-    setCameraFacing(nextFacing);
-    if (isCameraActive) {
-      await handleStartCamera(nextFacing);
+    setScanError('');
+
+    // If only 1 camera exists on the device (e.g. laptop webcam):
+    if (cameraDevices.length <= 1) {
+      const currentLabel = cameraDevices[0]?.label || 'Default Camera';
+      setScanError(`Only 1 camera detected (${currentLabel}). Flip Camera is active on dual-camera devices like mobile phones or tablets.`);
+      return;
     }
+
+    // Multiple cameras available (phone front/back or external USB cam)
+    const nextIdx = (selectedCameraIdx + 1) % cameraDevices.length;
+    setSelectedCameraIdx(nextIdx);
+    const nextCamera = cameraDevices[nextIdx];
+
+    await handleStartCamera(nextCamera.id);
   };
 
   // Scan from uploaded file / screenshot fallback
@@ -435,28 +501,45 @@ export default function QRAttendanceModal({
               {scanStep !== 'success' && (
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
                   <div className="qr-scanner-wrapper">
-                    <div id="qr-camera-viewport" />
-                    {isCameraActive && <div className="qr-scanner-laser" />}
+                    {/* Viewfinder container always exists for Html5Qrcode to attach */}
+                    <div id="qr-camera-viewport" style={{ opacity: isCameraActive ? 1 : 0, pointerEvents: isCameraActive ? 'auto' : 'none' }} />
                     
+                    {/* Scanning laser and border crosshairs */}
+                    {isCameraActive && (
+                      <>
+                        <div className="qr-scanner-laser" />
+                        <div className="qr-viewfinder-frame" />
+                      </>
+                    )}
+                    
+                    {/* Centered inactive placeholder */}
                     {!isCameraActive && scanStep !== 'starting' && (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: 24, textAlign: 'center' }}>
-                        <IconCamera style={{ width: 44, height: 44, color: 'var(--accent-color)' }} />
-                        <span style={{ fontSize: 13, color: '#e5e5e5' }}>
-                          Camera is inactive. Click below to start scanning the event QR.
-                        </span>
+                      <div className="qr-scanner-placeholder">
+                        <div className="qr-camera-icon-badge">
+                          <IconCamera style={{ width: 28, height: 28, color: 'var(--accent-color)' }} />
+                        </div>
+                        <p className="qr-placeholder-text">
+                          Camera is inactive. Click below to start scanning the event QR code.
+                        </p>
                       </div>
                     )}
 
+                    {/* Starting state */}
                     {scanStep === 'starting' && (
-                      <div style={{ color: '#fff', fontSize: 13, padding: 20 }}>
-                        Initializing camera viewfinder...
+                      <div className="qr-scanner-placeholder">
+                        <div className="qr-camera-icon-badge" style={{ animation: 'pulse 1.5s infinite' }}>
+                          <IconCamera style={{ width: 28, height: 28, color: 'var(--accent-color)' }} />
+                        </div>
+                        <p className="qr-placeholder-text">
+                          Initializing camera viewfinder...
+                        </p>
                       </div>
                     )}
                   </div>
 
-                  {/* Scan error notice */}
+                  {/* Scan error / camera note notice */}
                   {scanError && (
-                    <div style={{ padding: '8px 12px', borderRadius: 8, backgroundColor: 'rgba(244, 33, 46, 0.1)', border: '1px solid #f4212e', color: '#f4212e', fontSize: 12, maxWidth: 360, textAlign: 'center' }}>
+                    <div style={{ padding: '8px 14px', borderRadius: 8, backgroundColor: 'rgba(244, 33, 46, 0.1)', border: '1px solid #f4212e', color: '#f4212e', fontSize: 12, maxWidth: 360, textAlign: 'center', lineHeight: 1.4 }}>
                       {scanError}
                     </div>
                   )}
@@ -488,9 +571,9 @@ export default function QRAttendanceModal({
                           className="btn-qr-action"
                           onClick={handleFlipCamera}
                           style={{ fontSize: 13 }}
-                          title="Switch between front and back cameras"
+                          title={cameraDevices.length > 1 ? `Switch camera (${selectedCameraIdx + 1} of ${cameraDevices.length})` : 'Only 1 camera detected on this computer'}
                         >
-                          Flip Camera
+                          Flip Camera {cameraDevices.length > 1 ? `(${selectedCameraIdx + 1}/${cameraDevices.length})` : ''}
                         </button>
                       </>
                     )}
