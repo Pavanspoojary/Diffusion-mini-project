@@ -4006,6 +4006,65 @@ dialog::backdrop {
   object-fit: contain;
 }
 
+/* Live QR Camera Scanner Viewport */
+.qr-scanner-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  min-height: 260px;
+  background-color: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--accent-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#qr-camera-viewport {
+  width: 100%;
+}
+
+#qr-camera-viewport video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 12px;
+}
+
+.qr-scanner-laser {
+  position: absolute;
+  top: 15%;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: var(--accent-color);
+  box-shadow: 0 0 8px var(--accent-color), 0 0 16px var(--accent-color);
+  border-radius: 2px;
+  animation: qrLaserScan 2s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes qrLaserScan {
+  0% { top: 15%; opacity: 0.8; }
+  50% { top: 85%; opacity: 1; }
+  100% { top: 15%; opacity: 0.8; }
+}
+
+.qr-scan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(29, 155, 240, 0.12);
+  color: var(--accent-color);
+}
+
 .qr-helper-text {
   font-size: 13px;
   color: var(--text-secondary);

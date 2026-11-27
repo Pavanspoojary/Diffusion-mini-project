@@ -12,6 +12,7 @@
     "@clerk/react": "^6.19.7",
     "@supabase/supabase-js": "^2.118.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "html5-qrcode": "^2.3.8",
     "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

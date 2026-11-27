@@ -52,6 +52,17 @@ import {
   subscribeToTable
 } from './services/dbService';
 
+const getRouteNav = () => {
+  if (typeof window === 'undefined') return 'announcements';
+  const path = window.location.pathname.replace(/^\/+/, '').toLowerCase();
+  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+  if (path === 'events' || path === 'event' || hash === 'events' || hash === 'event') return 'events';
+  if (path === 'websites' || path === 'portals' || hash === 'websites') return 'websites';
+  if (path === 'bookmarks' || hash === 'bookmarks') return 'bookmarks';
+  if (path === 'notifications' || hash === 'notifications') return 'notifications';
+  return 'announcements';
+};
+
 export default function App({ isClerkConfigured = false }) {
   // Theme & Styling
   const [theme, setTheme] = useState(() => localStorage.getItem('college_hub_theme') || 'dark');
@@ -115,8 +126,8 @@ export default function App({ isClerkConfigured = false }) {
   });
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
-  // Navigation & Filtering
-  const [activeNav, setActiveNav] = useState('announcements'); // announcements | events | websites | notifications | bookmarks
+  // Navigation & Filtering (supports direct URL routing: /events, /websites, /bookmarks, /notifications)
+  const [activeNav, setActiveNav] = useState(getRouteNav); // announcements | events | websites | notifications | bookmarks
   const [activeBranch, setActiveBranch] = useState('ALL');
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -273,6 +284,29 @@ export default function App({ isClerkConfigured = false }) {
       localStorage.setItem('college_hub_websites_v8', JSON.stringify(websites));
     } catch {}
   }, [websites]);
+
+  // Sync URL route with activeNav
+  useEffect(() => {
+    const currentNav = getRouteNav();
+    const targetPath = activeNav === 'announcements' ? '/' : `/${activeNav}`;
+    if (currentNav !== activeNav && window.location.pathname !== targetPath) {
+      window.history.pushState(null, '', targetPath);
+    }
+  }, [activeNav]);
+
+  // Handle browser back / forward navigation and hash changes
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const nav = getRouteNav();
+      setActiveNav(nav);
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
 
   // Persist Sidebar State
   useEffect(() => {
@@ -1126,6 +1160,7 @@ export default function App({ isClerkConfigured = false }) {
         currentUser={currentUser}
         mode={qrModal.mode}
         onRecordAttendance={handleRecordAttendance}
+        onRegisterEvent={handleRegisterEvent}
       />
 
       {/* FLOATING TOAST NOTIFICATION */}
