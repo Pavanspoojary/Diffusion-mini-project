@@ -353,7 +353,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 142,
     isRegistered: false,
     qrPayload: 'EVENT_ALGORHYTHM_2026',
-    link: 'https://docs.google.com/forms',
+    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:45 AM', checkOut: 'In Progress', status: 'Checked In' },
       { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '09:50 AM', checkOut: 'In Progress', status: 'Checked In' },
@@ -376,7 +376,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 86,
     isRegistered: true,
     qrPayload: 'EVENT_DEVHACKS_2026',
-    link: 'https://docs.google.com/forms',
+    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:12 AM', checkOut: 'In Progress', status: 'Checked In' },
       { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '08:58 AM', checkOut: 'In Progress', status: 'Checked In' },
@@ -399,7 +399,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 48,
     isRegistered: false,
     qrPayload: 'EVENT_DEEPLEARNING_WORKSHOP_2026',
-    link: 'https://docs.google.com/forms',
+    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
     attendance: []
   },
   {
@@ -417,7 +417,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 340,
     isRegistered: false,
     qrPayload: 'EVENT_VARNOTHSAVA_INAUGURATION_2026',
-    link: 'https://docs.google.com/forms',
+    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
     attendance: []
   },
   {

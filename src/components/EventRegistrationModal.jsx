@@ -74,11 +74,13 @@ export default function EventRegistrationModal({
     onClose();
   };
 
+  const DEFAULT_GOOGLE_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
+
   const getSafeGoogleFormLink = () => {
     if (event.link && !event.link.includes('instagram.com') && event.link.includes('form')) {
       return event.link;
     }
-    return 'https://docs.google.com/forms';
+    return DEFAULT_GOOGLE_FORM;
   };
 
   return (

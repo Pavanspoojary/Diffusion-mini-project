@@ -44,7 +44,7 @@ export default function CreateEventModal({
       deadline: deadline.trim() || 'Registration open',
       description: description.trim(),
       poster: poster || null,
-      link: link.trim() || null
+      link: link.trim() || (type === 'internal' ? 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor' : null)
     });
 
     onClose();

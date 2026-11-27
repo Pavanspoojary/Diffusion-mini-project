@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
 import EventRegistrationModal from './EventRegistrationModal';
 
+const INTERNAL_GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
+
 export default function EventsView({
   events,
   currentUser,
@@ -199,26 +201,30 @@ export default function EventsView({
                           >
                             Seats Filled (Housefull)
                           </button>
-                        ) : (
+                        ) : evt.isRegistered ? (
                           <button
                             type="button"
-                            className={`btn-event-register ${evt.isRegistered ? 'registered' : ''}`}
+                            className="btn-event-register registered"
                             onClick={() => setRegisteringEvent(evt)}
                             style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                            title={evt.isRegistered ? 'View or manage registration details' : 'Open Google Form to register'}
+                            title="View or manage registration details"
                           >
-                            {evt.isRegistered ? (
-                              <>
-                                <IconCheck style={{ width: 13, height: 13 }} />
-                                <span>Registered</span>
-                              </>
-                            ) : (
-                              <>
-                                <span>Register via Google Form</span>
-                                <IconExternal style={{ width: 13, height: 13 }} />
-                              </>
-                            )}
+                            <IconCheck style={{ width: 13, height: 13 }} />
+                            <span>Registered</span>
                           </button>
+                        ) : (
+                          <a
+                            href={evt.link || INTERNAL_GOOGLE_FORM_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-event-register"
+                            onClick={() => setRegisteringEvent(evt)}
+                            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                            title="Opens official Google Form in a new tab"
+                          >
+                            <span>Register via Google Form</span>
+                            <IconExternal style={{ width: 13, height: 13 }} />
+                          </a>
                         )}
 
                         {/* QR Attendance Buttons */}

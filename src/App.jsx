@@ -159,23 +159,26 @@ export default function App({ isClerkConfigured = false }) {
     }
   });
 
+  const INTERNAL_GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
+
   const [events, setEvents] = useState(() => {
     try {
       localStorage.removeItem('college_hub_events_v1');
       localStorage.removeItem('college_hub_events_v2');
       localStorage.removeItem('college_hub_events_v3');
       localStorage.removeItem('college_hub_events_v4');
-      const savedV5 = localStorage.getItem('college_hub_events_v5');
-      if (savedV5) {
-        const parsed = JSON.parse(savedV5);
+      localStorage.removeItem('college_hub_events_v5');
+      const savedV6 = localStorage.getItem('college_hub_events_v6');
+      if (savedV6) {
+        const parsed = JSON.parse(savedV6);
         return parsed.map((e) => ({
           ...e,
-          link: (e.link && !e.link.includes('instagram.com')) ? e.link : 'https://docs.google.com/forms'
+          link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
         }));
       }
       return INITIAL_EVENTS.map((e) => ({
         ...e,
-        link: (e.link && !e.link.includes('instagram.com')) ? e.link : 'https://docs.google.com/forms'
+        link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
       }));
     } catch {
       return INITIAL_EVENTS;
@@ -285,7 +288,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v5', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v6', JSON.stringify(events));
     } catch {}
   }, [events]);
 
