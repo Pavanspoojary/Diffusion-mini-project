@@ -240,7 +240,7 @@ export default function AuthPage({
           <a href="#">SMVITM Bantakal</a>
         </div>
         <div className="auth-footer-copyright">
-          © 2026 Campus Hub / X. All rights reserved.
+          © 2026 Campus Hub. All rights reserved.
         </div>
       </footer>
 
