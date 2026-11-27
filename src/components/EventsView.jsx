@@ -156,21 +156,21 @@ export default function EventsView({
 
                 {/* Event Metadata Grid */}
                 <div className="event-meta-grid">
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Date:</span>
-                    <span>{evt.date}</span>
+                    <span className="meta-value">{evt.date}</span>
                   </div>
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Time:</span>
-                    <span>{evt.time}</span>
+                    <span className="meta-value">{evt.time}</span>
                   </div>
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Venue:</span>
-                    <span>{evt.venue}</span>
+                    <span className="meta-value">{evt.venue}</span>
                   </div>
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Deadline:</span>
-                    <span style={{ color: 'var(--like-color)', fontWeight: 600 }}>{evt.deadline}</span>
+                    <span className="meta-value deadline">{evt.deadline}</span>
                   </div>
                 </div>
 

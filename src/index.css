@@ -3199,15 +3199,41 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 .event-meta-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px 16px;
-  font-size: 13px;
-  color: var(--text-secondary);
+  gap: 8px 24px;
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 2px 0 4px 0;
+}
+
+@media (max-width: 580px) {
+  .event-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+.event-meta-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
 }
 
 .meta-label {
+  font-size: 13px;
   font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 68px;
+  flex-shrink: 0;
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 600;
   color: var(--text-primary);
-  margin-right: 4px;
+}
+
+.meta-value.deadline {
+  color: #f4212e;
 }
 
 .event-actions-bar {
