@@ -8,6 +8,7 @@ import {
   IconPlus,
   IconBook,
   IconGraduationCap,
+  IconArrowLeft,
   VerifiedBadge,
   UserAvatar
 } from './Icons';
@@ -29,7 +30,8 @@ export default function FacultyDirectoryView({
   unreadCount = 0,
   onOpenNotifications,
   isHeaderHidden = false,
-  onOpenCommunity
+  onOpenCommunity,
+  onBackToProfile
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('ALL');
@@ -131,6 +133,30 @@ export default function FacultyDirectoryView({
       <div className={`sticky-header ${isHeaderHidden ? 'header-hidden' : ''}`}>
         <div className="header-top-row">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {onBackToProfile && !selectedLecturer && (
+              <button
+                type="button"
+                className="header-back-btn"
+                onClick={onBackToProfile}
+                aria-label="Back to Profile"
+                title="Back to Profile"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 34,
+                  height: 34,
+                  borderRadius: '50%',
+                  padding: 0
+                }}
+              >
+                <IconArrowLeft style={{ width: 18, height: 18 }} />
+              </button>
+            )}
             {isSidebarHidden && (
               <button
                 type="button"

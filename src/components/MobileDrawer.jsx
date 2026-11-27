@@ -3,7 +3,6 @@ import {
   IconClose,
   IconSettings,
   IconBookmarks,
-  IconGraduationCap,
   CommunityAvatar,
   VerifiedBadge,
   UserAvatar
@@ -124,18 +123,6 @@ export default function MobileDrawer({
 
         {/* Quick Actions */}
         <div className="mobile-drawer-section">
-          <button
-            type="button"
-            className="mobile-drawer-action-btn"
-            onClick={() => {
-              onSelectNav('faculty');
-              onClose();
-            }}
-          >
-            <IconGraduationCap className="mobile-drawer-action-icon" />
-            <span>Faculty & Lecturers</span>
-          </button>
-
           <button
             type="button"
             className="mobile-drawer-action-btn"

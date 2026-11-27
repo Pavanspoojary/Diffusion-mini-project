@@ -8,7 +8,6 @@ import {
   IconNotifications,
   IconBookmarks,
   IconProfile,
-  IconGraduationCap,
   IconSettings,
   IconMore,
   IconSidebarToggle,
@@ -100,17 +99,6 @@ export default function LeftSidebar({
                 <IconWebsites className="nav-icon" />
               </div>
               <span className="nav-label">Websites</span>
-            </button>
-
-            <button
-              type="button"
-              className={`nav-item ${activeNav === 'faculty' ? 'active' : ''}`}
-              onClick={() => setActiveNav('faculty')}
-            >
-              <div className="nav-icon-wrap">
-                <IconGraduationCap className="nav-icon" />
-              </div>
-              <span className="nav-label">Faculty</span>
             </button>
 
             <button

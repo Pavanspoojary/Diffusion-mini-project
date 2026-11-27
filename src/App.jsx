@@ -22,7 +22,6 @@ import {
   IconAnnouncements,
   IconEvents,
   IconWebsites,
-  IconGraduationCap,
   IconNotifications,
   IconBookmarks,
   IconProfile
@@ -1155,6 +1154,7 @@ export default function App({ isClerkConfigured = false }) {
             onOpenNotifications={() => setActiveNav('notifications')}
             isHeaderHidden={isHeaderHidden}
             onOpenCommunity={openCommunity}
+            onBackToProfile={() => setActiveNav('profile')}
           />
         )}
 
@@ -1258,18 +1258,6 @@ export default function App({ isClerkConfigured = false }) {
           aria-label="Websites"
         >
           <IconWebsites className="mobile-nav-icon" />
-        </button>
-
-        <button
-          type="button"
-          className={`mobile-nav-item ${activeNav === 'faculty' ? 'active' : ''}`}
-          onClick={() => {
-            setSelectedLecturerId(null);
-            setActiveNav('faculty');
-          }}
-          aria-label="Faculty"
-        >
-          <IconGraduationCap className="mobile-nav-icon" />
         </button>
 
         <button
