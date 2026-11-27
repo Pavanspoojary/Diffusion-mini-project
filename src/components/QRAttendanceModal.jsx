@@ -435,14 +435,15 @@ export default function QRAttendanceModal({
                   <span style={{ color: '#ff7a00', fontWeight: 600 }}>
                     You have not registered for this event yet.
                   </span>
-                  <button
-                    type="button"
+                  <a
+                    href={event.link || 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor'}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn-primary-post"
-                    onClick={() => onRegisterEvent(event.id)}
-                    style={{ fontSize: 12, padding: '4px 10px' }}
+                    style={{ fontSize: 12, padding: '4px 10px', textDecoration: 'none' }}
                   >
-                    Register Now
-                  </button>
+                    Register via Google Form
+                  </a>
                 </div>
               )}
 

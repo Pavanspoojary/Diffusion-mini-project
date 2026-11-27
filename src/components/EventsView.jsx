@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
-import EventRegistrationModal from './EventRegistrationModal';
 
 const INTERNAL_GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
 
@@ -22,7 +21,6 @@ export default function EventsView({
 }) {
   const [activeTab, setActiveTab] = useState('internal'); // 'internal' | 'external'
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState(null);
-  const [registeringEvent, setRegisteringEvent] = useState(null);
 
   const canCreateEvent = currentUser.roleKey !== 'student';
 
@@ -201,24 +199,12 @@ export default function EventsView({
                           >
                             Seats Filled (Housefull)
                           </button>
-                        ) : evt.isRegistered ? (
-                          <button
-                            type="button"
-                            className="btn-event-register registered"
-                            onClick={() => setRegisteringEvent(evt)}
-                            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                            title="View or manage registration details"
-                          >
-                            <IconCheck style={{ width: 13, height: 13 }} />
-                            <span>Registered</span>
-                          </button>
                         ) : (
                           <a
                             href={evt.link || INTERNAL_GOOGLE_FORM_URL}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn-event-register"
-                            onClick={() => setRegisteringEvent(evt)}
                             style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
                             title="Opens official Google Form in a new tab"
                           >
@@ -306,14 +292,6 @@ export default function EventsView({
           </div>
         </div>
       )}
-      {/* Google Form Event Registration Modal */}
-      <EventRegistrationModal
-        isOpen={Boolean(registeringEvent)}
-        onClose={() => setRegisteringEvent(null)}
-        event={registeringEvent ? events.find((e) => e.id === registeringEvent.id) || registeringEvent : null}
-        currentUser={currentUser}
-        onRegisterEvent={onRegisterEvent}
-      />
     </div>
   );
 }
