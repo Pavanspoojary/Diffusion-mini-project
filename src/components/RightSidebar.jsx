@@ -143,7 +143,7 @@ export default function RightSidebar({
         <footer style={{ padding: '8px 12px', fontSize: 12, color: 'var(--text-secondary)', lineHeight: '18px' }}>
           <div>Campus Hub · SMVITM Bantakal</div>
           <div>Department of Artificial Intelligence and Data Science</div>
-          <div style={{ marginTop: 4 }}>© 2026 Campus Hub / X. All rights reserved.</div>
+          <div style={{ marginTop: 4 }}>© 2026 Campus Hub. All rights reserved.</div>
         </footer>
       </div>
     </aside>

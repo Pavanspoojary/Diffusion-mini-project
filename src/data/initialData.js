@@ -109,18 +109,19 @@ export const USERS = {
   },
   admin: {
     id: 'user-admin',
-    name: 'Prathik Devadiga',
-    usn: '4MW24AD030',
-    email: 'prathik.24ad030@sode-edu.in',
+    name: 'Campus Admin',
+    email: '01pavan06@gmail.com',
+    usn: 'ADM-01',
     role: 'Administrator',
     roleKey: 'admin',
     branch: 'ALL',
     department: 'Campus Administration',
-    handle: '@prathik_admin',
-    avatarChar: 'P',
+    handle: '@campus_admin',
+    avatarChar: 'A',
     avatarBg: '#e65100',
     verified: true,
-    verifiedType: 'gold'
+    verifiedType: 'gold',
+    canAccessAllDepts: true
   }
 };
 
