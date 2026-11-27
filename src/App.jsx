@@ -52,22 +52,41 @@ import {
   subscribeToTable
 } from './services/dbService';
 
-export default function App() {
+export default function App({ isClerkConfigured = false }) {
   // Theme & Styling
   const [theme, setTheme] = useState(() => localStorage.getItem('college_hub_theme') || 'dark');
   const [color, setColor] = useState(() => localStorage.getItem('college_hub_color') || 'blue');
 
   // Authentication State
+  const isClerkEnabled = Boolean(
+    isClerkConfigured ||
+    (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY && import.meta.env.VITE_CLERK_PUBLISHABLE_KEY.trim() !== '')
+  );
+
   const { isLoaded, isSignedIn } = useAuth();
   const { user: clerkUser } = useUser();
   const { signOut } = useClerk();
   const redirectedClerkUserRef = useRef(null);
 
+  const [clerkTimedOut, setClerkTimedOut] = useState(!isClerkEnabled);
+
+  useEffect(() => {
+    if (!isClerkEnabled) {
+      setClerkTimedOut(true);
+      return;
+    }
+    if (isLoaded) return;
+    const timer = setTimeout(() => {
+      setClerkTimedOut(true);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [isClerkEnabled, isLoaded]);
+
   const clerkEmail =
     clerkUser?.primaryEmailAddress?.emailAddress ||
     clerkUser?.emailAddresses?.[0]?.emailAddress ||
     '';
-  const collegeAccess = isSignedIn && clerkUser ? parseCollegeEmail(clerkEmail) : null;
+  const collegeAccess = isClerkEnabled && isSignedIn && clerkUser ? parseCollegeEmail(clerkEmail) : null;
 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('college_hub_auth') === 'true';
@@ -774,7 +793,7 @@ export default function App() {
     });
   };
 
-  if (!isLoaded) {
+  if (isClerkEnabled && !isLoaded && !clerkTimedOut) {
     return (
       <div className="auth-root" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', color: 'var(--text-secondary)' }}>
         Loading...
@@ -833,6 +852,7 @@ export default function App() {
           onLogin={handleLogin}
           onSignup={handleSignup}
           users={USERS}
+          isClerkEnabled={isClerkEnabled}
         />
         <Toast message={toastMessage} />
       </div>
