@@ -580,14 +580,20 @@ export default function App({ isClerkConfigured = false }) {
 
   const handleRegisterEvent = async (eventId) => {
     const target = events.find((evt) => evt.id === eventId);
-    const wasRegistered = target ? Boolean(target.isRegistered) : false;
-    const currentCount = target ? (target.registeredCount || 0) : 0;
+    if (!target) return;
+    const wasRegistered = Boolean(target.isRegistered);
+    const currentCount = target.registeredCount || 0;
+
+    if (!wasRegistered && target.maxCapacity && currentCount >= target.maxCapacity) {
+      showToast('Event capacity full (Housefull)');
+      return;
+    }
 
     setEvents((prev) =>
       prev.map((evt) => {
         if (evt.id === eventId) {
           const isRegistered = !evt.isRegistered;
-          showToast(isRegistered ? 'Registered for event' : 'Registration cancelled');
+          showToast(isRegistered ? 'Opening Google Form registration...' : 'Registration status updated');
           return {
             ...evt,
             isRegistered,

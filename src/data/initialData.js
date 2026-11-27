@@ -353,7 +353,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 142,
     isRegistered: false,
     qrPayload: 'EVENT_ALGORHYTHM_2026',
-    link: 'https://www.instagram.com/reel/De9IDZuyW5v/?rpxt=MWw4amx3ZnN6dWVxag==',
+    link: 'https://forms.gle/AlgoRhythm2026SMVITM',
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:45 AM', checkOut: 'In Progress', status: 'Checked In' },
       { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '09:50 AM', checkOut: 'In Progress', status: 'Checked In' },
@@ -376,6 +376,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 86,
     isRegistered: true,
     qrPayload: 'EVENT_DEVHACKS_2026',
+    link: 'https://forms.gle/DevHacks2026SMVITM',
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:12 AM', checkOut: 'In Progress', status: 'Checked In' },
       { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '08:58 AM', checkOut: 'In Progress', status: 'Checked In' },
@@ -398,6 +399,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 48,
     isRegistered: false,
     qrPayload: 'EVENT_DEEPLEARNING_WORKSHOP_2026',
+    link: 'https://forms.gle/DLWorkshopSMVITM',
     attendance: []
   },
   {
@@ -415,6 +417,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 340,
     isRegistered: false,
     qrPayload: 'EVENT_VARNOTHSAVA_INAUGURATION_2026',
+    link: 'https://forms.gle/Varnothsava2026SMVITM',
     attendance: []
   },
   {

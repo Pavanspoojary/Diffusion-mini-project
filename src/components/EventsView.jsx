@@ -188,13 +188,33 @@ export default function EventsView({
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                     {evt.type === 'internal' ? (
                       <>
-                        <button
-                          type="button"
-                          className={`btn-event-register ${evt.isRegistered ? 'registered' : ''}`}
-                          onClick={() => onRegisterEvent(evt.id)}
-                        >
-                          {evt.isRegistered ? 'Registered' : 'Register for Event'}
-                        </button>
+                        {evt.registeredCount >= evt.maxCapacity && !evt.isRegistered ? (
+                          <button
+                            type="button"
+                            className="btn-event-register"
+                            style={{ opacity: 0.6, cursor: 'not-allowed', backgroundColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                            disabled
+                          >
+                            Seats Filled (Housefull)
+                          </button>
+                        ) : (
+                          <a
+                            href={evt.link || 'https://docs.google.com/forms'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`btn-event-register ${evt.isRegistered ? 'registered' : ''}`}
+                            onClick={() => {
+                              if (!evt.isRegistered) {
+                                onRegisterEvent(evt.id);
+                              }
+                            }}
+                            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                            title="Opens official Google Form in a new tab"
+                          >
+                            <span>{evt.isRegistered ? 'Registered (Google Form)' : 'Register via Google Form'}</span>
+                            <IconExternal style={{ width: 13, height: 13 }} />
+                          </a>
+                        )}
 
                         {/* QR Attendance Buttons */}
                         {currentUser.roleKey === 'student' ? (
