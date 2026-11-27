@@ -403,31 +403,17 @@ export const INITIAL_EVENTS = [
     ]
   },
   {
-    id: 'evt-4',
+    id: 'evt-ideatex-2027',
     type: 'external',
-    title: 'Smart India Hackathon (SIH) 2026 - College Teams Nomination',
-    organizer: 'Ministry of Education Innovation Cell (MIC)',
-    date: 'Nov 18, 2026',
-    time: 'Online / Multi-center',
-    venue: 'National Level Finals',
-    poster: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Oct 30, 2026',
-    link: 'https://sih.gov.in',
-    description: 'National level hackathon for college teams solving real-world challenges for ministries and public sector departments.',
-    isRegistered: false
-  },
-  {
-    id: 'evt-5',
-    type: 'external',
-    title: 'IEEE Mangalore Subsection Student Paper Conference',
-    organizer: 'IEEE Mangalore Subsection',
-    date: 'Dec 05, 2026',
-    time: '09:30 AM - 05:00 PM',
-    venue: 'NITK Surathkal',
-    poster: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Nov 15, 2026',
-    link: 'https://ieee-mangalore.org',
-    description: 'Call for research papers across AI, Computer Vision, and IoT. Accepted peer-reviewed papers will be published in IEEE Xplore.',
+    title: 'IdeateX 2026-27: National Innovation & Grand Challenge Hackathon',
+    organizer: 'Kishkinda University & BITM (Ballari)',
+    date: 'Feb 27, 2027',
+    time: 'Hybrid Mode (Online + Offline)',
+    venue: 'Kishkinda University Campus, Ballari',
+    poster: '/events/ideatex-2027-poster.jpg',
+    deadline: 'Dec 01, 2026 (Extended)',
+    link: 'https://www.ideatex.in',
+    description: 'National Innovation & Grand Challenge Competition across Six Frontiers: MedTech, Industry Problems, AgriTech, Smart Spaces, GreenTech, and EdTech. Take real-world problems from idea to working prototype with industry mentorship. Total prize pool ₹10 Lakh. Team size: 4-5 students. Registration fee: ₹1,000 per team. Official website: www.ideatex.in',
     isRegistered: false
   }
 ];
