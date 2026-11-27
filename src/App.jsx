@@ -168,9 +168,10 @@ export default function App({ isClerkConfigured = false }) {
       localStorage.removeItem('college_hub_events_v3');
       localStorage.removeItem('college_hub_events_v4');
       localStorage.removeItem('college_hub_events_v5');
-      const savedV6 = localStorage.getItem('college_hub_events_v6');
-      if (savedV6) {
-        const parsed = JSON.parse(savedV6);
+      localStorage.removeItem('college_hub_events_v6');
+      const savedV7 = localStorage.getItem('college_hub_events_v7');
+      if (savedV7) {
+        const parsed = JSON.parse(savedV7);
         return parsed.map((e) => ({
           ...e,
           link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
@@ -288,7 +289,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v6', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v7', JSON.stringify(events));
     } catch {}
   }, [events]);
 
