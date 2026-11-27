@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Show, UserButton } from '@clerk/react';
 import {
   XLogo,
   IconAnnouncements,
@@ -46,15 +47,20 @@ export default function LeftSidebar({
               <XLogo className="x-logo" />
             </div>
 
-            <button
-              type="button"
-              className="sidebar-hide-btn"
-              onClick={onToggleSidebar}
-              title="Hide side navigation (Press [)"
-              aria-label="Hide side navigation"
-            >
-              <IconSidebarToggle style={{ width: 18, height: 18 }} />
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
+              <button
+                type="button"
+                className="sidebar-hide-btn"
+                onClick={onToggleSidebar}
+                title="Hide side navigation (Press [)"
+                aria-label="Hide side navigation"
+              >
+                <IconSidebarToggle style={{ width: 18, height: 18 }} />
+              </button>
+            </div>
           </div>
 
           {/* Navigation Links */}
@@ -186,37 +192,7 @@ export default function LeftSidebar({
           </button>
 
           {showUserDropdown && (
-            <div className="dropdown-popover" style={{ bottom: 'calc(100% + 10px)', width: 280, left: 0 }}>
-              <div style={{ padding: '8px 16px', fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)' }}>
-                SWITCH ACTIVE ROLE (RBAC)
-              </div>
-              {Object.keys(users).map((key) => {
-                const u = users[key];
-                const isActive = u.roleKey === currentUser.roleKey;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    className="dropdown-item"
-                    onClick={() => {
-                      onSwitchUser(key);
-                      setShowUserDropdown(false);
-                    }}
-                    style={{ backgroundColor: isActive ? 'var(--bg-hover)' : 'transparent' }}
-                  >
-                    <div className="avatar avatar-sm" style={{ background: u.avatarBg }}>
-                      <span>{u.avatarChar}</span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontWeight: 700, fontSize: 14 }}>{u.name}</span>
-                      <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                        {u.role} ({u.branch})
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-              <div className="dropdown-divider" />
+            <div className="dropdown-popover" style={{ bottom: 'calc(100% + 10px)', width: 240, left: 0 }}>
               <button
                 type="button"
                 className="dropdown-item"

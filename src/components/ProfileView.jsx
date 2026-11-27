@@ -65,35 +65,6 @@ export default function ProfileView({
 
         <div className="profile-divider" />
 
-        {/* Switch Account / Role Grid */}
-        <div className="profile-section">
-          <span className="profile-section-title">Switch Account / Role</span>
-          <div className="profile-role-grid">
-            {Object.keys(users).map((key) => {
-              const u = users[key];
-              const isCurrent = currentUser.roleKey === key;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  className={`profile-role-chip-btn ${isCurrent ? 'active' : ''}`}
-                  onClick={() => onSwitchUser(key)}
-                >
-                  <span
-                    className="avatar avatar-xs"
-                    style={{ background: u.avatarBg, width: 22, height: 22, fontSize: 11 }}
-                  >
-                    <span>{u.avatarChar}</span>
-                  </span>
-                  <span>{u.role}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="profile-divider" />
-
         {/* Branch Communities */}
         <div className="profile-section">
           <span className="profile-section-title">Branch Communities</span>

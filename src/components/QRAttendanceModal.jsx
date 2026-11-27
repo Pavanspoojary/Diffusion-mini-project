@@ -42,7 +42,7 @@ export default function QRAttendanceModal({
 
   if (!isOpen || !event) return null;
 
-  const isCoordinator = mode === 'coordinator' || currentUser.roleKey === 'coordinator' || currentUser.roleKey === 'admin';
+  const isCoordinator = mode === 'coordinator' || currentUser.roleKey !== 'student';
 
   // Handle student simulated or camera QR scan
   const handlePerformScan = () => {
