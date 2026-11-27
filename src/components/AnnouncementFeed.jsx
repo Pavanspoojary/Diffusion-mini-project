@@ -229,7 +229,7 @@ export default function AnnouncementFeed({
       if (item.branch !== activeBranch) {
         return false;
       }
-    } else if (currentUser.roleKey === 'student') {
+    } else if (currentUser.roleKey === 'student' && !currentUser.canAccessAllDepts) {
       // If student in general feed, show ALL + student's own branch
       if (item.branch !== 'ALL' && item.branch !== currentUser.branch) {
         return false;

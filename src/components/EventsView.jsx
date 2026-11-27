@@ -124,7 +124,7 @@ export default function EventsView({
               (currentUser.roleKey === 'admin' ||
                 evt.creatorId === currentUser.id ||
                 evt.organizer === currentUser.name ||
-                (currentUser.roleKey === 'coordinator' && evt.type === 'internal'));
+                ((currentUser.roleKey === 'faculty' || currentUser.roleKey === 'coordinator') && evt.type === 'internal'));
 
             return (
               <article key={evt.id} className="event-card">

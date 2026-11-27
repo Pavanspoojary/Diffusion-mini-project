@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SignInButton, SignUpButton } from '@clerk/react';
 import { XLogo, IconClose, VerifiedBadge } from './Icons';
 import { BRANCHES } from '../data/initialData';
 
@@ -122,34 +123,15 @@ export default function AuthPage({
           <h2 className="auth-sub-heading">Join your campus community today.</h2>
 
           <div className="auth-actions-group">
-            {/* Campus SSO Button */}
-            <button
-              type="button"
-              className="btn-auth-sso"
-              onClick={() => handleQuickDemo('student')}
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: 'currentColor' }}>
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
-              </svg>
-              <span>Sign in with SMVITM SSO</span>
-            </button>
-
-            {/* Divider */}
-            <div className="auth-divider-line">
-              <span>or</span>
-            </div>
-
             {/* Create Account Button */}
-            <button
-              type="button"
-              className="btn-auth-create"
-              onClick={() => {
-                setModalMode('signup');
-                setSignupError('');
-              }}
-            >
-              Create campus account
-            </button>
+            <SignUpButton mode="modal">
+              <button
+                type="button"
+                className="btn-auth-create"
+              >
+                Create campus account
+              </button>
+            </SignUpButton>
 
             <p className="auth-terms-disclaimer">
               By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>.
@@ -158,57 +140,14 @@ export default function AuthPage({
             {/* Already have an account */}
             <div className="auth-signin-block">
               <h3 className="auth-signin-title">Already have an account?</h3>
-              <button
-                type="button"
-                className="btn-auth-signin"
-                onClick={() => {
-                  setModalMode('signin');
-                  setLoginError('');
-                }}
-              >
-                Sign in
-              </button>
-            </div>
-
-            {/* Quick Role Portal Selection */}
-            <div className="auth-quick-role-box">
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                Role-Based Portal Access
-              </div>
-              <div className="quick-role-chips">
+              <SignInButton mode="modal">
                 <button
                   type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('student')}
-                  title="Student Portal (AI&DS)"
+                  className="btn-auth-signin"
                 >
-                  Student
+                  Sign in
                 </button>
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('faculty')}
-                  title="Faculty Portal"
-                >
-                  Faculty
-                </button>
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('coordinator')}
-                  title="Event Coordinator Portal"
-                >
-                  Coordinator
-                </button>
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('admin')}
-                  title="Campus Administrator Portal"
-                >
-                  Administrator
-                </button>
-              </div>
+              </SignInButton>
             </div>
           </div>
         </div>

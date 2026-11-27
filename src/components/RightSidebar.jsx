@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconSearch, IconClose, CommunityAvatar } from './Icons';
 import { BRANCHES } from '../data/initialData';
+import { canAccessCommunity } from '../utils/collegeAuth';
 
 export default function RightSidebar({
   searchQuery,
@@ -11,7 +12,8 @@ export default function RightSidebar({
   activeBranch,
   setActiveBranch,
   onOpenCommunity,
-  joinedCommunities = []
+  joinedCommunities = [],
+  currentUser
 }) {
   const upcomingEvents = events.slice(0, 3);
 
@@ -104,26 +106,32 @@ export default function RightSidebar({
             {BRANCHES.map((b) => {
               const isActive = activeBranch === b.id;
               const isJoined = joinedCommunities.includes(b.id);
+              const hasAccess = canAccessCommunity(currentUser, b.id);
               return (
                 <div
                   key={b.id}
                   className={`reddit-community-row ${isActive ? 'active' : ''}`}
+                  style={!hasAccess ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
                   onClick={() => {
                     if (onOpenCommunity) {
                       onOpenCommunity(b.id);
-                    } else {
+                    } else if (hasAccess) {
                       setActiveBranch(b.id);
                       setActiveNav('announcements');
                     }
                   }}
                   role="button"
                   tabIndex={0}
-                  aria-label={`Switch to ${b.slug}`}
-                  title={`${b.label} (${b.slug})`}
+                  aria-label={hasAccess ? `Switch to ${b.slug}` : `${b.slug} (Restricted)`}
+                  title={hasAccess ? `${b.label} (${b.slug})` : `${b.label} — Restricted to ${b.id} students`}
                 >
                   <CommunityAvatar id={b.id} size={36} />
                   <span className="reddit-community-title">{b.slug}</span>
-                  {isJoined && <span className="reddit-joined-mark" title="Joined">Joined</span>}
+                  {!hasAccess ? (
+                    <span style={{ fontSize: 11, color: 'var(--text-secondary)', marginLeft: 'auto' }}>Locked</span>
+                  ) : (
+                    isJoined && <span className="reddit-joined-mark" title="Joined">Joined</span>
+                  )}
                   {isActive && <span className="reddit-active-dot" />}
                 </div>
               );

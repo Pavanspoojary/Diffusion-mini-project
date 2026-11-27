@@ -7,6 +7,7 @@ import {
   VerifiedBadge
 } from './Icons';
 import { BRANCHES } from '../data/initialData';
+import { canAccessCommunity } from '../utils/collegeAuth';
 
 export default function MobileDrawer({
   isOpen,
@@ -60,38 +61,6 @@ export default function MobileDrawer({
 
         <div className="mobile-drawer-divider" />
 
-        {/* Switch Account */}
-        <div className="mobile-drawer-section">
-          <span className="mobile-drawer-section-label">Switch Account / Role</span>
-          <div className="mobile-drawer-role-grid">
-            {Object.keys(users).map((key) => {
-              const u = users[key];
-              const isCurrent = currentUser.roleKey === key;
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  className={`mobile-drawer-role-btn ${isCurrent ? 'active' : ''}`}
-                  onClick={() => {
-                    onSwitchUser(key);
-                    onClose();
-                  }}
-                >
-                  <span
-                    className="avatar avatar-xs"
-                    style={{ background: u.avatarBg, width: 22, height: 22, fontSize: 11 }}
-                  >
-                    <span>{u.avatarChar}</span>
-                  </span>
-                  <span>{u.role}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="mobile-drawer-divider" />
-
         {/* Communities List */}
         <div className="mobile-drawer-section">
           <span className="mobile-drawer-section-label">Branch Communities</span>
@@ -110,23 +79,27 @@ export default function MobileDrawer({
                 <span className="mobile-drawer-comm-sub">General Feed</span>
               </div>
             </button>
-            {BRANCHES.map((b) => (
-              <button
-                key={b.id}
-                type="button"
-                className={`mobile-drawer-community-item ${activeBranch === b.id ? 'active' : ''}`}
-                onClick={() => {
-                  onOpenCommunity(b.id);
-                  onClose();
-                }}
-              >
-                <CommunityAvatar id={b.id} size={24} />
-                <div className="mobile-drawer-comm-text">
-                  <span className="mobile-drawer-comm-slug">{b.slug}</span>
-                  <span className="mobile-drawer-comm-sub">{b.label}</span>
-                </div>
-              </button>
-            ))}
+            {BRANCHES.map((b) => {
+              const hasAccess = canAccessCommunity(currentUser, b.id);
+              return (
+                <button
+                  key={b.id}
+                  type="button"
+                  className={`mobile-drawer-community-item ${activeBranch === b.id ? 'active' : ''}`}
+                  style={!hasAccess ? { opacity: 0.5 } : undefined}
+                  onClick={() => {
+                    onOpenCommunity(b.id);
+                    if (hasAccess) onClose();
+                  }}
+                >
+                  <CommunityAvatar id={b.id} size={24} />
+                  <div className="mobile-drawer-comm-text">
+                    <span className="mobile-drawer-comm-slug">{b.slug}</span>
+                    <span className="mobile-drawer-comm-sub">{hasAccess ? b.label : `${b.label} (Locked)`}</span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 

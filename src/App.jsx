@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuth, useUser, useClerk } from '@clerk/react';
+import { parseCollegeEmail, canAccessCommunity } from './utils/collegeAuth';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import AnnouncementFeed from './components/AnnouncementFeed';
@@ -56,6 +58,17 @@ export default function App() {
   const [color, setColor] = useState(() => localStorage.getItem('college_hub_color') || 'blue');
 
   // Authentication State
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user: clerkUser } = useUser();
+  const { signOut } = useClerk();
+  const redirectedClerkUserRef = useRef(null);
+
+  const clerkEmail =
+    clerkUser?.primaryEmailAddress?.emailAddress ||
+    clerkUser?.emailAddresses?.[0]?.emailAddress ||
+    '';
+  const collegeAccess = isSignedIn && clerkUser ? parseCollegeEmail(clerkEmail) : null;
+
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('college_hub_auth') === 'true';
   });
@@ -649,6 +662,49 @@ export default function App() {
     } catch {}
   }, [activeUser]);
 
+  useEffect(() => {
+    if (!isSignedIn || !clerkUser) {
+      redirectedClerkUserRef.current = null;
+      return;
+    }
+
+    if (!collegeAccess?.isAllowed) return;
+
+    const displayName =
+      clerkUser.fullName ||
+      clerkUser.username ||
+      clerkEmail.split('@')[0] ||
+      'Campus User';
+
+    setCurrentRoleKey(collegeAccess.roleKey);
+    setActiveUser((prev) => ({
+      ...USERS[collegeAccess.roleKey] || USERS.student,
+      ...prev,
+      id: clerkUser.id,
+      name: displayName,
+      email: clerkEmail,
+      usn: collegeAccess.usn || (collegeAccess.roleKey === 'faculty' ? 'FACULTY' : prev?.usn || USERS.student.usn),
+      role: collegeAccess.role,
+      roleKey: collegeAccess.roleKey,
+      canAccessAllDepts: Boolean(collegeAccess.canAccessAllDepts),
+      verifiedType: collegeAccess.roleKey === 'student' ? 'blue' : 'gold',
+      branch: collegeAccess.branchId,
+      department: collegeAccess.branch?.description || `Dept. of ${collegeAccess.branchId}`,
+      handle: clerkUser.username
+        ? `@${clerkUser.username}`
+        : `@${displayName.toLowerCase().replace(/[^a-z0-9]/g, '')}`,
+      avatarChar: displayName.charAt(0).toUpperCase(),
+      avatarUrl: clerkUser.imageUrl || prev?.avatarUrl
+    }));
+
+    if (redirectedClerkUserRef.current !== clerkUser.id) {
+      redirectedClerkUserRef.current = clerkUser.id;
+      setActiveBranch(collegeAccess.branchId);
+      setActiveNav('announcements');
+      showToast(`Welcome, ${displayName}! Opened ${collegeAccess.branch?.slug || collegeAccess.branchId}`);
+    }
+  }, [isSignedIn, clerkUser, clerkEmail, collegeAccess]);
+
   const handleLogin = (user) => {
     setActiveUser(user);
     setCurrentRoleKey(user.roleKey || 'student');
@@ -663,7 +719,10 @@ export default function App() {
     showToast(`Account created! Welcome, ${newUser.name}.`);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (isSignedIn) {
+      await signOut();
+    }
     setIsAuthenticated(false);
     showToast('Signed out of campus account');
   };
@@ -691,6 +750,10 @@ export default function App() {
 
   // Open a community page (Reddit style): only that community's posts
   const openCommunity = (branchId) => {
+    if (!canAccessCommunity(currentUser, branchId)) {
+      showToast(`Access restricted: You can only view your ${currentUser.branch} department community`);
+      return;
+    }
     setActiveBranch(branchId);
     setActiveNav('announcements');
     setIsHeaderHidden(false);
@@ -711,7 +774,59 @@ export default function App() {
     });
   };
 
-  if (!isAuthenticated) {
+  if (!isLoaded) {
+    return (
+      <div className="auth-root" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', color: 'var(--text-secondary)' }}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (isSignedIn && clerkUser && collegeAccess && !collegeAccess.isAllowed) {
+    return (
+      <div
+        className="auth-root"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          padding: 24
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 440,
+            width: '100%',
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border-color)',
+            borderRadius: 16,
+            padding: 28,
+            textAlign: 'center'
+          }}
+        >
+          <h2 style={{ marginBottom: 10, fontSize: 22 }}>Access Restricted</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.5, marginBottom: 12 }}>
+            Signed in as <strong>{clerkEmail || 'unknown email'}</strong>.
+          </p>
+          <p style={{ color: '#f4212e', fontSize: 14, lineHeight: 1.5, marginBottom: 20 }}>
+            {collegeAccess.reason}
+          </p>
+          <button
+            type="button"
+            className="btn-auth-create"
+            onClick={handleLogout}
+            style={{ width: '100%' }}
+          >
+            Sign out &amp; switch account
+          </button>
+        </div>
+        <Toast message={toastMessage} />
+      </div>
+    );
+  }
+
+  if (!isSignedIn && !isAuthenticated) {
     return (
       <div className="auth-root">
         <AuthPage
@@ -878,6 +993,7 @@ export default function App() {
         setActiveBranch={setActiveBranch}
         onOpenCommunity={openCommunity}
         joinedCommunities={joinedCommunities}
+        currentUser={currentUser}
       />
 
       {/* MOBILE BOTTOM NAVIGATION BAR */}
