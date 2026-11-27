@@ -26,18 +26,6 @@ export default function AuthPage({
   const [signupPassword, setSignupPassword] = useState('');
   const [signupError, setSignupError] = useState('');
 
-  // Handle Quick Role Authentication
-  const handleQuickRole = (roleKey) => {
-    const user = users[roleKey];
-    if (user) {
-      onLogin(user);
-    }
-  };
-
-  const handleQuickDemo = (roleKey = 'student') => {
-    handleQuickRole(roleKey);
-  };
-
   // Submit Sign In
   const handleSignInSubmit = (e) => {
     e.preventDefault();
@@ -156,40 +144,9 @@ export default function AuthPage({
                     </button>
                   </SignInButton>
                 </div>
-
-                <div className="auth-divider-line">
-                  <span>or</span>
-                </div>
-
-                <button
-                  type="button"
-                  className="btn-auth-sso"
-                  onClick={() => handleQuickDemo('student')}
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: 'currentColor' }}>
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
-                  </svg>
-                  <span>Sign in with SMVITM SSO (Demo)</span>
-                </button>
               </>
             ) : (
               <>
-                {/* Campus SSO Button */}
-                <button
-                  type="button"
-                  className="btn-auth-sso"
-                  onClick={() => handleQuickDemo('student')}
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true" style={{ width: 18, height: 18, fill: 'currentColor' }}>
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
-                  </svg>
-                  <span>Sign in with SMVITM SSO</span>
-                </button>
-
-                <div className="auth-divider-line">
-                  <span>or</span>
-                </div>
-
                 {/* Create Account Button */}
                 <button
                   type="button"
