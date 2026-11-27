@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
-import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
+import {
+  IconQR,
+  IconExternal,
+  IconMedia,
+  IconCheck,
+  IconSidebarToggle,
+  IconNotifications,
+  IconTrash,
+  IconCalendar,
+  IconClock,
+  IconLocation,
+  IconHourglass,
+  IconUsersGroup
+} from './Icons';
 
 const INTERNAL_GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
 
@@ -130,15 +143,11 @@ export default function EventsView({
 
             return (
               <article key={evt.id} className="event-card">
-                <div className="event-header">
-                  <div>
-                    <h2 className="event-title">
-                      {evt.title}
-                    </h2>
-                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>
-                      Organized by: <strong style={{ color: 'var(--text-primary)' }}>{evt.organizer}</strong>
-                    </div>
-                  </div>
+                {/* Header row: Badge + Title + Delete Button */}
+                <div className="event-header-top">
+                  <span className={`event-type-pill ${evt.type === 'internal' ? 'internal' : 'external'}`}>
+                    {evt.type === 'internal' ? 'Campus Event • QR Attendance' : 'National Challenge • External'}
+                  </span>
 
                   {canDelete && onDeleteEvent && (
                     <button
@@ -148,46 +157,84 @@ export default function EventsView({
                       aria-label="Delete event"
                       title="Delete event"
                     >
-                      <IconTrash style={{ width: 14, height: 14 }} />
+                      <IconTrash style={{ width: 13, height: 13 }} />
                       <span>Delete</span>
                     </button>
                   )}
                 </div>
 
-                {/* Event Metadata Grid */}
-                <div className="event-meta-grid">
-                  <div>
-                    <span className="meta-label">Date:</span>
-                    <span>{evt.date}</span>
+                <h2 className="event-card-title">{evt.title}</h2>
+
+                <div className="event-organizer-block">
+                  <span className="event-org-label">Organized by</span>
+                  <span className="event-org-name">{evt.organizer}</span>
+                </div>
+
+                {/* Structured Professional Key Details Grid */}
+                <div className="event-key-details-grid">
+                  <div className="event-detail-box">
+                    <div className="event-detail-icon-wrap date-icon-wrap">
+                      <IconCalendar style={{ width: 16, height: 16 }} />
+                    </div>
+                    <div className="event-detail-content">
+                      <span className="event-detail-label">EVENT DATE</span>
+                      <span className="event-detail-val">{evt.date}</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="meta-label">Time:</span>
-                    <span>{evt.time}</span>
+
+                  <div className="event-detail-box">
+                    <div className="event-detail-icon-wrap time-icon-wrap">
+                      <IconClock style={{ width: 16, height: 16 }} />
+                    </div>
+                    <div className="event-detail-content">
+                      <span className="event-detail-label">TIMING</span>
+                      <span className="event-detail-val">{evt.time}</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="meta-label">Venue:</span>
-                    <span>{evt.venue}</span>
+
+                  <div className="event-detail-box">
+                    <div className="event-detail-icon-wrap venue-icon-wrap">
+                      <IconLocation style={{ width: 16, height: 16 }} />
+                    </div>
+                    <div className="event-detail-content">
+                      <span className="event-detail-label">VENUE</span>
+                      <span className="event-detail-val">{evt.venue}</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="meta-label">Deadline:</span>
-                    <span style={{ color: 'var(--like-color)', fontWeight: 600 }}>{evt.deadline}</span>
+
+                  <div className="event-detail-box deadline-box">
+                    <div className="event-detail-icon-wrap deadline-icon-wrap">
+                      <IconHourglass style={{ width: 16, height: 16 }} />
+                    </div>
+                    <div className="event-detail-content">
+                      <span className="event-detail-label deadline-label">DEADLINE</span>
+                      <span className="event-detail-val deadline-val">{evt.deadline}</span>
+                    </div>
                   </div>
                 </div>
 
-                <p className="post-text" style={{ margin: 0 }}>
+                {/* Event Description */}
+                <p className="event-card-desc">
                   {evt.description}
                 </p>
 
-                {/* Poster Attachment */}
+                {/* Event Poster with Clean Preview Frame */}
                 {evt.poster && (
-                  <div className="post-media-container" onClick={() => onOpenImage(evt.poster)}>
-                    <img src={evt.poster} alt={`${evt.title} poster`} className="post-media-img" />
+                  <div
+                    className="event-poster-wrapper"
+                    onClick={() => onOpenImage(evt.poster)}
+                    title="Click to view full event poster"
+                  >
+                    <img src={evt.poster} alt={`${evt.title} poster`} className="event-poster-image" />
+                    <div className="event-poster-overlay-hint">
+                      <span>Click to view full poster</span>
+                    </div>
                   </div>
                 )}
 
                 {/* Event Action Suite */}
-                <div className="event-actions-bar">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <div className="event-card-actions">
+                  <div className="event-action-buttons">
                     {evt.type === 'internal' ? (
                       <>
                         {evt.registeredCount >= evt.maxCapacity && !evt.isRegistered ? (
@@ -242,7 +289,7 @@ export default function EventsView({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn-event-register"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
                       >
                         <span>Official Registration</span>
                         <IconExternal style={{ width: 14, height: 14 }} />
@@ -250,11 +297,18 @@ export default function EventsView({
                     )}
                   </div>
 
-                  <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                    {evt.type === 'internal' && (
+                  {/* Capacity or Status Pill */}
+                  {evt.type === 'internal' ? (
+                    <div className="event-seats-pill">
+                      <IconUsersGroup style={{ width: 14, height: 14 }} />
                       <span>{evt.registeredCount} / {evt.maxCapacity} Seats Filled</span>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="event-status-pill open">
+                      <span className="status-indicator-dot" />
+                      <span>Registrations Active</span>
+                    </div>
+                  )}
                 </div>
               </article>
             );
