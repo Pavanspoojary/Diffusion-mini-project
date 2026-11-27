@@ -200,10 +200,18 @@ export default function App({ isClerkConfigured = false }) {
 
   const [websites, setWebsites] = useState(() => {
     try {
-      const savedV8 = localStorage.getItem('college_hub_websites_v8');
-      if (savedV8) return JSON.parse(savedV8);
-      const savedV7 = localStorage.getItem('college_hub_websites_v7');
-      if (savedV7 && savedV7.includes('logo')) return JSON.parse(savedV7);
+      localStorage.removeItem('college_hub_websites_v8');
+      localStorage.removeItem('college_hub_websites_v9');
+      const saved = localStorage.getItem('college_hub_websites_v10');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const map = new Map();
+        INITIAL_WEBSITES.forEach((w) => map.set(w.id, w));
+        parsed.forEach((w) => {
+          if (w && w.id) map.set(w.id, { ...map.get(w.id), ...w });
+        });
+        return Array.from(map.values());
+      }
       return INITIAL_WEBSITES;
     } catch {
       return INITIAL_WEBSITES;
@@ -245,7 +253,14 @@ export default function App({ isClerkConfigured = false }) {
         if (isMounted) {
           if (noticesData) setAnnouncements(noticesData);
           if (eventsData) setEvents(eventsData);
-          if (websitesData) setWebsites(websitesData);
+          if (websitesData) {
+            const map = new Map();
+            INITIAL_WEBSITES.forEach((w) => map.set(w.id, w));
+            websitesData.forEach((w) => {
+              if (w && w.id) map.set(w.id, { ...map.get(w.id), ...w });
+            });
+            setWebsites(Array.from(map.values()));
+          }
           if (notifsData) setNotifications(notifsData);
           if (lecturersData && lecturersData.length > 0) setLecturers(lecturersData);
         }
@@ -309,7 +324,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_websites_v8', JSON.stringify(websites));
+      localStorage.setItem('college_hub_websites_v10', JSON.stringify(websites));
     } catch {}
   }, [websites]);
 

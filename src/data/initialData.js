@@ -1105,7 +1105,19 @@ export const PORTAL_LOGOS = {
   'web-10': '/portals/varnothsava.ico',
   'web-11': '/portals/vichaara.ico',
   'web-12': '/portals/techfest.png',
-  'web-13': '/portals/projecthub.svg'
+  'web-13': '/portals/projecthub.svg',
+  'web-14': '/portals/instagram.svg',
+  'web-15': '/portals/instagram.svg',
+  'web-16': '/portals/instagram.svg',
+  'web-17': '/portals/instagram.svg',
+  'web-18': '/portals/instagram.svg',
+  'web-19': '/portals/instagram.svg',
+  'web-20': '/portals/instagram.svg',
+  'web-21': '/portals/instagram.svg',
+  'web-22': '/portals/instagram.svg',
+  'web-23': '/portals/instagram.svg',
+  'web-24': '/portals/instagram.svg',
+  'web-25': '/portals/instagram.svg'
 };
 
 export const INITIAL_WEBSITES = [
@@ -1238,6 +1250,126 @@ export const INITIAL_WEBSITES = [
     badge: 'Project Workspace',
     iconType: 'database',
     logo: '/portals/projecthub.svg'
+  },
+  {
+    id: 'web-14',
+    name: 'SMVITM Official Instagram',
+    category: 'Social Media',
+    description: 'Official Instagram handle of Shri Madhwa Vadiraja Institute of Technology & Management (SMVITM), Bantakal. Campus updates, announcements, and events.',
+    url: 'https://www.instagram.com/smvitm.sode?lqvp=cjh3dm13dzlzdnJs',
+    badge: 'Official Instagram',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-15',
+    name: 'UTKARSH SMVITM',
+    category: 'Social Media',
+    description: 'Official Instagram page of Utkarsh — the cultural, literary, and student talent club of SMVITM.',
+    url: 'https://www.instagram.com/utkarsh.smvitm?knvt=MXA3bmQzNjVrMDE2bA==',
+    badge: 'Cultural Club',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-16',
+    name: 'SPL SMVITM (Premier League)',
+    category: 'Social Media',
+    description: 'Official Instagram account for SMVITM Premier League — cricket tournament fixtures, player auctions, and live match scores.',
+    url: 'https://www.instagram.com/spl.smvitm?dmpr=MTR4M3Z5OTd1N2c0dg==',
+    badge: 'Sports League',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-17',
+    name: 'AIKYA SMVITM',
+    category: 'Social Media',
+    description: 'Official Instagram page of Aikya SMVITM — youth forum for community service, cultural unity, and social awareness.',
+    url: 'https://www.instagram.com/aikya.smvitm?lqvp=MXRqZmFnbjZxOWQ0MQ==',
+    badge: 'Youth Forum',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-18',
+    name: 'CODE TROOPERS',
+    category: 'Social Media',
+    description: 'Student coding community and developer club of Computer Science & Engineering department at SMVITM.',
+    url: 'https://www.instagram.com/code.troopers?evlk=MTg1bGkwOWM3Ymo2aw==',
+    badge: 'Tech Community',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-19',
+    name: 'MBA SMVITM',
+    category: 'Social Media',
+    description: 'Official Instagram page for Department of Management Studies (MBA) at SMVITM Bantakal.',
+    url: 'https://www.instagram.com/mba.smvitm?cnvx=bWppcGt4bGlpdGJk',
+    badge: 'MBA Dept',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-20',
+    name: 'VARNOTHSAVA 2026',
+    category: 'Social Media',
+    description: 'Official Instagram handle for Varnothsava 2026 — the annual national-level intercollegiate techno-cultural fest of SMVITM.',
+    url: 'https://www.instagram.com/varnothsava.2026?knvt=MWxobDdpOGVvZWtxdA==',
+    badge: 'Cultural Fest',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-21',
+    name: 'NIRAMAYA SMVITM',
+    category: 'Social Media',
+    description: 'Official Instagram account of Niramaya — student health, wellness, hygiene awareness, and blood donation wing of SMVITM.',
+    url: 'https://www.instagram.com/niramayabantakal?jplx=MXFyM2YzcDNtenR0dw==',
+    badge: 'Health & Wellness',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-22',
+    name: 'TECHNOCRATORS ECE',
+    category: 'Social Media',
+    description: 'Official Instagram page of Technocrators, the Electronics & Communication Engineering student association of SMVITM.',
+    url: 'https://www.instagram.com/technocrators_ece?fqnt=a2xjMXViamVyYXFn',
+    badge: 'ECE Association',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-23',
+    name: 'THE LEGITTS 2026',
+    category: 'Social Media',
+    description: 'Official Instagram account for The Legitts (Batch of 2026) student community, celebrations, and campus memories.',
+    url: 'https://www.instagram.com/the_legittts_2026?lqvp=MXE5NGI0c2g2aTR0aA==',
+    badge: 'Student Community',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-24',
+    name: 'MOTOMANIA 2K26',
+    category: 'Social Media',
+    description: 'Official Instagram page of Motomania — the automotive and mechanical engineering enthusiast club of SMVITM.',
+    url: 'https://www.instagram.com/motomania_2k26?fqnt=MTA4Znl1djdnZGlwOQ==',
+    badge: 'Auto & Mech Club',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
+  },
+  {
+    id: 'web-25',
+    name: 'IGNITE AI&DS',
+    category: 'Social Media',
+    description: 'Official Instagram page of Ignite — Department of Artificial Intelligence & Data Science student association at SMVITM.',
+    url: 'https://www.instagram.com/ignite.ai_ds?lqvp=Nzdud3l5Z2w0MTJ3',
+    badge: 'AI&DS Forum',
+    iconType: 'instagram',
+    logo: '/portals/instagram.svg'
   }
 ];
 

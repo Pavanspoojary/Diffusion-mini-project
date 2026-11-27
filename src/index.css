@@ -3331,6 +3331,49 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   white-space: nowrap;
 }
 
+/* Quick Category Filter Pills */
+.web-category-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  scrollbar-width: none;
+}
+
+.web-category-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.web-category-pill {
+  padding: 5px 13px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.web-category-pill:hover {
+  background: var(--bg-hover-subtle);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.web-category-pill.active {
+  background: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+  font-weight: 600;
+}
+
 /* Admin Add Portal Panel */
 .web-add-panel {
   padding: 16px;
