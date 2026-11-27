@@ -133,8 +133,18 @@ export default function App() {
 
   const [websites, setWebsites] = useState(() => {
     try {
-      const savedV9 = localStorage.getItem('college_hub_websites_v9');
-      if (savedV9) return JSON.parse(savedV9);
+      localStorage.removeItem('college_hub_websites_v8');
+      localStorage.removeItem('college_hub_websites_v9');
+      const saved = localStorage.getItem('college_hub_websites_v10');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const map = new Map();
+        INITIAL_WEBSITES.forEach((w) => map.set(w.id, w));
+        parsed.forEach((w) => {
+          if (w && w.id) map.set(w.id, { ...map.get(w.id), ...w });
+        });
+        return Array.from(map.values());
+      }
       return INITIAL_WEBSITES;
     } catch {
       return INITIAL_WEBSITES;
@@ -175,7 +185,14 @@ export default function App() {
         if (isMounted) {
           if (noticesData) setAnnouncements(noticesData);
           if (eventsData) setEvents(eventsData);
-          if (websitesData) setWebsites(websitesData);
+          if (websitesData) {
+            const map = new Map();
+            INITIAL_WEBSITES.forEach((w) => map.set(w.id, w));
+            websitesData.forEach((w) => {
+              if (w && w.id) map.set(w.id, { ...map.get(w.id), ...w });
+            });
+            setWebsites(Array.from(map.values()));
+          }
           if (notifsData) setNotifications(notifsData);
         }
       } catch (err) {
@@ -238,7 +255,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_websites_v9', JSON.stringify(websites));
+      localStorage.setItem('college_hub_websites_v10', JSON.stringify(websites));
     } catch {}
   }, [websites]);
 

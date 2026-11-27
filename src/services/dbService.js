@@ -453,14 +453,46 @@ export async function fetchWebsites() {
 
     if (error) throw error;
     if (data && data.length > 0) {
-      return data.map(mapWebsiteFromDB);
+      const dbList = data.map(mapWebsiteFromDB);
+      const mergedMap = new Map();
+      INITIAL_WEBSITES.forEach((w) => mergedMap.set(w.id, w));
+      dbList.forEach((w) => {
+        if (w && w.id) {
+          mergedMap.set(w.id, { ...mergedMap.get(w.id), ...w });
+        }
+      });
+
+      // Sync missing initial items (like Social Media portals) to Supabase in the background
+      const dbIds = new Set(data.map((d) => d.id));
+      const missing = INITIAL_WEBSITES.filter((w) => !dbIds.has(w.id));
+      if (missing.length > 0) {
+        supabase
+          .from('websites')
+          .upsert(missing.map(mapWebsiteToDB))
+          .then(({ error: upErr }) => {
+            if (upErr) console.info('[Supabase:syncWebsites]', upErr.message);
+          })
+          .catch(() => {});
+      }
+
+      return Array.from(mergedMap.values());
     }
     return INITIAL_WEBSITES;
   } catch (err) {
     console.info('[Supabase:fetchWebsites fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_websites_v9');
-      if (saved) return JSON.parse(saved);
+      const saved = localStorage.getItem('college_hub_websites_v10');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const mergedMap = new Map();
+        INITIAL_WEBSITES.forEach((w) => mergedMap.set(w.id, w));
+        parsed.forEach((w) => {
+          if (w && w.id) {
+            mergedMap.set(w.id, { ...mergedMap.get(w.id), ...w });
+          }
+        });
+        return Array.from(mergedMap.values());
+      }
     } catch {}
     return INITIAL_WEBSITES;
   }

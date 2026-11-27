@@ -18,7 +18,7 @@ import {
   IconNotifications,
   VerifiedBadge
 } from './Icons';
-import { PORTAL_LOGOS } from '../data/initialData';
+import { PORTAL_LOGOS, INITIAL_WEBSITES } from '../data/initialData';
 
 function PortalLogoIcon({ site, getSiteIcon }) {
   const [hasError, setHasError] = useState(false);
@@ -158,20 +158,36 @@ export default function WebsitesView({
 
   const activeSearch = localSearch.trim() || globalSearchQuery.trim();
 
+  const displayWebsites = useMemo(() => {
+    const map = new Map();
+    (INITIAL_WEBSITES || []).forEach((w) => map.set(w.id, w));
+    (websites || []).forEach((w) => {
+      if (w && w.id) {
+        map.set(w.id, { ...map.get(w.id), ...w });
+      }
+    });
+    return Array.from(map.values());
+  }, [websites]);
+
   const filteredWebsites = useMemo(() => {
-    return websites.filter((site) => {
-      if (selectedCat !== 'All' && site.category !== selectedCat) return false;
+    return displayWebsites.filter((site) => {
+      if (!site) return false;
+      if (selectedCat !== 'All') {
+        const siteCat = (site.category || '').trim().toLowerCase();
+        const targetCat = selectedCat.trim().toLowerCase();
+        if (siteCat !== targetCat) return false;
+      }
       if (activeSearch) {
         const q = activeSearch.toLowerCase();
-        const matchName = site.name.toLowerCase().includes(q);
-        const matchDesc = site.description.toLowerCase().includes(q);
-        const matchCat = site.category.toLowerCase().includes(q);
-        const matchUrl = site.url.toLowerCase().includes(q);
+        const matchName = (site.name || '').toLowerCase().includes(q);
+        const matchDesc = (site.description || '').toLowerCase().includes(q);
+        const matchCat = (site.category || '').toLowerCase().includes(q);
+        const matchUrl = (site.url || '').toLowerCase().includes(q);
         return matchName || matchDesc || matchCat || matchUrl;
       }
       return true;
     });
-  }, [websites, selectedCat, activeSearch]);
+  }, [displayWebsites, selectedCat, activeSearch]);
 
   const handleCopy = (site) => {
     try {
