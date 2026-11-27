@@ -8,10 +8,12 @@ import {
   IconNotifications,
   IconBookmarks,
   IconProfile,
+  IconGraduationCap,
   IconSettings,
   IconMore,
   IconSidebarToggle,
-  VerifiedBadge
+  VerifiedBadge,
+  UserAvatar
 } from './Icons';
 
 export default function LeftSidebar({
@@ -38,14 +40,16 @@ export default function LeftSidebar({
         <div>
           {/* Brand Logo & Collapse Header */}
           <div className="sidebar-header-row">
-            <div
+            <button
+              type="button"
               className="logo-wrap"
               onClick={() => setActiveNav('announcements')}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', border: 'none', background: 'transparent', padding: 0 }}
               title="SMVITM Campus Hub"
+              aria-label="Home announcements"
             >
               <XLogo className="x-logo" />
-            </div>
+            </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <Show when="signed-in">
@@ -96,6 +100,17 @@ export default function LeftSidebar({
                 <IconWebsites className="nav-icon" />
               </div>
               <span className="nav-label">Websites</span>
+            </button>
+
+            <button
+              type="button"
+              className={`nav-item ${activeNav === 'faculty' ? 'active' : ''}`}
+              onClick={() => setActiveNav('faculty')}
+            >
+              <div className="nav-icon-wrap">
+                <IconGraduationCap className="nav-icon" />
+              </div>
+              <span className="nav-label">Faculty</span>
             </button>
 
             <button
@@ -176,9 +191,7 @@ export default function LeftSidebar({
             onClick={() => setShowUserDropdown(!showUserDropdown)}
             title="Click to switch role or view account"
           >
-            <div className="avatar avatar-md" style={{ background: currentUser.avatarBg }}>
-              <span>{currentUser.avatarChar}</span>
-            </div>
+            <UserAvatar user={currentUser} sizeClass="avatar-md" />
             <div className="user-meta">
               <div className="user-name-line">
                 <span className="user-display-name">{currentUser.name}</span>

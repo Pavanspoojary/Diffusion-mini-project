@@ -428,3 +428,83 @@ export const IconShield = ({ className = 'action-icon', style = {} }) => (
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
   </svg>
 );
+
+export const IconGraduationCap = ({ className = 'nav-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+  </svg>
+);
+
+export const IconMail = ({ className = 'action-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </svg>
+);
+
+export const IconPhone = ({ className = 'action-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  </svg>
+);
+
+export const IconMapPin = ({ className = 'action-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
+export const IconEdit = ({ className = 'action-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+  </svg>
+);
+
+export const IconAward = ({ className = 'action-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="7" />
+    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+  </svg>
+);
+
+export const UserAvatar = ({ user, sizeClass = 'avatar-md', className = '', style = {}, onClick }) => {
+  const photo = user?.photoUrl;
+  const bg = user?.avatarBg || '#1d9bf0';
+  const char = user?.avatarChar || (user?.name ? user.name.charAt(0).toUpperCase() : 'U');
+
+  const content = photo ? (
+    <img
+      src={photo}
+      alt={user?.name || 'User profile photo'}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+    />
+  ) : (
+    <span>{char}</span>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={`avatar ${sizeClass} ${className}`}
+        style={{ background: photo ? 'transparent' : bg, border: 'none', padding: 0, cursor: 'pointer', ...style }}
+        onClick={onClick}
+        aria-label={user?.name ? `${user.name} profile` : 'User profile'}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <div
+      className={`avatar ${sizeClass} ${className}`}
+      style={{ background: photo ? 'transparent' : bg, ...style }}
+    >
+      {content}
+    </div>
+  );
+};

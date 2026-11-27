@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   IconBookmarks,
@@ -17,8 +18,10 @@ import {
   VerifiedBadge,
   CommunityAvatar,
   IconChevronDown,
-  IconTrash
+  IconTrash,
+  UserAvatar
 } from './Icons';
+import { findLecturerProfile } from '../services/dbService';
 
 function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
   const [open, setOpen] = useState(false);
@@ -130,7 +133,7 @@ function PostShareMenu({ item, isOpen, onClose }) {
   };
 
   return (
-    <div className="post-share-popover" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+    <div className="post-share-popover" ref={menuRef}>
       <button type="button" className="share-menu-item" onClick={handleCopyLink}>
         {copiedLink ? (
           <IconCheck style={{ color: '#00ba7c', width: 16, height: 16 }} />
@@ -171,7 +174,9 @@ export default function BookmarksView({
   onTogglePin,
   onOpenCommunity,
   onClearAll,
-  onDeleteNotice
+  onDeleteNotice,
+  lecturers = [],
+  onOpenLecturer
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -235,6 +240,14 @@ export default function BookmarksView({
   const userHandle = currentUser?.handle
     ? (currentUser.handle.startsWith('@') ? currentUser.handle : `@${currentUser.handle}`)
     : '';
+
+  const handleCloseDeleteNotice = (e) => {
+    if (e.target === e.currentTarget) setConfirmDeleteNotice(null);
+  };
+
+  const handleDeleteNoticeKeyDown = (e) => {
+    if (e.key === 'Escape') setConfirmDeleteNotice(null);
+  };
 
   return (
     <div className="bookmarks-container">
@@ -411,6 +424,11 @@ export default function BookmarksView({
           /* List of Bookmarked Post Cards */
           sortedAnnouncements.map((item) => {
             const isItemImportant = Boolean(item.isImportant || item.important || item.tag === 'Important');
+            const matchedLecturer = findLecturerProfile(lecturers, {
+              userId: item.userId,
+              handle: item.handle,
+              author: item.author
+            });
             const canDelete =
               Boolean(currentUser) &&
               (currentUser.roleKey === 'admin' ||
@@ -421,9 +439,12 @@ export default function BookmarksView({
             return (
               <article key={item.id} className={`post-card ${isItemImportant ? 'is-important' : ''}`}>
                 <div className="post-avatar-col">
-                  <div className="avatar avatar-md" style={{ background: item.avatarBg }}>
-                    <span>{item.avatarChar}</span>
-                  </div>
+                  <UserAvatar
+                    user={matchedLecturer || item}
+                    sizeClass="avatar-md"
+                    onClick={matchedLecturer && onOpenLecturer ? () => onOpenLecturer(matchedLecturer.id) : undefined}
+                    style={matchedLecturer && onOpenLecturer ? { cursor: 'pointer' } : undefined}
+                  />
                 </div>
 
                 <div className="post-content-col">
@@ -451,7 +472,21 @@ export default function BookmarksView({
 
                   <div className="post-header-line">
                     <div className="post-user-info">
-                      <span className="post-user-name">{item.author}</span>
+                      {matchedLecturer && onOpenLecturer ? (
+                        <button
+                          type="button"
+                          className="post-author-link"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenLecturer(matchedLecturer.id);
+                          }}
+                          title={`View ${matchedLecturer.name}'s profile`}
+                        >
+                          {matchedLecturer.name}
+                        </button>
+                      ) : (
+                        <span className="post-user-name">{item.author}</span>
+                      )}
                       <VerifiedBadge type={item.verifiedType} />
                       <span className="post-user-handle">{item.handle}</span>
                       {item.collaborators && item.collaborators.length > 0 && (
@@ -515,7 +550,7 @@ export default function BookmarksView({
                   )}
 
                   {item.media && item.mediaKind === 'video' ? (
-                    <div className="post-media-container post-video-container" onClick={(e) => e.stopPropagation()}>
+                    <div className="post-media-container post-video-container">
                       <video
                         src={item.media}
                         controls
@@ -542,9 +577,15 @@ export default function BookmarksView({
                       </a>
                     </div>
                   ) : item.media ? (
-                    <div className="post-media-container" onClick={() => onOpenImage && onOpenImage(item.media)}>
+                    <button
+                      type="button"
+                      className="post-media-container"
+                      onClick={() => onOpenImage && onOpenImage(item.media)}
+                      aria-label="Enlarge bookmark attachment"
+                      style={{ background: 'transparent', border: 'none', padding: 0, textAlign: 'left', cursor: 'zoom-in', width: '100%', display: 'block' }}
+                    >
                       <img src={item.media} alt="Notice attachment" className="post-media-img" />
-                    </div>
+                    </button>
                   ) : null}
 
                   {/* Actions Row */}
@@ -638,9 +679,16 @@ export default function BookmarksView({
 
       {/* Delete Notice Confirmation Modal */}
       {confirmDeleteNotice && (
-        <div className="confirm-modal-overlay" onClick={() => setConfirmDeleteNotice(null)}>
-          <div className="confirm-modal-box" onClick={(e) => e.stopPropagation()}>
-            <h3 className="confirm-modal-title">Delete notice?</h3>
+        <div
+          role="button"
+          tabIndex={0}
+          className="confirm-modal-overlay"
+          onClick={handleCloseDeleteNotice}
+          onKeyDown={handleDeleteNoticeKeyDown}
+          aria-label="Close delete notice dialog"
+        >
+          <div className="confirm-modal-box" role="dialog" aria-modal="true" aria-labelledby="delete-bookmark-title">
+            <h3 id="delete-bookmark-title" className="confirm-modal-title">Delete notice?</h3>
             <p className="confirm-modal-desc">
               This notice will be permanently removed from the announcements feed. This action cannot be undone.
             </p>

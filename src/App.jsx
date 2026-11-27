@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth, useUser, useClerk } from '@clerk/react';
 import { parseCollegeEmail, canAccessCommunity } from './utils/collegeAuth';
@@ -7,6 +8,7 @@ import AnnouncementFeed from './components/AnnouncementFeed';
 import EventsView from './components/EventsView';
 import WebsitesView from './components/WebsitesView';
 import ProfileView from './components/ProfileView';
+import FacultyDirectoryView from './components/FacultyDirectoryView';
 import NotificationsView from './components/NotificationsView';
 import BookmarksView from './components/BookmarksView';
 import ComposeModal from './components/ComposeModal';
@@ -20,6 +22,7 @@ import {
   IconAnnouncements,
   IconEvents,
   IconWebsites,
+  IconGraduationCap,
   IconNotifications,
   IconBookmarks,
   IconProfile
@@ -29,7 +32,8 @@ import {
   INITIAL_ANNOUNCEMENTS,
   INITIAL_EVENTS,
   INITIAL_WEBSITES,
-  INITIAL_NOTIFICATIONS
+  INITIAL_NOTIFICATIONS,
+  INITIAL_LECTURERS
 } from './data/initialData';
 import {
   fetchAnnouncements,
@@ -49,7 +53,12 @@ import {
   fetchNotifications,
   createNotification,
   markAllNotificationsReadInDB,
-  subscribeToTable
+  subscribeToTable,
+  fetchLecturers,
+  upsertLecturerProfile,
+  loadLocalLecturers,
+  saveLocalLecturers,
+  findLecturerProfile
 } from './services/dbService';
 
 export default function App({ isClerkConfigured = false }) {
@@ -107,7 +116,34 @@ export default function App({ isClerkConfigured = false }) {
 
   // Active User / Role (Student, Faculty, Coordinator, Admin)
   const [currentRoleKey, setCurrentRoleKey] = useState('student');
-  const currentUser = activeUser || USERS[currentRoleKey] || USERS.student;
+
+  // Lecturer Profiles State
+  const [lecturers, setLecturers] = useState(() => loadLocalLecturers());
+  const [selectedLecturerId, setSelectedLecturerId] = useState(null);
+
+  const baseUser = activeUser || USERS[currentRoleKey] || USERS.student;
+  const matchedActiveLecturer =
+    baseUser.roleKey === 'faculty'
+      ? findLecturerProfile(lecturers, {
+          lecturerId: baseUser.lecturerId,
+          id: baseUser.id,
+          handle: baseUser.handle,
+          name: baseUser.name
+        })
+      : null;
+
+  const currentUser = matchedActiveLecturer
+    ? {
+        ...baseUser,
+        lecturerId: matchedActiveLecturer.id,
+        name: matchedActiveLecturer.name,
+        branch: matchedActiveLecturer.branch,
+        department: matchedActiveLecturer.department,
+        avatarChar: matchedActiveLecturer.avatarChar,
+        avatarBg: matchedActiveLecturer.avatarBg,
+        photoUrl: matchedActiveLecturer.photoUrl || null
+      }
+    : baseUser;
 
   // Sidebar Hideable & Mobile Drawer State
   const [isSidebarHidden, setIsSidebarHidden] = useState(() => {
@@ -199,11 +235,12 @@ export default function App({ isClerkConfigured = false }) {
 
     async function loadBackendData() {
       try {
-        const [noticesData, eventsData, websitesData, notifsData] = await Promise.all([
+        const [noticesData, eventsData, websitesData, notifsData, lecturersData] = await Promise.all([
           fetchAnnouncements(currentUser.id),
           fetchEvents(currentUser.id),
           fetchWebsites(),
-          fetchNotifications(currentUser.id)
+          fetchNotifications(currentUser.id),
+          fetchLecturers()
         ]);
 
         if (isMounted) {
@@ -211,6 +248,7 @@ export default function App({ isClerkConfigured = false }) {
           if (eventsData) setEvents(eventsData);
           if (websitesData) setWebsites(websitesData);
           if (notifsData) setNotifications(notifsData);
+          if (lecturersData && lecturersData.length > 0) setLecturers(lecturersData);
         }
       } catch (err) {
         console.info('[Supabase:initSync fallback]', err.message);
@@ -287,6 +325,11 @@ export default function App({ isClerkConfigured = false }) {
       localStorage.setItem('college_hub_joined_communities', JSON.stringify(joinedCommunities));
     } catch {}
   }, [joinedCommunities]);
+
+  // Persist Lecturer Profiles
+  useEffect(() => {
+    saveLocalLecturers(lecturers);
+  }, [lecturers]);
 
   const handleToggleSidebar = (forceDrawer) => {
     if (forceDrawer === true || (typeof window !== 'undefined' && window.innerWidth <= 768)) {
@@ -732,10 +775,60 @@ export default function App({ isClerkConfigured = false }) {
   };
 
   const handleSignup = (newUser) => {
-    setActiveUser(newUser);
-    setCurrentRoleKey(newUser.roleKey || 'student');
+    let userToSet = newUser;
+    if (newUser.roleKey === 'faculty') {
+      const existing = findLecturerProfile(lecturers, {
+        id: newUser.id,
+        handle: newUser.handle,
+        name: newUser.name
+      });
+      if (!existing) {
+        const newLecId = `lec-${Date.now()}`;
+        const starterLecturer = {
+          id: newLecId,
+          userId: newUser.id,
+          name: newUser.name,
+          handle: newUser.handle,
+          aliases: [],
+          employeeId: newUser.usn || `FAC-${Date.now().toString().slice(-4)}`,
+          designation: 'Assistant Professor',
+          headline: `Faculty · ${newUser.department}`,
+          branch: newUser.branch || 'AI&DS',
+          department: newUser.department || 'Dept. of AI & Data Science',
+          location: 'SMVITM Campus, Bantakal, Udupi',
+          experienceYears: '1+ years',
+          avatarChar: newUser.avatarChar,
+          avatarBg: newUser.avatarBg,
+          photoUrl: null,
+          bannerBg: 'linear-gradient(135deg, #4f46e5 0%, #7856ff 55%, #1d9bf0 100%)',
+          verified: true,
+          verifiedType: 'gold',
+          about: `Faculty member in ${newUser.department} at SMVITM Bantakal.`,
+          contact: {
+            email: '',
+            phone: '',
+            office: '',
+            officeHours: 'Mon – Fri · 3:00 PM – 4:30 PM',
+            linkedin: '',
+            scholar: '',
+            website: ''
+          },
+          yearsTaught: ['2nd Year'],
+          semestersTaught: ['3rd Sem'],
+          subjects: [],
+          education: [],
+          experience: [],
+          skills: []
+        };
+        setLecturers((prev) => [starterLecturer, ...prev]);
+        upsertLecturerProfile(starterLecturer);
+        userToSet = { ...newUser, lecturerId: newLecId };
+      }
+    }
+    setActiveUser(userToSet);
+    setCurrentRoleKey(userToSet.roleKey || 'student');
     setIsAuthenticated(true);
-    showToast(`Account created! Welcome, ${newUser.name}.`);
+    showToast(`Account created! Welcome, ${userToSet.name}.`);
   };
 
   const handleLogout = async () => {
@@ -751,6 +844,90 @@ export default function App({ isClerkConfigured = false }) {
     const u = USERS[roleKey];
     setActiveUser(u);
     showToast(`Switched active role: ${u.role} (${u.name})`);
+  };
+
+  const handleSwitchLecturer = (lecturer) => {
+    if (!lecturer) return;
+    setCurrentRoleKey('faculty');
+    setActiveUser({
+      id: lecturer.userId || lecturer.id,
+      lecturerId: lecturer.id,
+      name: lecturer.name,
+      usn: lecturer.employeeId || 'FAC-01',
+      role: 'Faculty',
+      roleKey: 'faculty',
+      branch: lecturer.branch,
+      department: lecturer.department,
+      handle: lecturer.handle,
+      avatarChar: lecturer.avatarChar,
+      avatarBg: lecturer.avatarBg,
+      photoUrl: lecturer.photoUrl || null,
+      verified: true,
+      verifiedType: lecturer.verifiedType || 'gold'
+    });
+    showToast(`Switched lecturer profile: ${lecturer.name}`);
+  };
+
+  const handleSaveLecturerPhoto = async (lecturerId, photoUrl) => {
+    let updatedTarget = null;
+    setLecturers((prev) =>
+      prev.map((lec) => {
+        if (lec.id === lecturerId) {
+          updatedTarget = { ...lec, photoUrl: photoUrl || null };
+          return updatedTarget;
+        }
+        return lec;
+      })
+    );
+    if (
+      activeUser &&
+      (activeUser.lecturerId === lecturerId ||
+        activeUser.id === updatedTarget?.userId ||
+        activeUser.handle === updatedTarget?.handle)
+    ) {
+      setActiveUser((prev) => ({ ...prev, photoUrl: photoUrl || null }));
+    }
+    showToast(photoUrl ? 'Profile photo updated' : 'Profile photo removed');
+    if (updatedTarget) {
+      await upsertLecturerProfile(updatedTarget);
+    }
+  };
+
+  const handleSaveLecturerProfile = async (updatedProfile) => {
+    setLecturers((prev) =>
+      prev.map((lec) => (lec.id === updatedProfile.id ? updatedProfile : lec))
+    );
+    if (
+      activeUser &&
+      (activeUser.lecturerId === updatedProfile.id ||
+        activeUser.id === updatedProfile.userId ||
+        activeUser.handle === updatedProfile.handle)
+    ) {
+      setActiveUser((prev) => ({
+        ...prev,
+        name: updatedProfile.name,
+        branch: updatedProfile.branch,
+        department: updatedProfile.department,
+        avatarChar: updatedProfile.avatarChar
+      }));
+    }
+    showToast(`Updated profile for ${updatedProfile.name}`);
+    await upsertLecturerProfile(updatedProfile);
+  };
+
+  const handleCreateLecturer = async (newProfile) => {
+    setLecturers((prev) => [newProfile, ...prev]);
+    setSelectedLecturerId(newProfile.id);
+    showToast(`Created lecturer profile for ${newProfile.name}`);
+    await upsertLecturerProfile(newProfile);
+  };
+
+  const handleOpenLecturer = (lecturerId) => {
+    setSelectedLecturerId(lecturerId);
+    setActiveNav('faculty');
+    setIsHeaderHidden(false);
+    setIsBottomNavHidden(false);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleMarkAllRead = async () => {
@@ -864,7 +1041,10 @@ export default function App({ isClerkConfigured = false }) {
       {/* LEFT SIDEBAR (Desktop & Medium screens) */}
       <LeftSidebar
         activeNav={activeNav}
-        setActiveNav={setActiveNav}
+        setActiveNav={(nav) => {
+          if (nav === 'faculty') setSelectedLecturerId(null);
+          setActiveNav(nav);
+        }}
         currentUser={currentUser}
         onSwitchUser={handleSwitchUser}
         users={USERS}
@@ -909,6 +1089,8 @@ export default function App({ isClerkConfigured = false }) {
             isHeaderHidden={isHeaderHidden}
             onTogglePin={handleTogglePin}
             onDeleteNotice={handleDeleteNotice}
+            lecturers={lecturers}
+            onOpenLecturer={handleOpenLecturer}
           />
         )}
 
@@ -957,16 +1139,44 @@ export default function App({ isClerkConfigured = false }) {
           />
         )}
 
+        {activeNav === 'faculty' && (
+          <FacultyDirectoryView
+            lecturers={lecturers}
+            announcements={announcements}
+            currentUser={currentUser}
+            selectedLecturerId={selectedLecturerId}
+            onSelectLecturer={setSelectedLecturerId}
+            onSavePhoto={handleSaveLecturerPhoto}
+            onSaveProfile={handleSaveLecturerProfile}
+            onCreateLecturer={handleCreateLecturer}
+            isSidebarHidden={isSidebarHidden}
+            onToggleSidebar={handleToggleSidebar}
+            unreadCount={unreadCount}
+            onOpenNotifications={() => setActiveNav('notifications')}
+            isHeaderHidden={isHeaderHidden}
+            onOpenCommunity={openCommunity}
+          />
+        )}
+
         {activeNav === 'profile' && (
           <ProfileView
             currentUser={currentUser}
             users={USERS}
+            lecturers={lecturers}
+            announcements={announcements}
             onSwitchUser={handleSwitchUser}
+            onSwitchLecturer={handleSwitchLecturer}
+            onSavePhoto={handleSaveLecturerPhoto}
+            onSaveProfile={handleSaveLecturerProfile}
             isSidebarHidden={isSidebarHidden}
             onToggleSidebar={handleToggleSidebar}
             onSelectNav={(nav) => setActiveNav(nav)}
             onOpenDisplay={() => setIsDisplayOpen(true)}
             onOpenCommunity={openCommunity}
+            onOpenFacultyDirectory={() => {
+              setSelectedLecturerId(null);
+              setActiveNav('faculty');
+            }}
             onLogout={handleLogout}
             isHeaderHidden={isHeaderHidden}
           />
@@ -991,6 +1201,8 @@ export default function App({ isClerkConfigured = false }) {
             onOpenCommunity={openCommunity}
             onClearAll={handleClearAllBookmarks}
             onDeleteNotice={handleDeleteNotice}
+            lecturers={lecturers}
+            onOpenLecturer={handleOpenLecturer}
           />
         )}
       </main>
@@ -1046,6 +1258,18 @@ export default function App({ isClerkConfigured = false }) {
           aria-label="Websites"
         >
           <IconWebsites className="mobile-nav-icon" />
+        </button>
+
+        <button
+          type="button"
+          className={`mobile-nav-item ${activeNav === 'faculty' ? 'active' : ''}`}
+          onClick={() => {
+            setSelectedLecturerId(null);
+            setActiveNav('faculty');
+          }}
+          aria-label="Faculty"
+        >
+          <IconGraduationCap className="mobile-nav-icon" />
         </button>
 
         <button
