@@ -4,7 +4,8 @@ import {
   IconSettings,
   IconBookmarks,
   CommunityAvatar,
-  VerifiedBadge
+  VerifiedBadge,
+  UserAvatar
 } from './Icons';
 import { BRANCHES } from '../data/initialData';
 import { canAccessCommunity } from '../utils/collegeAuth';
@@ -23,11 +24,28 @@ export default function MobileDrawer({
 }) {
   if (!isOpen) return null;
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  const handleOverlayKeyDown = (e) => {
+    if (e.key === 'Escape' || e.key === 'Enter') onClose();
+  };
+
   return (
-    <div className="mobile-drawer-overlay" onClick={onClose} aria-modal="true" role="dialog">
+    <div
+      role="button"
+      tabIndex={0}
+      className="mobile-drawer-overlay"
+      onClick={handleOverlayClick}
+      onKeyDown={handleOverlayKeyDown}
+      aria-label="Close navigation drawer"
+    >
       <div
         className="mobile-drawer-panel"
-        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Account navigation drawer"
       >
         {/* Drawer Header */}
         <div className="mobile-drawer-header">
@@ -44,9 +62,7 @@ export default function MobileDrawer({
 
         {/* User Profile Card */}
         <div className="mobile-drawer-profile">
-          <div className="avatar avatar-lg" style={{ background: currentUser.avatarBg }}>
-            <span>{currentUser.avatarChar}</span>
-          </div>
+          <UserAvatar user={currentUser} sizeClass="avatar-lg" />
           <div className="mobile-drawer-user-info">
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <strong className="mobile-drawer-name">{currentUser.name}</strong>

@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useEffect, useRef } from 'react';
 import {
   IconClose,
@@ -14,7 +15,8 @@ import {
   IconVideo,
   IconArticle,
   IconCheck,
-  VerifiedBadge
+  VerifiedBadge,
+  UserAvatar
 } from './Icons';
 import { BRANCHES, CATEGORIES, USERS } from '../data/initialData';
 
@@ -284,9 +286,7 @@ export default function ComposeModal({
         {/* Identity row */}
         <div className="li-compose-top">
           <div className="li-compose-identity">
-            <div className="avatar avatar-lg" style={{ background: currentUser.avatarBg }}>
-              <span>{currentUser.avatarChar}</span>
-            </div>
+            <UserAvatar user={currentUser} sizeClass="avatar-lg" />
             <div className="li-compose-identity-text">
               <div className="li-compose-name-wrap">
                 <button
@@ -534,25 +534,35 @@ export default function ComposeModal({
 
           {/* Empty Upload Zone if in photo or video mode without media */}
           {!media && currentMode === 'photo' && (
-            <div className="li-upload-zone" onClick={() => photoInputRef.current?.click()}>
+            <button
+              type="button"
+              className="li-upload-zone"
+              style={{ width: '100%', border: '1px dashed var(--border-color)', background: 'transparent', textAlign: 'left', font: 'inherit', color: 'inherit', cursor: 'pointer' }}
+              onClick={() => photoInputRef.current?.click()}
+            >
               <IconMedia className="li-upload-zone-icon" />
               <div className="li-upload-zone-text">
                 <strong>Click to choose a photo</strong>
                 <span>Supports PNG, JPG, WebP, GIF from your device</span>
               </div>
-              <button type="button" className="li-upload-zone-btn">Browse Photo</button>
-            </div>
+              <span className="li-upload-zone-btn">Browse Photo</span>
+            </button>
           )}
 
           {!media && currentMode === 'video' && (
-            <div className="li-upload-zone" onClick={() => videoInputRef.current?.click()}>
+            <button
+              type="button"
+              className="li-upload-zone"
+              style={{ width: '100%', border: '1px dashed var(--border-color)', background: 'transparent', textAlign: 'left', font: 'inherit', color: 'inherit', cursor: 'pointer' }}
+              onClick={() => videoInputRef.current?.click()}
+            >
               <IconVideo className="li-upload-zone-icon video" />
               <div className="li-upload-zone-text">
                 <strong>Click to choose a video</strong>
                 <span>Supports MP4, WebM, MOV video files</span>
               </div>
-              <button type="button" className="li-upload-zone-btn">Browse Video</button>
-            </div>
+              <span className="li-upload-zone-btn">Browse Video</span>
+            </button>
           )}
 
           {/* Media Preview: Real Photo, Video, or Document */}

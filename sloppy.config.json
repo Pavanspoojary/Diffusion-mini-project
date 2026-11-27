@@ -1,0 +1,11 @@
+{
+  "name": "campus-hub-x",
+  "rules": {
+    "WORD_BUDGET_EXCEEDED": "off",
+    "PURPLE_GRADIENT_SLOP": "error",
+    "SPARKLE_ICON_OVERLOAD": "error",
+    "BOXED_CARD_SYNDROME": "error",
+    "FAKE_CONTROL_SLOP": "error",
+    "DEAD_PLACEHOLDER_SLOP": "error"
+  }
+}

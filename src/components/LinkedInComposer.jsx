@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { IconVideo, IconMedia, IconArticle } from './Icons';
+import { IconVideo, IconMedia, IconArticle, UserAvatar } from './Icons';
 
 /**
  * LinkedIn-style post starter bar.
@@ -56,12 +56,7 @@ export default function LinkedInComposer({ currentUser, onOpenCompose }) {
         onChange={(e) => handleFileChosen(e, 'video')}
       />
 
-      <div
-        className="avatar avatar-md li-composer-avatar"
-        style={{ background: currentUser.avatarBg }}
-      >
-        <span>{currentUser.avatarChar}</span>
-      </div>
+      <UserAvatar user={currentUser} sizeClass="avatar-md li-composer-avatar" />
 
       <div className="li-composer-main">
         <button

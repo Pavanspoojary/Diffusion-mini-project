@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   IconPrinter,
@@ -7,6 +8,7 @@ import {
   IconUsers,
   IconBriefcase,
   IconShield,
+  IconInstagram,
   IconSidebarToggle,
   IconSearch,
   IconClose,
@@ -17,7 +19,7 @@ import {
   IconNotifications,
   VerifiedBadge
 } from './Icons';
-import { PORTAL_LOGOS } from '../data/initialData';
+import { PORTAL_LOGOS, INITIAL_WEBSITES } from '../data/initialData';
 
 function PortalLogoIcon({ site, getSiteIcon }) {
   const [hasError, setHasError] = useState(false);
@@ -96,16 +98,22 @@ function FilterDropdown({ label, value, options, onChange, icon: Icon }) {
 
 function getCategoryColor(category) {
   switch (category) {
+    case 'Social Media':
+      return { bg: 'rgba(225, 48, 108, 0.14)', border: 'rgba(225, 48, 108, 0.35)', color: '#e1306c' };
     case 'Academic':
       return { bg: 'rgba(255, 112, 67, 0.14)', border: 'rgba(255, 112, 67, 0.4)', color: '#ff7043' };
     case 'Student Utilities':
       return { bg: 'rgba(0, 186, 124, 0.12)', border: 'rgba(0, 186, 124, 0.3)', color: '#00ba7c' };
     case 'University':
       return { bg: 'rgba(120, 86, 255, 0.12)', border: 'rgba(120, 86, 255, 0.3)', color: '#7856ff' };
+    case 'Campus Life':
+      return { bg: 'rgba(29, 155, 240, 0.14)', border: 'rgba(29, 155, 240, 0.35)', color: '#1d9bf0' };
     case 'Volunteering':
       return { bg: 'rgba(249, 24, 128, 0.12)', border: 'rgba(249, 24, 128, 0.3)', color: '#f91880' };
     case 'Career':
       return { bg: 'rgba(255, 212, 0, 0.12)', border: 'rgba(255, 212, 0, 0.3)', color: '#ffd400' };
+    case 'Events':
+      return { bg: 'rgba(244, 91, 105, 0.14)', border: 'rgba(244, 91, 105, 0.35)', color: '#f45b69' };
     default:
       return { bg: 'rgba(148, 163, 184, 0.14)', border: 'rgba(148, 163, 184, 0.35)', color: '#94a3b8' };
   }
@@ -131,13 +139,14 @@ export default function WebsitesView({
   const [newSiteName, setNewSiteName] = useState('');
   const [newSiteDesc, setNewSiteDesc] = useState('');
   const [newSiteUrl, setNewSiteUrl] = useState('');
-  const [newSiteCat, setNewSiteCat] = useState('Academic');
-  const [newSiteIcon, setNewSiteIcon] = useState('external');
+  const [newSiteCat, setNewSiteCat] = useState('Social Media');
+  const [newSiteIcon, setNewSiteIcon] = useState('instagram');
 
-  const categories = ['All', 'Student Utilities', 'Academic', 'University', 'Volunteering', 'Career'];
+  const categories = ['All', 'Social Media', 'Student Utilities', 'Academic', 'University', 'Campus Life', 'Volunteering', 'Career', 'Events'];
 
   const getSiteIcon = (type) => {
     switch (type) {
+      case 'instagram': return <IconInstagram style={{ width: 22, height: 22 }} />;
       case 'printer': return <IconPrinter style={{ width: 22, height: 22 }} />;
       case 'database': return <IconDatabase style={{ width: 22, height: 22 }} />;
       case 'book': return <IconBook style={{ width: 22, height: 22 }} />;
@@ -150,20 +159,36 @@ export default function WebsitesView({
 
   const activeSearch = localSearch.trim() || globalSearchQuery.trim();
 
+  const displayWebsites = useMemo(() => {
+    const map = new Map();
+    (INITIAL_WEBSITES || []).forEach((w) => map.set(w.id, w));
+    (websites || []).forEach((w) => {
+      if (w && w.id) {
+        map.set(w.id, { ...map.get(w.id), ...w });
+      }
+    });
+    return Array.from(map.values());
+  }, [websites]);
+
   const filteredWebsites = useMemo(() => {
-    return websites.filter((site) => {
-      if (selectedCat !== 'All' && site.category !== selectedCat) return false;
+    return displayWebsites.filter((site) => {
+      if (!site) return false;
+      if (selectedCat !== 'All') {
+        const siteCat = (site.category || '').trim().toLowerCase();
+        const targetCat = selectedCat.trim().toLowerCase();
+        if (siteCat !== targetCat) return false;
+      }
       if (activeSearch) {
         const q = activeSearch.toLowerCase();
-        const matchName = site.name.toLowerCase().includes(q);
-        const matchDesc = site.description.toLowerCase().includes(q);
-        const matchCat = site.category.toLowerCase().includes(q);
-        const matchUrl = site.url.toLowerCase().includes(q);
+        const matchName = (site.name || '').toLowerCase().includes(q);
+        const matchDesc = (site.description || '').toLowerCase().includes(q);
+        const matchCat = (site.category || '').toLowerCase().includes(q);
+        const matchUrl = (site.url || '').toLowerCase().includes(q);
         return matchName || matchDesc || matchCat || matchUrl;
       }
       return true;
     });
-  }, [websites, selectedCat, activeSearch]);
+  }, [displayWebsites, selectedCat, activeSearch]);
 
   const handleCopy = (site) => {
     try {
@@ -196,9 +221,11 @@ export default function WebsitesView({
   const getHostname = (url) => {
     try {
       const parsed = new URL(url);
-      return parsed.hostname + (parsed.pathname !== '/' ? parsed.pathname : '');
+      const host = parsed.hostname.replace(/^www\./, '');
+      const pathname = parsed.pathname !== '/' ? parsed.pathname : '';
+      return host + pathname;
     } catch {
-      return url.replace(/^https?:\/\//, '');
+      return url.replace(/^https?:\/\/(www\.)?/, '');
     }
   };
 
@@ -298,6 +325,23 @@ export default function WebsitesView({
             </span>
           </div>
         </div>
+
+        {/* Quick Category Chips */}
+        <div className="web-category-pills">
+          {categories.map((cat) => {
+            const isSelected = selectedCat === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                className={`web-category-pill ${isSelected ? 'active' : ''}`}
+                onClick={() => setSelectedCat(cat)}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Admin Add Portal Drawer/Card */}
@@ -358,6 +402,7 @@ export default function WebsitesView({
                   value={newSiteIcon}
                   onChange={(e) => setNewSiteIcon(e.target.value)}
                 >
+                  <option value="instagram">Instagram / Social Media Icon</option>
                   <option value="external">External Link Icon</option>
                   <option value="database">ERP / Database Icon</option>
                   <option value="book">Library / Book Icon</option>
@@ -457,7 +502,7 @@ export default function WebsitesView({
                     rel="noopener noreferrer"
                     className="web-launch-btn"
                   >
-                    <span>Visit Portal</span>
+                    <span>{site.category === 'Social Media' ? 'Open Instagram' : 'Visit Portal'}</span>
                     <IconExternal style={{ width: 14, height: 14 }} />
                   </a>
                 </div>

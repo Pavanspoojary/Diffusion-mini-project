@@ -4,6 +4,7 @@ import {
   INITIAL_EVENTS,
   INITIAL_WEBSITES,
   INITIAL_NOTIFICATIONS,
+  INITIAL_LECTURERS,
   PORTAL_LOGOS,
   USERS
 } from '../data/initialData';
@@ -463,14 +464,46 @@ export async function fetchWebsites() {
 
     if (error) throw error;
     if (data && data.length > 0) {
-      return data.map(mapWebsiteFromDB);
+      const dbList = data.map(mapWebsiteFromDB);
+      const mergedMap = new Map();
+      INITIAL_WEBSITES.forEach((w) => mergedMap.set(w.id, w));
+      dbList.forEach((w) => {
+        if (w && w.id) {
+          mergedMap.set(w.id, { ...mergedMap.get(w.id), ...w });
+        }
+      });
+
+      // Sync missing initial items (like Social Media portals) to Supabase in the background
+      const dbIds = new Set(data.map((d) => d.id));
+      const missing = INITIAL_WEBSITES.filter((w) => !dbIds.has(w.id));
+      if (missing.length > 0) {
+        supabase
+          .from('websites')
+          .upsert(missing.map(mapWebsiteToDB))
+          .then(({ error: upErr }) => {
+            if (upErr) console.info('[Supabase:syncWebsites]', upErr.message);
+          })
+          .catch(() => {});
+      }
+
+      return Array.from(mergedMap.values());
     }
     return INITIAL_WEBSITES;
   } catch (err) {
     console.info('[Supabase:fetchWebsites fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_websites_v8') || localStorage.getItem('college_hub_websites_v7');
-      if (saved) return JSON.parse(saved);
+      const saved = localStorage.getItem('college_hub_websites_v10');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const mergedMap = new Map();
+        INITIAL_WEBSITES.forEach((w) => mergedMap.set(w.id, w));
+        parsed.forEach((w) => {
+          if (w && w.id) {
+            mergedMap.set(w.id, { ...mergedMap.get(w.id), ...w });
+          }
+        });
+        return Array.from(mergedMap.values());
+      }
     } catch {}
     return INITIAL_WEBSITES;
   }
@@ -551,4 +584,152 @@ export function subscribeToTable(table, onPayload) {
     console.warn(`[Supabase:realtime] Channel failed for ${table}:`, err.message);
     return () => {};
   }
+}
+
+// --- Lecturer Profiles API ---
+
+const LECTURERS_STORAGE_KEY = 'college_hub_lecturers_v1';
+
+function mapLecturerFromDB(row) {
+  return {
+    id: row.id,
+    userId: row.user_id || row.userId || row.id,
+    name: row.name,
+    handle: row.handle,
+    aliases: Array.isArray(row.aliases) ? row.aliases : [],
+    employeeId: row.employee_id || row.employeeId || '',
+    designation: row.designation || 'Faculty',
+    headline: row.headline || '',
+    branch: row.branch || 'AI&DS',
+    department: row.department || 'Dept. of AI & Data Science',
+    location: row.location || 'SMVITM Campus, Bantakal, Udupi',
+    experienceYears: row.experience_years || row.experienceYears || '',
+    avatarChar: row.avatar_char || row.avatarChar || (row.name ? row.name.charAt(0).toUpperCase() : 'L'),
+    avatarBg: row.avatar_bg || row.avatarBg || '#8e24aa',
+    photoUrl: row.photo_url ?? row.photoUrl ?? null,
+    bannerBg: row.banner_bg || row.bannerBg || 'linear-gradient(135deg, #4f46e5 0%, #7856ff 55%, #1d9bf0 100%)',
+    verified: row.verified ?? true,
+    verifiedType: row.verified_type || row.verifiedType || 'blue',
+    about: row.about || '',
+    contact: row.contact || {},
+    yearsTaught: Array.isArray(row.years_taught || row.yearsTaught) ? (row.years_taught || row.yearsTaught) : [],
+    semestersTaught: Array.isArray(row.semesters_taught || row.semestersTaught) ? (row.semesters_taught || row.semestersTaught) : [],
+    subjects: Array.isArray(row.subjects) ? row.subjects : [],
+    education: Array.isArray(row.education) ? row.education : [],
+    experience: Array.isArray(row.experience) ? row.experience : [],
+    skills: Array.isArray(row.skills) ? row.skills : []
+  };
+}
+
+function mapLecturerToDB(lec) {
+  return {
+    id: lec.id,
+    user_id: lec.userId || lec.id,
+    name: lec.name,
+    handle: lec.handle,
+    aliases: lec.aliases || [],
+    employee_id: lec.employeeId || '',
+    designation: lec.designation || 'Faculty',
+    headline: lec.headline || '',
+    branch: lec.branch || 'AI&DS',
+    department: lec.department || '',
+    location: lec.location || '',
+    experience_years: lec.experienceYears || '',
+    avatar_char: lec.avatarChar || (lec.name ? lec.name.charAt(0).toUpperCase() : 'L'),
+    avatar_bg: lec.avatarBg || '#8e24aa',
+    photo_url: lec.photoUrl || null,
+    banner_bg: lec.bannerBg || '',
+    verified: lec.verified ?? true,
+    verified_type: lec.verifiedType || 'blue',
+    about: lec.about || '',
+    contact: lec.contact || {},
+    years_taught: lec.yearsTaught || [],
+    semesters_taught: lec.semestersTaught || [],
+    subjects: lec.subjects || [],
+    education: lec.education || [],
+    experience: lec.experience || [],
+    skills: lec.skills || []
+  };
+}
+
+export function loadLocalLecturers() {
+  try {
+    const saved = localStorage.getItem(LECTURERS_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch {}
+  return INITIAL_LECTURERS;
+}
+
+export function saveLocalLecturers(lecturers) {
+  try {
+    localStorage.setItem(LECTURERS_STORAGE_KEY, JSON.stringify(lecturers));
+  } catch (err) {
+    console.warn('[LocalStorage:saveLocalLecturers failed]', err.message);
+  }
+}
+
+export async function fetchLecturers() {
+  try {
+    const { data, error } = await supabase
+      .from('lecturer_profiles')
+      .select('*');
+
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const mapped = data.map(mapLecturerFromDB);
+      saveLocalLecturers(mapped);
+      return mapped;
+    }
+    return loadLocalLecturers();
+  } catch (err) {
+    console.info('[Supabase:fetchLecturers fallback]', err.message);
+    return loadLocalLecturers();
+  }
+}
+
+export async function upsertLecturerProfile(profile) {
+  try {
+    const payload = mapLecturerToDB(profile);
+    const { data, error } = await supabase
+      .from('lecturer_profiles')
+      .upsert(payload)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return mapLecturerFromDB(data);
+  } catch (err) {
+    console.warn('[Supabase:upsertLecturerProfile fallback to local]', err.message);
+    return profile;
+  }
+}
+
+export function findLecturerProfile(lecturers = [], query = {}) {
+  if (!Array.isArray(lecturers) || !query) return null;
+  const { id, userId, lecturerId, handle, author, name } = query;
+  const targetName = (author || name || '').trim().toLowerCase();
+  const targetHandle = (handle || '').trim().toLowerCase();
+
+  return (
+    lecturers.find((l) => {
+      if (lecturerId && l.id === lecturerId) return true;
+      if (id && (l.id === id || l.userId === id)) return true;
+      if (userId && (l.userId === userId || l.id === userId)) return true;
+      if (targetHandle && (l.handle || '').toLowerCase() === targetHandle) return true;
+      if (targetName && (l.name || '').toLowerCase() === targetName) return true;
+      if (
+        targetName &&
+        Array.isArray(l.aliases) &&
+        l.aliases.some((alias) => alias.toLowerCase() === targetName)
+      ) {
+        return true;
+      }
+      return false;
+    }) || null
+  );
 }

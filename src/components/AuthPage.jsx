@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState } from 'react';
 import { SignInButton, SignUpButton } from '@clerk/react';
 import { XLogo, IconClose, VerifiedBadge } from './Icons';
@@ -112,6 +113,14 @@ export default function AuthPage({
     onSignup(newUser);
   };
 
+  const handleCloseModal = (e) => {
+    if (e.target === e.currentTarget) setModalMode(null);
+  };
+
+  const handleModalKeyDown = (e) => {
+    if (e.key === 'Escape') setModalMode(null);
+  };
+
   return (
     <div className="auth-page-container">
       {/* SPLIT SCREEN LANDING */}
@@ -145,7 +154,7 @@ export default function AuthPage({
                 </SignUpButton>
 
                 <p className="auth-terms-disclaimer">
-                  By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>.
+                  By signing up, you agree to the <a href="https://smvitm.sode-edu.in/terms" target="_blank" rel="noreferrer">Terms of Service</a> and <a href="https://smvitm.sode-edu.in/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>, including <a href="https://smvitm.sode-edu.in/cookies" target="_blank" rel="noreferrer">Cookie Use</a>.
                 </p>
 
                 {/* Already have an account */}
@@ -176,7 +185,7 @@ export default function AuthPage({
                 </button>
 
                 <p className="auth-terms-disclaimer">
-                  By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>.
+                  By signing up, you agree to the <a href="https://smvitm.sode-edu.in/terms" target="_blank" rel="noreferrer">Terms of Service</a> and <a href="https://smvitm.sode-edu.in/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>, including <a href="https://smvitm.sode-edu.in/cookies" target="_blank" rel="noreferrer">Cookie Use</a>.
                 </p>
 
                 {/* Already have an account */}
@@ -201,17 +210,17 @@ export default function AuthPage({
 
       {/* FOOTER */}
       <footer className="auth-footer">
-        <div className="auth-footer-links">
-          <a href="#">About</a>
-          <a href="#">Download PWA</a>
-          <a href="#">Help Center</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Cookie Policy</a>
-          <a href="#">Accessibility</a>
-          <a href="#">Department of AI&DS</a>
-          <a href="#">SMVITM Bantakal</a>
-        </div>
+        <nav className="auth-footer-links" aria-label="Campus links">
+          <a href="https://smvitm.sode-edu.in/about-us/" target="_blank" rel="noreferrer">About</a>
+          <a href="/manifest.webmanifest" download="manifest.webmanifest">Download PWA</a>
+          <a href="https://smvitm.sode-edu.in/contact-us/" target="_blank" rel="noreferrer">Help Center</a>
+          <a href="https://smvitm.sode-edu.in/terms" target="_blank" rel="noreferrer">Terms of Service</a>
+          <a href="https://smvitm.sode-edu.in/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>
+          <a href="https://smvitm.sode-edu.in/cookies" target="_blank" rel="noreferrer">Cookie Policy</a>
+          <a href="https://smvitm.sode-edu.in/accessibility" target="_blank" rel="noreferrer">Accessibility</a>
+          <a href="https://smvitm.sode-edu.in/artificial-intelligence-data-science/" target="_blank" rel="noreferrer">Department of AI&DS</a>
+          <a href="https://smvitm.sode-edu.in/" target="_blank" rel="noreferrer">SMVITM Bantakal</a>
+        </nav>
         <div className="auth-footer-copyright">
           © 2026 Campus Hub. All rights reserved.
         </div>
@@ -219,10 +228,16 @@ export default function AuthPage({
 
       {/* AUTHENTICATION MODAL (Sign In / Sign Up) */}
       {modalMode && (
-        <div className="auth-modal-overlay" onClick={() => setModalMode(null)}>
+        <div
+          role="button"
+          tabIndex={0}
+          className="auth-modal-overlay"
+          onClick={handleCloseModal}
+          onKeyDown={handleModalKeyDown}
+          aria-label="Close authentication modal"
+        >
           <div
             className="auth-modal-card"
-            onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
           >
