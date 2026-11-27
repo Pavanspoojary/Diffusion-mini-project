@@ -222,47 +222,6 @@ export default function AuthPage({
                 </div>
               </>
             )}
-
-            {/* Quick Role Portal Selection */}
-            <div className="auth-quick-role-box">
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                Role-Based Portal Access
-              </div>
-              <div className="quick-role-chips">
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('student')}
-                  title="Student Portal (AI&DS)"
-                >
-                  Student
-                </button>
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('faculty')}
-                  title="Faculty Portal"
-                >
-                  Faculty
-                </button>
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('coordinator')}
-                  title="Event Coordinator Portal"
-                >
-                  Coordinator
-                </button>
-                <button
-                  type="button"
-                  className="role-access-chip"
-                  onClick={() => handleQuickRole('admin')}
-                  title="Campus Administrator Portal"
-                >
-                  Administrator
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
