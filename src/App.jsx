@@ -151,12 +151,10 @@ export default function App({ isClerkConfigured = false }) {
   const [events, setEvents] = useState(() => {
     try {
       localStorage.removeItem('college_hub_events_v1');
-      const savedV3 = localStorage.getItem('college_hub_events_v3');
-      if (savedV3) return JSON.parse(savedV3);
-      const saved = localStorage.getItem('college_hub_events_v2');
-      if (saved && saved.includes('algorhythm')) {
-        return JSON.parse(saved);
-      }
+      localStorage.removeItem('college_hub_events_v2');
+      localStorage.removeItem('college_hub_events_v3');
+      const savedV4 = localStorage.getItem('college_hub_events_v4');
+      if (savedV4) return JSON.parse(savedV4);
       return INITIAL_EVENTS;
     } catch {
       return INITIAL_EVENTS;
@@ -266,7 +264,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v3', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v4', JSON.stringify(events));
     } catch {}
   }, [events]);
 

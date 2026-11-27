@@ -358,7 +358,7 @@ export async function fetchEvents(currentUserId = 'user-student') {
   } catch (err) {
     console.info('[Supabase:fetchEvents fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_events_v3') || localStorage.getItem('college_hub_events_v2');
+      const saved = localStorage.getItem('college_hub_events_v4') || localStorage.getItem('college_hub_events_v3');
       if (saved) return JSON.parse(saved);
     } catch {}
     return INITIAL_EVENTS;
