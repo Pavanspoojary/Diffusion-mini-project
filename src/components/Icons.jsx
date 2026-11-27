@@ -475,21 +475,36 @@ export const UserAvatar = ({ user, sizeClass = 'avatar-md', className = '', styl
   const bg = user?.avatarBg || '#1d9bf0';
   const char = user?.avatarChar || (user?.name ? user.name.charAt(0).toUpperCase() : 'U');
 
+  const content = photo ? (
+    <img
+      src={photo}
+      alt={user?.name || 'User profile photo'}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+    />
+  ) : (
+    <span>{char}</span>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={`avatar ${sizeClass} ${className}`}
+        style={{ background: photo ? 'transparent' : bg, border: 'none', padding: 0, cursor: 'pointer', ...style }}
+        onClick={onClick}
+        aria-label={user?.name ? `${user.name} profile` : 'User profile'}
+      >
+        {content}
+      </button>
+    );
+  }
+
   return (
     <div
       className={`avatar ${sizeClass} ${className}`}
       style={{ background: photo ? 'transparent' : bg, ...style }}
-      onClick={onClick}
     >
-      {photo ? (
-        <img
-          src={photo}
-          alt={user?.name || 'User profile photo'}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-        />
-      ) : (
-        <span>{char}</span>
-      )}
+      {content}
     </div>
   );
 };

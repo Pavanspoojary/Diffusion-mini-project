@@ -39,14 +39,16 @@ export default function LeftSidebar({
         <div>
           {/* Brand Logo & Collapse Header */}
           <div className="sidebar-header-row">
-            <div
+            <button
+              type="button"
               className="logo-wrap"
               onClick={() => setActiveNav('announcements')}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', border: 'none', background: 'transparent', padding: 0 }}
               title="SMVITM Campus Hub"
+              aria-label="Home announcements"
             >
               <XLogo className="x-logo" />
-            </div>
+            </button>
 
             <button
               type="button"

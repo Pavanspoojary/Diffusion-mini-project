@@ -54,16 +54,23 @@ export default function RightSidebar({
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {upcomingEvents.map((evt) => (
-              <div
+              <button
+                type="button"
                 key={evt.id}
                 onClick={() => onSelectEvent(evt)}
                 style={{
                   padding: '12px 16px',
+                  border: 'none',
                   borderTop: '1px solid var(--border-color)',
+                  background: 'transparent',
+                  textAlign: 'left',
                   cursor: 'pointer',
+                  width: '100%',
+                  display: 'block',
                   transition: 'background-color 0.15s ease'
                 }}
                 className="hover-subtle"
+                aria-label={`View event details for ${evt.title}`}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
                   <span style={{ fontSize: 12, color: 'var(--accent-color)', fontWeight: 700 }}>
@@ -77,7 +84,7 @@ export default function RightSidebar({
                 <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                   Venue: {evt.venue}
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -105,7 +112,8 @@ export default function RightSidebar({
               const isActive = activeBranch === b.id;
               const isJoined = joinedCommunities.includes(b.id);
               return (
-                <div
+                <button
+                  type="button"
                   key={b.id}
                   className={`reddit-community-row ${isActive ? 'active' : ''}`}
                   onClick={() => {
@@ -116,8 +124,6 @@ export default function RightSidebar({
                       setActiveNav('announcements');
                     }
                   }}
-                  role="button"
-                  tabIndex={0}
                   aria-label={`Switch to ${b.slug}`}
                   title={`${b.label} (${b.slug})`}
                 >
@@ -125,7 +131,7 @@ export default function RightSidebar({
                   <span className="reddit-community-title">{b.slug}</span>
                   {isJoined && <span className="reddit-joined-mark" title="Joined">Joined</span>}
                   {isActive && <span className="reddit-active-dot" />}
-                </div>
+                </button>
               );
             })}
           </div>
@@ -133,9 +139,8 @@ export default function RightSidebar({
 
         {/* Legal & College Footer */}
         <footer style={{ padding: '8px 12px', fontSize: 12, color: 'var(--text-secondary)', lineHeight: '18px' }}>
-          <div>Campus Hub · SMVITM Bantakal</div>
-          <div>Department of Artificial Intelligence and Data Science</div>
-          <div style={{ marginTop: 4 }}>© 2026 Campus Hub / X. All rights reserved.</div>
+          <div>SMVITM Bantakal · Dept. of AI&DS</div>
+          <div style={{ marginTop: 4 }}>© 2026 Campus Hub</div>
         </footer>
       </div>
     </aside>

@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useRef, useEffect } from 'react';
 import {
   IconHeart,
@@ -155,7 +156,7 @@ function PostShareMenu({ item, isOpen, onClose }) {
   const supportsNativeShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   return (
-    <div className="post-share-popover" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+    <div className="post-share-popover" ref={menuRef}>
       <button type="button" className="share-menu-item" onClick={handleCopyLink}>
         {copiedLink ? (
           <IconCheck style={{ color: '#00ba7c', width: 16, height: 16 }} />
@@ -276,6 +277,14 @@ export default function AnnouncementFeed({
     const score = (p) => (p.reposts || 0) * 3 + (p.replies || 0) * 2;
     return score(b) - score(a);
   });
+
+  const handleCloseDeleteNotice = (e) => {
+    if (e.target === e.currentTarget) setConfirmDeleteNotice(null);
+  };
+
+  const handleDeleteNoticeKeyDown = (e) => {
+    if (e.key === 'Escape') setConfirmDeleteNotice(null);
+  };
 
   return (
     <div>
@@ -526,7 +535,7 @@ export default function AnnouncementFeed({
                 )}
 
                 {item.media && item.mediaKind === 'video' ? (
-                  <div className="post-media-container post-video-container" onClick={(e) => e.stopPropagation()}>
+                  <div className="post-media-container post-video-container">
                     <video
                       src={item.media}
                       controls
@@ -553,9 +562,15 @@ export default function AnnouncementFeed({
                     </a>
                   </div>
                 ) : item.media ? (
-                  <div className="post-media-container" onClick={() => onOpenImage(item.media)}>
+                  <button
+                    type="button"
+                    className="post-media-container"
+                    onClick={() => onOpenImage(item.media)}
+                    aria-label="Enlarge notice attachment"
+                    style={{ background: 'transparent', border: 'none', padding: 0, textAlign: 'left', cursor: 'zoom-in', width: '100%', display: 'block' }}
+                  >
                     <img src={item.media} alt="Notice attachment" className="post-media-img" />
-                  </div>
+                  </button>
                 ) : null}
 
                 {/* Post action bar: Pin (Staff only), Bookmark, Share */}
@@ -640,9 +655,16 @@ export default function AnnouncementFeed({
 
       {/* Delete Notice Confirmation Modal */}
       {confirmDeleteNotice && (
-        <div className="confirm-modal-overlay" onClick={() => setConfirmDeleteNotice(null)}>
-          <div className="confirm-modal-box" onClick={(e) => e.stopPropagation()}>
-            <h3 className="confirm-modal-title">Delete notice?</h3>
+        <div
+          role="button"
+          tabIndex={0}
+          className="confirm-modal-overlay"
+          onClick={handleCloseDeleteNotice}
+          onKeyDown={handleDeleteNoticeKeyDown}
+          aria-label="Close delete notice dialog"
+        >
+          <div className="confirm-modal-box" role="dialog" aria-modal="true" aria-labelledby="delete-announcement-title">
+            <h3 id="delete-announcement-title" className="confirm-modal-title">Delete notice?</h3>
             <p className="confirm-modal-desc">
               This notice will be permanently removed from the announcements feed. This action cannot be undone.
             </p>

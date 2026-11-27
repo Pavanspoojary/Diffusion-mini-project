@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';

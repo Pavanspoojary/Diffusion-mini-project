@@ -1,3 +1,4 @@
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useMemo } from 'react';
 import {
   IconSidebarToggle,

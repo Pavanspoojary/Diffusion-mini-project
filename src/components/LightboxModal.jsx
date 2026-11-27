@@ -19,6 +19,9 @@ export default function LightboxModal({ isOpen, onClose, imageUrl }) {
       ref={dialogRef}
       closedby="any"
       onClose={onClose}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       style={{
         position: 'fixed',
         inset: 0,
@@ -65,7 +68,6 @@ export default function LightboxModal({ isOpen, onClose, imageUrl }) {
           width: '90vw',
           height: '90vh'
         }}
-        onClick={onClose}
       >
         <img
           src={imageUrl}
