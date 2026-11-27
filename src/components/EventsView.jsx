@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
+import EventRegistrationModal from './EventRegistrationModal';
 
 export default function EventsView({
   events,
@@ -19,6 +20,7 @@ export default function EventsView({
 }) {
   const [activeTab, setActiveTab] = useState('internal'); // 'internal' | 'external'
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState(null);
+  const [registeringEvent, setRegisteringEvent] = useState(null);
 
   const canCreateEvent = currentUser.roleKey !== 'student';
 
@@ -198,22 +200,25 @@ export default function EventsView({
                             Seats Filled (Housefull)
                           </button>
                         ) : (
-                          <a
-                            href={evt.link || 'https://docs.google.com/forms'}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            type="button"
                             className={`btn-event-register ${evt.isRegistered ? 'registered' : ''}`}
-                            onClick={() => {
-                              if (!evt.isRegistered) {
-                                onRegisterEvent(evt.id);
-                              }
-                            }}
-                            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                            title="Opens official Google Form in a new tab"
+                            onClick={() => setRegisteringEvent(evt)}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                            title={evt.isRegistered ? 'View or manage registration details' : 'Open Google Form to register'}
                           >
-                            <span>{evt.isRegistered ? 'Registered (Google Form)' : 'Register via Google Form'}</span>
-                            <IconExternal style={{ width: 13, height: 13 }} />
-                          </a>
+                            {evt.isRegistered ? (
+                              <>
+                                <IconCheck style={{ width: 13, height: 13 }} />
+                                <span>Registered</span>
+                              </>
+                            ) : (
+                              <>
+                                <span>Register via Google Form</span>
+                                <IconExternal style={{ width: 13, height: 13 }} />
+                              </>
+                            )}
+                          </button>
                         )}
 
                         {/* QR Attendance Buttons */}
@@ -295,6 +300,14 @@ export default function EventsView({
           </div>
         </div>
       )}
+      {/* Google Form Event Registration Modal */}
+      <EventRegistrationModal
+        isOpen={Boolean(registeringEvent)}
+        onClose={() => setRegisteringEvent(null)}
+        event={registeringEvent ? events.find((e) => e.id === registeringEvent.id) || registeringEvent : null}
+        currentUser={currentUser}
+        onRegisterEvent={onRegisterEvent}
+      />
     </div>
   );
 }

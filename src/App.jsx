@@ -164,9 +164,19 @@ export default function App({ isClerkConfigured = false }) {
       localStorage.removeItem('college_hub_events_v1');
       localStorage.removeItem('college_hub_events_v2');
       localStorage.removeItem('college_hub_events_v3');
-      const savedV4 = localStorage.getItem('college_hub_events_v4');
-      if (savedV4) return JSON.parse(savedV4);
-      return INITIAL_EVENTS;
+      localStorage.removeItem('college_hub_events_v4');
+      const savedV5 = localStorage.getItem('college_hub_events_v5');
+      if (savedV5) {
+        const parsed = JSON.parse(savedV5);
+        return parsed.map((e) => ({
+          ...e,
+          link: (e.link && !e.link.includes('instagram.com')) ? e.link : 'https://docs.google.com/forms'
+        }));
+      }
+      return INITIAL_EVENTS.map((e) => ({
+        ...e,
+        link: (e.link && !e.link.includes('instagram.com')) ? e.link : 'https://docs.google.com/forms'
+      }));
     } catch {
       return INITIAL_EVENTS;
     }
@@ -275,7 +285,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v4', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v5', JSON.stringify(events));
     } catch {}
   }, [events]);
 
@@ -578,7 +588,7 @@ export default function App({ isClerkConfigured = false }) {
     await deleteAnnouncementFromDB(noticeId);
   };
 
-  const handleRegisterEvent = async (eventId) => {
+  const handleRegisterEvent = async (eventId, registrationDetails = null) => {
     const target = events.find((evt) => evt.id === eventId);
     if (!target) return;
     const wasRegistered = Boolean(target.isRegistered);
@@ -589,15 +599,18 @@ export default function App({ isClerkConfigured = false }) {
       return;
     }
 
+    const nextIsRegistered = registrationDetails ? true : !wasRegistered;
+
     setEvents((prev) =>
       prev.map((evt) => {
         if (evt.id === eventId) {
-          const isRegistered = !evt.isRegistered;
-          showToast(isRegistered ? 'Opening Google Form registration...' : 'Registration status updated');
+          const delta = nextIsRegistered === wasRegistered ? 0 : (nextIsRegistered ? 1 : -1);
+          showToast(nextIsRegistered ? 'Registration submitted via Google Form!' : 'Registration cancelled');
           return {
             ...evt,
-            isRegistered,
-            registeredCount: Math.max(0, (evt.registeredCount || 0) + (isRegistered ? 1 : -1))
+            isRegistered: nextIsRegistered,
+            registeredCount: Math.max(0, (evt.registeredCount || 0) + delta),
+            registrationDetails: nextIsRegistered ? registrationDetails : null
           };
         }
         return evt;

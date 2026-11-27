@@ -94,7 +94,7 @@ function mapEventFromDB(row, userRegisteredSet = new Set(), attendanceList = [])
     registeredCount: Number(row.registered_count ?? row.registeredCount ?? 0),
     isRegistered: userRegisteredSet.has(row.id),
     qrPayload: row.qr_payload || row.qrPayload || `EVENT_${row.id}`,
-    link: row.link || null,
+    link: (row.link && !row.link.includes('instagram.com')) ? row.link : 'https://docs.google.com/forms',
     attendance: attendanceList
   };
 }
@@ -358,8 +358,14 @@ export async function fetchEvents(currentUserId = 'user-student') {
   } catch (err) {
     console.info('[Supabase:fetchEvents fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_events_v4') || localStorage.getItem('college_hub_events_v3');
-      if (saved) return JSON.parse(saved);
+      const saved = localStorage.getItem('college_hub_events_v5');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.map((e) => ({
+          ...e,
+          link: (e.link && !e.link.includes('instagram.com')) ? e.link : 'https://docs.google.com/forms'
+        }));
+      }
     } catch {}
     return INITIAL_EVENTS;
   }
