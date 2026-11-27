@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SignInButton, SignUpButton } from '@clerk/react';
 import { XLogo, IconClose, VerifiedBadge } from './Icons';
 import { BRANCHES } from '../data/initialData';
+import { ADMIN_EMAILS } from '../utils/collegeAuth';
 
 export default function AuthPage({
   onLogin,
@@ -38,14 +39,22 @@ export default function AuthPage({
 
     const idLower = loginIdentifier.trim().toLowerCase();
 
-    // Check if matches known user account (by USN, handle, or role)
+    // Check if matches known user account (by USN, handle, email, or role)
     let matchedUser = Object.values(users).find(
       (u) =>
         u.usn.toLowerCase() === idLower ||
         u.handle.toLowerCase() === idLower ||
         u.handle.toLowerCase() === `@${idLower}` ||
+        (u.email && u.email.toLowerCase() === idLower) ||
         u.name.toLowerCase().includes(idLower)
     );
+
+    if (!matchedUser && (ADMIN_EMAILS.has(idLower) || idLower === 'admin')) {
+      matchedUser = {
+        ...users.admin,
+        email: idLower.includes('@') ? idLower : (users.admin.email || '01pavan06@gmail.com')
+      };
+    }
 
     if (!matchedUser) {
       // Default to student if custom USN was entered
@@ -78,19 +87,26 @@ export default function AuthPage({
       return;
     }
 
+    const emailLower = signupEmail.trim().toLowerCase();
+    const isSignupAdmin = ADMIN_EMAILS.has(emailLower) || signupRole === 'admin';
+    const resolvedRole = isSignupAdmin ? 'Administrator' : (signupRole === 'faculty' ? 'Faculty / Guide' : (signupRole === 'coordinator' ? 'Event Coordinator' : 'Student'));
+    const resolvedRoleKey = isSignupAdmin ? 'admin' : signupRole;
+
     const newUser = {
       id: `user-${Date.now()}`,
       name: signupName.trim(),
+      email: signupEmail.trim(),
       usn: signupUsn.trim().toUpperCase(),
-      role: signupRole === 'faculty' ? 'Faculty / Guide' : (signupRole === 'coordinator' ? 'Event Coordinator' : 'Student'),
-      roleKey: signupRole,
-      branch: signupBranch,
-      department: signupBranch === 'ALL' ? 'Institutional Administration' : `Dept. of ${signupBranch}`,
+      role: resolvedRole,
+      roleKey: resolvedRoleKey,
+      branch: isSignupAdmin ? 'ALL' : signupBranch,
+      department: isSignupAdmin || signupBranch === 'ALL' ? 'Institutional Administration' : `Dept. of ${signupBranch}`,
       handle: `@${signupUsn.trim().toLowerCase().replace(/[^a-z0-9_]/g, '')}`,
       avatarChar: signupName.charAt(0).toUpperCase(),
-      avatarBg: signupRole === 'faculty' ? '#8e24aa' : (signupRole === 'coordinator' ? '#00897b' : 'linear-gradient(135deg, #1d9bf0, #7856ff)'),
+      avatarBg: isSignupAdmin ? '#e65100' : (signupRole === 'faculty' ? '#8e24aa' : (signupRole === 'coordinator' ? '#00897b' : 'linear-gradient(135deg, #1d9bf0, #7856ff)')),
       verified: true,
-      verifiedType: signupRole === 'faculty' ? 'gold' : 'blue'
+      verifiedType: isSignupAdmin || signupRole === 'faculty' ? 'gold' : 'blue',
+      canAccessAllDepts: isSignupAdmin
     };
 
     onSignup(newUser);

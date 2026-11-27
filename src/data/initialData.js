@@ -107,6 +107,7 @@ export const USERS = {
   admin: {
     id: 'user-admin',
     name: 'Campus Admin',
+    email: '01pavan06@gmail.com',
     usn: 'ADM-01',
     role: 'Administrator',
     roleKey: 'admin',
@@ -116,7 +117,8 @@ export const USERS = {
     avatarChar: 'A',
     avatarBg: '#e65100',
     verified: true,
-    verifiedType: 'gold'
+    verifiedType: 'gold',
+    canAccessAllDepts: true
   }
 };
 

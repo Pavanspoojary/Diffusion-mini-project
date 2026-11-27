@@ -22,7 +22,8 @@ export const DEPT_CODE_MAP = {
  * Admin emails with full access to all departments and all admin/faculty features.
  */
 export const ADMIN_EMAILS = new Set([
-  'prathik.24ad030@sode-edu.in'
+  'prathik.24ad030@sode-edu.in',
+  '01pavan06@gmail.com'
 ]);
 
 const FACULTY_SUFFIXES = ['aids', 'aiml', 'mech', 'cse', 'ece', 'ds', 'ad', 'ai', 'cs', 'ec', 'me'];
@@ -31,7 +32,7 @@ const FACULTY_SUFFIXES = ['aids', 'aiml', 'mech', 'cse', 'ece', 'ds', 'ad', 'ai'
  * Parses a college email address, determines role (admin / student / faculty),
  * extracts the department code and USN (for students), and checks access.
  *
- * - Admin: prathik.24ad030@sode-edu.in (full access to all departments & features)
+ * - Admin: 01pavan06@gmail.com, prathik.24ad030@sode-edu.in (full access to all departments & features)
  * - Student: <name>.<year><dept><roll>@sode-edu.in (contains numbers, e.g. nishan.24ad023@sode-edu.in)
  * - Faculty: <name><branch>@sode-edu.in or <name>.<branch>@sode-edu.in (no numbers, e.g. ramesh.ds@sode-edu.in or rameshds@sode-edu.in)
  */
@@ -53,9 +54,31 @@ export function parseCollegeEmail(rawEmail) {
     };
   }
 
+  const isAdmin = ADMIN_EMAILS.has(email);
+  if (isAdmin) {
+    let adminUsn = 'ADMIN';
+    const localPart = email.split('@')[0] || '';
+    const studentMatch = localPart.match(/(?:^|\.)?(\d{2})([a-z]{2})(\d+)$/i);
+    if (studentMatch) {
+      adminUsn = `${studentMatch[1]}${studentMatch[2].toUpperCase()}${studentMatch[3]}`;
+    }
+    return {
+      email,
+      isCollegeEmail: true,
+      isAllowed: true,
+      roleKey: 'admin',
+      role: 'Administrator',
+      canAccessAllDepts: true,
+      deptCode: 'admin',
+      branchId: 'ALL',
+      branch: { id: 'ALL', name: 'All Departments', description: 'Institutional Administration', slug: 'all' },
+      usn: adminUsn,
+      reason: null
+    };
+  }
+
   const isCollegeEmail = email.endsWith('@sode-edu.in');
   const localPart = email.split('@')[0] || '';
-  const isAdmin = ADMIN_EMAILS.has(email);
 
   if (!isCollegeEmail) {
     return {
