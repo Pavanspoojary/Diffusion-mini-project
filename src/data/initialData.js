@@ -989,6 +989,9 @@ export const INITIAL_ANNOUNCEMENTS = [
   }
 ];
 
+export const INTERNAL_GOOGLE_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
+
 export const INITIAL_EVENTS = [
   {
     id: 'evt-algorhythm-2026',
@@ -1005,7 +1008,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 142,
     isRegistered: false,
     qrPayload: 'EVENT_ALGORHYTHM_2026',
-    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
+    link: INTERNAL_GOOGLE_FORM_URL,
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:45 AM', checkOut: 'In Progress', status: 'Checked In' },
       { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '09:50 AM', checkOut: 'In Progress', status: 'Checked In' },
@@ -1028,7 +1031,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 38,
     isRegistered: false,
     qrPayload: 'EVENT_CISC_POSTER_2026',
-    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
+    link: INTERNAL_GOOGLE_FORM_URL,
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:20 AM', checkOut: 'In Progress', status: 'Checked In' },
       { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '09:25 AM', checkOut: 'In Progress', status: 'Checked In' }
@@ -1049,7 +1052,7 @@ export const INITIAL_EVENTS = [
     registeredCount: 94,
     isRegistered: false,
     qrPayload: 'EVENT_CMR_HACKFEST_2027',
-    link: 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor',
+    link: INTERNAL_GOOGLE_FORM_URL,
     attendance: [
       { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:10 AM', checkOut: 'In Progress', status: 'Checked In' }
     ]

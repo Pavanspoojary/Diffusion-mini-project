@@ -1,8 +1,7 @@
 // sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState } from 'react';
 import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
-
-const INTERNAL_GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
+import { INTERNAL_GOOGLE_FORM_URL } from '../data/initialData';
 
 export default function EventsView({
   events,

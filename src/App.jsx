@@ -30,6 +30,7 @@ import {
   USERS,
   INITIAL_ANNOUNCEMENTS,
   INITIAL_EVENTS,
+  INTERNAL_GOOGLE_FORM_URL,
   INITIAL_WEBSITES,
   INITIAL_NOTIFICATIONS,
   INITIAL_LECTURERS
@@ -193,8 +194,6 @@ export default function App({ isClerkConfigured = false }) {
       return INITIAL_ANNOUNCEMENTS;
     }
   });
-
-  const INTERNAL_GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
 
   const [events, setEvents] = useState(() => {
     try {
