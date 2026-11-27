@@ -122,6 +122,34 @@ export const USERS = {
 
 export const INITIAL_ANNOUNCEMENTS = [
   {
+    id: 'post-algorhythm-2026',
+    author: 'Campus Events Office',
+    authorRole: 'Event Coordinator',
+    handle: '@campus_events',
+    department: 'Student Welfare & Cultural Affairs',
+    verified: true,
+    verifiedType: 'blue',
+    avatarChar: 'E',
+    avatarBg: '#00897b',
+    branch: 'ALL',
+    category: 'Club',
+    isImportant: true,
+    time: 'Just now',
+    timestamp: Date.now(),
+    articleTitle: 'Introducing ALGO RHYTHM 2K26: A Day of Talent, Rhythm and Celebration',
+    text: 'The vibe. The energy. The rhythm. Introducing ALGO RHYTHM 2K26 — where creativity meets culture and memories turn iconic. Join us on November 7, 2026, from 10:00 AM to 4:30 PM at the Open Air Auditorium. Scan to register and get ready for music, dance, and campus celebration.',
+    media: '/events/algo-rhythm-2026.jpg',
+    mediaKind: 'image',
+    linkUrl: 'https://www.instagram.com/reel/De9IDZuyW5v/?rpxt=MWw4amx3ZnN6dWVxag==',
+    linkLabel: 'Watch Fest Teaser on Instagram',
+    replies: 0,
+    reposts: 12,
+    likes: 48,
+    views: '1.1K',
+    isLiked: false,
+    isBookmarked: false
+  },
+  {
     id: 'post-1',
     author: 'Faculty Coordinator',
     authorRole: 'Faculty',
@@ -305,6 +333,24 @@ export const INITIAL_ANNOUNCEMENTS = [
 ];
 
 export const INITIAL_EVENTS = [
+  {
+    id: 'evt-algorhythm-2026',
+    type: 'internal',
+    title: 'Algo-Rhythm 2026: Annual Cultural & Talent Fest',
+    organizer: 'Student Welfare & Cultural Committee, SMVITM',
+    date: 'Nov 07, 2026',
+    time: '10:00 AM - 04:30 PM',
+    venue: 'College Open Air Auditorium',
+    poster: '/events/algo-rhythm-2026.jpg',
+    deadline: 'Nov 06, 2026 05:00 PM',
+    description: 'The vibe. The energy. The rhythm. Introducing ALGO RHYTHM 2K26 — where creativity meets culture and memories turn iconic. A day of talent, rhythm, and celebration at the Open Air Auditorium.',
+    maxCapacity: 800,
+    registeredCount: 142,
+    isRegistered: false,
+    qrPayload: 'EVENT_ALGORHYTHM_2026',
+    link: 'https://www.instagram.com/reel/De9IDZuyW5v/?rpxt=MWw4amx3ZnN6dWVxag==',
+    attendance: []
+  },
   {
     id: 'evt-1',
     type: 'internal',

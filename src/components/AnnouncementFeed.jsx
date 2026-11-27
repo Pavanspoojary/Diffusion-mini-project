@@ -15,7 +15,8 @@ import {
   IconCopy,
   IconWhatsApp,
   IconArticle,
-  IconPin
+  IconPin,
+  IconTrash
 } from './Icons';
 import LinkedInComposer from './LinkedInComposer';
 import CommunityHeader from './CommunityHeader';
@@ -207,12 +208,14 @@ export default function AnnouncementFeed({
   unreadCount = 0,
   onOpenNotifications,
   isHeaderHidden = false,
-  onTogglePin
+  onTogglePin,
+  onDeleteNotice
 }) {
   const canPublish = currentUser.roleKey !== 'student';
   const canManagePin = currentUser?.roleKey !== 'student';
   const [sort, setSort] = useState('Best');
   const [activeShareId, setActiveShareId] = useState(null);
+  const [confirmDeleteNotice, setConfirmDeleteNotice] = useState(null);
 
   const activeCommunity = activeBranch !== 'ALL'
     ? BRANCHES.find((b) => b.id === activeBranch)
@@ -387,6 +390,14 @@ export default function AnnouncementFeed({
         ) : (
           sortedAnnouncements.map((item) => {
             const isItemImportant = Boolean(item.isImportant || item.important || item.tag === 'Important');
+            const canDelete = Boolean(
+              onDeleteNotice && currentUser && (
+                currentUser.roleKey === 'admin' ||
+                item.userId === currentUser.id ||
+                item.handle === currentUser.handle ||
+                item.author === currentUser.name
+              )
+            );
             return (
               <article key={item.id} className={`post-card ${isItemImportant ? 'is-important' : ''}`}>
                 <div className="post-avatar-col">
@@ -574,6 +585,25 @@ export default function AnnouncementFeed({
                       onClose={() => setActiveShareId(null)}
                     />
                   </div>
+
+                  {/* Delete notice action (author or admin only) */}
+                  {canDelete && (
+                    <button
+                      type="button"
+                      className="x-action-btn x-delete"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConfirmDeleteNotice(item);
+                      }}
+                      aria-label="Delete notice"
+                      title="Delete notice"
+                    >
+                      <span className="x-action-icon-wrap">
+                        <IconTrash />
+                      </span>
+                      <span className="x-action-count">Delete</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </article>
@@ -581,6 +611,37 @@ export default function AnnouncementFeed({
         })
         )}
       </section>
+
+      {/* Delete Notice Confirmation Modal */}
+      {confirmDeleteNotice && (
+        <div className="confirm-modal-overlay" onClick={() => setConfirmDeleteNotice(null)}>
+          <div className="confirm-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h3 className="confirm-modal-title">Delete notice?</h3>
+            <p className="confirm-modal-desc">
+              This notice will be permanently removed from the announcements feed. This action cannot be undone.
+            </p>
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="btn-confirm-delete"
+                onClick={() => {
+                  onDeleteNotice(confirmDeleteNotice.id);
+                  setConfirmDeleteNotice(null);
+                }}
+              >
+                Delete Notice
+              </button>
+              <button
+                type="button"
+                className="btn-confirm-cancel"
+                onClick={() => setConfirmDeleteNotice(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

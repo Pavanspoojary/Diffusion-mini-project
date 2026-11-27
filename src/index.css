@@ -476,6 +476,16 @@ html[data-theme="light"] .auth-hero-x-logo {
   transition: background-color 0.15s ease;
 }
 
+.dropdown-item svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  flex-shrink: 0 !important;
+}
+
 .dropdown-item:hover {
   background-color: var(--bg-hover);
 }
@@ -1521,6 +1531,36 @@ html[data-theme="light"] .community-live-pill {
 .li-icon-lg {
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.icon-default {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.icon-sm {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.tool-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.dir-icon {
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
 }
 
@@ -2931,9 +2971,10 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 .post-actions-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   margin-top: 12px;
   margin-left: -8px;
-  gap: 12px;
+  gap: 6px 12px;
 }
 
 .x-action-btn {
@@ -3021,11 +3062,25 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 .x-share.active { color: var(--accent-color); }
 .x-share.active .x-action-icon-wrap { background-color: var(--accent-subtle); }
 
+/* Delete notice */
+.x-delete:hover { color: #f4212e; }
+.x-delete:hover .x-action-icon-wrap { background-color: rgba(244, 33, 46, 0.1); }
+[data-theme="dark"] .x-action-btn.x-delete:hover,
+[data-theme="dim"] .x-action-btn.x-delete:hover {
+  color: #f4212e;
+}
+[data-theme="dark"] .x-action-btn.x-delete:hover .x-action-icon-wrap,
+[data-theme="dim"] .x-action-btn.x-delete:hover .x-action-icon-wrap {
+  background-color: rgba(244, 33, 46, 0.15);
+}
+
 .post-share-popover {
   position: absolute;
   bottom: calc(100% + 8px);
   right: 0;
-  min-width: 200px;
+  min-width: 190px;
+  max-width: 240px;
+  width: max-content;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 14px;
@@ -3068,7 +3123,13 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 }
 
 .share-menu-item svg {
-  flex-shrink: 0;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  flex-shrink: 0 !important;
 }
 
 /* Event Specific Cards */
@@ -3089,6 +3150,29 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 12px;
+}
+
+.btn-event-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.btn-event-delete:hover {
+  color: #f4212e;
+  border-color: rgba(244, 33, 46, 0.4);
+  background-color: rgba(244, 33, 46, 0.08);
 }
 
 .event-title {
@@ -3110,12 +3194,6 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   background-color: rgba(0, 186, 124, 0.15);
   color: #00ba7c;
   border: 1px solid #00ba7c;
-}
-
-.badge-external {
-  background-color: rgba(120, 86, 255, 0.15);
-  color: #7856ff;
-  border: 1px solid #7856ff;
 }
 
 .event-meta-grid {
@@ -3921,38 +3999,222 @@ dialog::backdrop {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-.qr-canvas-box canvas, .qr-canvas-box img {
+.qr-canvas-box canvas, .qr-canvas-box img, .qr-code-img {
   display: block;
+  width: 170px;
+  height: 170px;
+  object-fit: contain;
+}
+
+.qr-helper-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Attendance Roster Summary */
+.attendance-roster-section {
+  width: 100%;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.attendance-roster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.attendance-roster-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.attendance-export-btn {
+  font-size: 12px !important;
+  padding: 5px 12px !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.attendance-table-container {
+  width: 100%;
+  max-width: 100%;
+  max-height: 220px;
+  min-height: 180px;
+  overflow-y: auto;
+  overflow-x: hidden !important; /* Disables horizontal scroll completely */
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--card-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.attendance-logs-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 0;
+}
+
+.attendance-col-usn { width: 23%; }
+.attendance-col-name { width: 23%; }
+.attendance-col-in { width: 18%; }
+.attendance-col-out { width: 18%; }
+.attendance-col-status { width: 18%; }
+
+.attendance-logs-table th,
+.attendance-logs-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attendance-logs-table th {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background-color: var(--card-bg);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 1px 0 var(--border-color);
+}
+
+.attendance-th-in,
+.attendance-th-out,
+.attendance-cell-in,
+.attendance-cell-out {
+  text-align: center !important;
+}
+
+.attendance-th-status,
+.attendance-cell-status {
+  text-align: right !important;
+}
+
+.attendance-cell-usn {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.attendance-cell-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.attendance-cell-in,
+.attendance-cell-out {
+  font-size: 11px;
+  color: var(--text-secondary);
 }
 
 .qr-status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   background-color: rgba(0, 186, 124, 0.15);
   color: #00ba7c;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 4px 14px;
+  padding: 3px 8px;
   border-radius: 9999px;
+  white-space: nowrap;
 }
 
-.attendance-logs-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 12px;
-  font-size: 13px;
-}
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .qr-modal-body {
+    padding: 10px 6px 14px 6px;
+    gap: 10px;
+  }
 
-.attendance-logs-table th, .attendance-logs-table td {
-  padding: 8px 12px;
-  text-align: left;
-  border-bottom: 1px solid var(--border-color);
-}
+  .qr-canvas-box {
+    padding: 10px;
+  }
 
-.attendance-logs-table th {
-  color: var(--text-secondary);
-  font-weight: 700;
+  .qr-canvas-box canvas, .qr-canvas-box img, .qr-code-img {
+    width: 125px !important;
+    height: 125px !important;
+  }
+
+  .qr-helper-text {
+    font-size: 11px;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .attendance-roster-section {
+    margin-top: 10px;
+  }
+
+  .attendance-roster-title {
+    font-size: 13px;
+  }
+
+  .attendance-export-btn {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+
+  .attendance-table-container {
+    max-height: 200px;
+    min-height: 172px; /* comfortably displays 4 student rows at once */
+    overflow-x: hidden !important;
+  }
+
+  .attendance-logs-table {
+    font-size: 11px;
+  }
+
+  .attendance-col-usn { width: 23%; }
+  .attendance-col-name { width: 22%; }
+  .attendance-col-in { width: 18%; }
+  .attendance-col-out { width: 18%; }
+  .attendance-col-status { width: 19%; }
+
+  .attendance-logs-table th,
+  .attendance-logs-table td {
+    padding: 6px 3px;
+  }
+
+  .attendance-logs-table th {
+    font-size: 9.5px;
+    letter-spacing: 0;
+  }
+
+  .attendance-cell-usn {
+    font-size: 10px;
+  }
+
+  .attendance-cell-name {
+    font-size: 10.5px;
+  }
+
+  .attendance-cell-in,
+  .attendance-cell-out {
+    font-size: 9.5px;
+  }
+
+  .qr-status-pill {
+    font-size: 9.5px;
+    padding: 2px 5px;
+    font-weight: 700;
+  }
 }
 
 /* Display modal */
@@ -5636,4 +5898,96 @@ dialog::backdrop {
 .bookmarks-search-clear:hover {
   color: var(--text-primary);
 }
+
+/* ==========================================================================
+   Destructive Action Confirmation Modal
+   ========================================================================== */
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.confirm-modal-box {
+  background-color: var(--dialog-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 360px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: scaleIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.confirm-modal-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.confirm-modal-desc {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.btn-confirm-delete {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 9999px;
+  border: none;
+  background-color: #f4212e;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.05s ease;
+}
+
+.btn-confirm-delete:hover {
+  background-color: #dc1e29;
+}
+
+.btn-confirm-delete:active {
+  transform: scale(0.98);
+}
+
+.btn-confirm-cancel {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-confirm-cancel:hover {
+  background-color: var(--bg-hover-subtle);
+}
+
 

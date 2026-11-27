@@ -201,7 +201,7 @@ export async function fetchAnnouncements(currentUserId = 'user-student') {
   } catch (err) {
     console.info('[Supabase:fetchAnnouncements fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_notices_v3');
+      const saved = localStorage.getItem('college_hub_notices_v4') || localStorage.getItem('college_hub_notices_v3');
       if (saved) return JSON.parse(saved);
     } catch {}
     return INITIAL_ANNOUNCEMENTS;
@@ -222,6 +222,20 @@ export async function createAnnouncement(newNotice) {
   } catch (err) {
     console.warn('[Supabase:createAnnouncement fallback to local]', err.message);
     return newNotice;
+  }
+}
+
+export async function deleteAnnouncementFromDB(noticeId) {
+  try {
+    const { error } = await supabase
+      .from('announcements')
+      .delete()
+      .eq('id', noticeId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Supabase:deleteAnnouncement fallback]', err.message);
+    return false;
   }
 }
 
@@ -344,7 +358,7 @@ export async function fetchEvents(currentUserId = 'user-student') {
   } catch (err) {
     console.info('[Supabase:fetchEvents fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_events_v2');
+      const saved = localStorage.getItem('college_hub_events_v3') || localStorage.getItem('college_hub_events_v2');
       if (saved) return JSON.parse(saved);
     } catch {}
     return INITIAL_EVENTS;
@@ -360,6 +374,20 @@ export async function createEvent(newEvent) {
   } catch (err) {
     console.warn('[Supabase:createEvent fallback to local]', err.message);
     return newEvent;
+  }
+}
+
+export async function deleteEventFromDB(eventId) {
+  try {
+    const { error } = await supabase
+      .from('events')
+      .delete()
+      .eq('id', eventId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.warn('[Supabase:deleteEvent fallback]', err.message);
+    return false;
   }
 }
 

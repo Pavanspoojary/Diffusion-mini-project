@@ -142,48 +142,54 @@ export default function QRAttendanceModal({
           {isCoordinator ? (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div className="qr-canvas-box">
-                {qrDataUrl && <img src={qrDataUrl} alt="Event QR Code" style={{ width: 190, height: 190 }} />}
+                {qrDataUrl && <img src={qrDataUrl} alt="Event QR Code" className="qr-code-img" />}
               </div>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 8 }}>
+              <span className="qr-helper-text">
                 Students scan this QR code on entry & exit to record timestamped attendance.
               </span>
 
               {/* Attendance Roster Summary */}
-              <div style={{ width: '100%', marginTop: 20, textAlign: 'left' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <h4 style={{ fontSize: 15, fontWeight: 700 }}>
+              <div className="attendance-roster-section">
+                <div className="attendance-roster-header">
+                  <h4 className="attendance-roster-title">
                     Live Attendance Roster ({event.attendance?.length || 0} Registered)
                   </h4>
                   <button
                     type="button"
-                    className="btn-primary-post"
+                    className="btn-primary-post attendance-export-btn"
                     onClick={handleExportCSV}
-                    style={{ fontSize: 12, padding: '5px 12px' }}
                   >
                     Export CSV Report
                   </button>
                 </div>
 
-                <div style={{ maxHeight: 200, overflowY: 'auto', border: '1px solid var(--border-color)', borderRadius: 10 }}>
+                <div className="attendance-table-container">
                   <table className="attendance-logs-table">
+                    <colgroup>
+                      <col className="attendance-col-usn" />
+                      <col className="attendance-col-name" />
+                      <col className="attendance-col-in" />
+                      <col className="attendance-col-out" />
+                      <col className="attendance-col-status" />
+                    </colgroup>
                     <thead>
                       <tr>
-                        <th>USN</th>
-                        <th>Name</th>
-                        <th>Check-In</th>
-                        <th>Check-Out</th>
-                        <th>Status</th>
+                        <th className="attendance-th-usn">USN</th>
+                        <th className="attendance-th-name">Name</th>
+                        <th className="attendance-th-in">Check-In</th>
+                        <th className="attendance-th-out">Check-Out</th>
+                        <th className="attendance-th-status">Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {event.attendance && event.attendance.length > 0 ? (
                         event.attendance.map((record) => (
                           <tr key={record.usn}>
-                            <td style={{ fontFamily: 'monospace', color: 'var(--accent-color)' }}>{record.usn}</td>
-                            <td>{record.name}</td>
-                            <td>{record.checkIn}</td>
-                            <td>{record.checkOut}</td>
-                            <td>
+                            <td className="attendance-cell-usn">{record.usn}</td>
+                            <td className="attendance-cell-name" title={record.name}>{record.name}</td>
+                            <td className="attendance-cell-in">{record.checkIn}</td>
+                            <td className="attendance-cell-out">{record.checkOut}</td>
+                            <td className="attendance-cell-status">
                               <span className="qr-status-pill">{record.status}</span>
                             </td>
                           </tr>
