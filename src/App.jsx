@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth, useUser, useClerk } from '@clerk/react';
 import { parseCollegeEmail, canAccessCommunity } from './utils/collegeAuth';
+import { cleanInstagramUrl } from './utils/urlUtils';
 import LeftSidebar from './components/LeftSidebar';
 import RightSidebar from './components/RightSidebar';
 import AnnouncementFeed from './components/AnnouncementFeed';
@@ -238,13 +239,18 @@ export default function App({ isClerkConfigured = false }) {
     try {
       localStorage.removeItem('college_hub_websites_v8');
       localStorage.removeItem('college_hub_websites_v9');
-      const saved = localStorage.getItem('college_hub_websites_v10');
+      localStorage.removeItem('college_hub_websites_v10');
+      const saved = localStorage.getItem('college_hub_websites_v11');
       if (saved) {
         const parsed = JSON.parse(saved);
         const map = new Map();
-        INITIAL_WEBSITES.forEach((w) => map.set(w.id, w));
+        INITIAL_WEBSITES.forEach((w) => map.set(w.id, { ...w, url: cleanInstagramUrl(w.url) }));
         parsed.forEach((w) => {
-          if (w && w.id) map.set(w.id, { ...map.get(w.id), ...w });
+          if (w && w.id) {
+            const merged = { ...map.get(w.id), ...w };
+            merged.url = cleanInstagramUrl(merged.url);
+            map.set(w.id, merged);
+          }
         });
         return Array.from(map.values());
       }
@@ -364,7 +370,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_websites_v10', JSON.stringify(websites));
+      localStorage.setItem('college_hub_websites_v11', JSON.stringify(websites));
     } catch {}
   }, [websites]);
 

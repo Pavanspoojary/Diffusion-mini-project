@@ -3712,12 +3712,23 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   box-sizing: border-box;
 }
 
+.web-card-icon.web-card-icon-app {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
 .web-card-logo-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 4px;
   display: block;
+}
+
+.web-card-icon.web-card-icon-app .web-card-logo-img {
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .web-card:hover .web-card-icon {

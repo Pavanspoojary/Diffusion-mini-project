@@ -797,7 +797,7 @@ export const INITIAL_ANNOUNCEMENTS = [
     text: 'The vibe. The energy. The rhythm. Introducing ALGO RHYTHM 2K26 — where creativity meets culture and memories turn iconic. Join us on November 7, 2026, from 10:00 AM to 4:30 PM at the Open Air Auditorium. Scan to register and get ready for music, dance, and campus celebration.',
     media: '/events/algo-rhythm-2026.jpg',
     mediaKind: 'image',
-    linkUrl: 'https://www.instagram.com/reel/De9IDZuyW5v/?rpxt=MWw4amx3ZnN6dWVxag==',
+    linkUrl: 'https://www.instagram.com/reel/De9IDZuyW5v/',
     linkLabel: 'Watch Fest Teaser on Instagram',
     replies: 0,
     reposts: 12,
@@ -1086,7 +1086,7 @@ export const INITIAL_EVENTS = [
 ];
 
 export const PORTAL_LOGOS = {
-  'web-1': '/portals/printin.png',
+  'web-1': '/portals/printin.svg',
   'web-2': '/portals/edmin.png',
   'web-3': '/portals/vtu.png',
   'web-4': '/portals/library.png',
@@ -1122,7 +1122,7 @@ export const INITIAL_WEBSITES = [
     url: 'https://printin.buildwithtba.in/',
     badge: 'Campus Service',
     iconType: 'printer',
-    logo: '/portals/printin.png'
+    logo: '/portals/printin.svg'
   },
   {
     id: 'web-2',
@@ -1249,7 +1249,7 @@ export const INITIAL_WEBSITES = [
     name: 'SMVITM Official Instagram',
     category: 'Social Media',
     description: 'Official Instagram handle of Shri Madhwa Vadiraja Institute of Technology & Management (SMVITM), Bantakal. Campus updates, announcements, and events.',
-    url: 'https://www.instagram.com/smvitm.sode?lqvp=cjh3dm13dzlzdnJs',
+    url: 'https://www.instagram.com/smvitm.sode/',
     badge: 'Official Instagram',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1259,7 +1259,7 @@ export const INITIAL_WEBSITES = [
     name: 'UTKARSH SMVITM',
     category: 'Social Media',
     description: 'Official Instagram page of Utkarsh — the cultural, literary, and student talent club of SMVITM.',
-    url: 'https://www.instagram.com/utkarsh.smvitm?knvt=MXA3bmQzNjVrMDE2bA==',
+    url: 'https://www.instagram.com/utkarsh.smvitm/',
     badge: 'Cultural Club',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1269,7 +1269,7 @@ export const INITIAL_WEBSITES = [
     name: 'SPL SMVITM (Premier League)',
     category: 'Social Media',
     description: 'Official Instagram account for SMVITM Premier League — cricket tournament fixtures, player auctions, and live match scores.',
-    url: 'https://www.instagram.com/spl.smvitm?dmpr=MTR4M3Z5OTd1N2c0dg==',
+    url: 'https://www.instagram.com/spl.smvitm/',
     badge: 'Sports League',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1279,7 +1279,7 @@ export const INITIAL_WEBSITES = [
     name: 'AIKYA SMVITM',
     category: 'Social Media',
     description: 'Official Instagram page of Aikya SMVITM — youth forum for community service, cultural unity, and social awareness.',
-    url: 'https://www.instagram.com/aikya.smvitm?lqvp=MXRqZmFnbjZxOWQ0MQ==',
+    url: 'https://www.instagram.com/aikya.smvitm/',
     badge: 'Youth Forum',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1289,7 +1289,7 @@ export const INITIAL_WEBSITES = [
     name: 'CODE TROOPERS',
     category: 'Social Media',
     description: 'Student coding community and developer club of Computer Science & Engineering department at SMVITM.',
-    url: 'https://www.instagram.com/code.troopers?evlk=MTg1bGkwOWM3Ymo2aw==',
+    url: 'https://www.instagram.com/code.troopers/',
     badge: 'Tech Community',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1299,7 +1299,7 @@ export const INITIAL_WEBSITES = [
     name: 'MBA SMVITM',
     category: 'Social Media',
     description: 'Official Instagram page for Department of Management Studies (MBA) at SMVITM Bantakal.',
-    url: 'https://www.instagram.com/mba.smvitm?cnvx=bWppcGt4bGlpdGJk',
+    url: 'https://www.instagram.com/mba.smvitm/',
     badge: 'MBA Dept',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1309,7 +1309,7 @@ export const INITIAL_WEBSITES = [
     name: 'VARNOTHSAVA 2026',
     category: 'Social Media',
     description: 'Official Instagram handle for Varnothsava 2026 — the annual national-level intercollegiate techno-cultural fest of SMVITM.',
-    url: 'https://www.instagram.com/varnothsava.2026?knvt=MWxobDdpOGVvZWtxdA==',
+    url: 'https://www.instagram.com/varnothsava.2026/',
     badge: 'Cultural Fest',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1319,7 +1319,7 @@ export const INITIAL_WEBSITES = [
     name: 'NIRAMAYA SMVITM',
     category: 'Social Media',
     description: 'Official Instagram account of Niramaya — student health, wellness, hygiene awareness, and blood donation wing of SMVITM.',
-    url: 'https://www.instagram.com/niramayabantakal?jplx=MXFyM2YzcDNtenR0dw==',
+    url: 'https://www.instagram.com/niramayabantakal/',
     badge: 'Health & Wellness',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1329,7 +1329,7 @@ export const INITIAL_WEBSITES = [
     name: 'TECHNOCRATORS ECE',
     category: 'Social Media',
     description: 'Official Instagram page of Technocrators, the Electronics & Communication Engineering student association of SMVITM.',
-    url: 'https://www.instagram.com/technocrators_ece?fqnt=a2xjMXViamVyYXFn',
+    url: 'https://www.instagram.com/technocrators_ece/',
     badge: 'ECE Association',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1339,7 +1339,7 @@ export const INITIAL_WEBSITES = [
     name: 'THE LEGITTS 2026',
     category: 'Social Media',
     description: 'Official Instagram account for The Legitts (Batch of 2026) student community, celebrations, and campus memories.',
-    url: 'https://www.instagram.com/the_legittts_2026?lqvp=MXE5NGI0c2g2aTR0aA==',
+    url: 'https://www.instagram.com/the_legittts_2026/',
     badge: 'Student Community',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1349,7 +1349,7 @@ export const INITIAL_WEBSITES = [
     name: 'MOTOMANIA 2K26',
     category: 'Social Media',
     description: 'Official Instagram page of Motomania — the automotive and mechanical engineering enthusiast club of SMVITM.',
-    url: 'https://www.instagram.com/motomania_2k26?fqnt=MTA4Znl1djdnZGlwOQ==',
+    url: 'https://www.instagram.com/motomania_2k26/',
     badge: 'Auto & Mech Club',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
@@ -1359,7 +1359,7 @@ export const INITIAL_WEBSITES = [
     name: 'IGNITE AI&DS',
     category: 'Social Media',
     description: 'Official Instagram page of Ignite — Department of Artificial Intelligence & Data Science student association at SMVITM.',
-    url: 'https://www.instagram.com/ignite.ai_ds?lqvp=Nzdud3l5Z2w0MTJ3',
+    url: 'https://www.instagram.com/ignite.ai_ds/',
     badge: 'AI&DS Forum',
     iconType: 'instagram',
     logo: '/portals/instagram.svg'
