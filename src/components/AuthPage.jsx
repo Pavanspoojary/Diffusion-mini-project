@@ -132,9 +132,18 @@ export default function AuthPage({
 
         {/* Right Content Section */}
         <div className="auth-content-col">
-          {/* Top Mobile Logo */}
+          {/* Top Mobile Brand Header */}
           <div className="auth-mobile-logo-bar">
-            <XLogo className="auth-mobile-logo smvitm-brand-logo" style={{ width: 44, height: 44 }} />
+            <XLogo className="auth-mobile-logo smvitm-brand-logo" style={{ width: 56, height: 56 }} />
+            <div className="auth-mobile-brand-meta">
+              <span className="auth-mobile-institution-name">SMVITM Campus Hub</span>
+              <span className="auth-mobile-institution-dept">Bantakal, Udupi</span>
+            </div>
+          </div>
+
+          <div className="auth-hero-badge">
+            <span className="auth-hero-badge-dot"></span>
+            Official Institutional Portal
           </div>
 
           <h1 className="auth-main-heading">Happening now</h1>
