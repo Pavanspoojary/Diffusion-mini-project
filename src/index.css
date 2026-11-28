@@ -730,13 +730,13 @@ html[data-theme="light"] .auth-mobile-logo {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 9999px;
+  padding: 5px 11px;
+  border-radius: 8px;
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12.5px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
@@ -791,15 +791,15 @@ html[data-theme="light"] .auth-mobile-logo {
 }
 
 .feed-filter-label {
-  color: var(--text-secondary);
-  font-size: 12px;
+  color: var(--text-muted);
+  font-size: 11.5px;
   font-weight: 500;
 }
 
 .feed-filter-value {
   color: var(--text-primary);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .feed-filter-btn.highlighted .feed-filter-value {
@@ -2642,22 +2642,22 @@ html[data-theme="light"] .li-schedule-input {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: rgba(244, 33, 46, 0.12);
-  border: 1px solid rgba(244, 33, 46, 0.35);
-  color: #f4212e;
-  padding: 3px 8px;
+  background-color: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #d97706;
+  padding: 3px 9px;
   border-radius: 6px;
   font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   margin-bottom: 8px;
   width: fit-content;
 }
 
 html[data-theme="light"] .post-important-badge {
-  background-color: #fee2e2;
-  border-color: #fca5a5;
-  color: #dc2626;
+  background-color: #fefce8;
+  border-color: #fef08a;
+  color: #a16207;
 }
 
 .post-important-badge svg {
@@ -2665,11 +2665,11 @@ html[data-theme="light"] .post-important-badge {
 }
 
 .post-important-pill {
-  background-color: #f4212e;
+  background-color: #f59e0b;
   color: #ffffff;
-  font-size: 9px;
-  font-weight: 800;
-  padding: 1px 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1px 6px;
   border-radius: 4px;
   letter-spacing: 0.04em;
   margin-left: 2px;
@@ -2744,10 +2744,10 @@ html[data-theme="light"] .post-important-badge {
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
-  padding: 2px 9px;
-  border-radius: 9999px;
+  padding: 2px 8px;
+  border-radius: 6px;
   line-height: 1.35;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -2755,97 +2755,97 @@ html[data-theme="light"] .post-important-badge {
 }
 
 .category-badge:hover {
-  filter: brightness(1.15);
+  filter: brightness(0.96);
   transform: translateY(-0.5px);
 }
 
-/* Academic - Warm Coral / Terracotta (Zero blue) */
+/* Academic - Terracotta */
 .category-badge.cat-academic {
-  background-color: rgba(255, 112, 67, 0.16);
-  border-color: rgba(255, 112, 67, 0.45);
-  color: #ff8a65;
+  background-color: rgba(234, 88, 12, 0.1);
+  border-color: rgba(234, 88, 12, 0.25);
+  color: #ea580c;
 }
 html[data-theme="light"] .category-badge.cat-academic {
-  background-color: #fbe9e7;
-  border-color: #ffccbc;
-  color: #d84315;
+  background-color: #fff7ed;
+  border-color: #ffedd5;
+  color: #c2410c;
 }
 
-/* Exam - Amber / Golden Orange */
+/* Exam - Amber / Ochre */
 .category-badge.cat-exam {
-  background-color: rgba(245, 158, 11, 0.16);
-  border-color: rgba(245, 158, 11, 0.45);
-  color: #fbbf24;
+  background-color: rgba(217, 119, 6, 0.1);
+  border-color: rgba(217, 119, 6, 0.25);
+  color: #d97706;
 }
 html[data-theme="light"] .category-badge.cat-exam {
-  background-color: #fef3c7;
-  border-color: #fde68a;
-  color: #b45309;
+  background-color: #fefce8;
+  border-color: #fef08a;
+  color: #a16207;
 }
 
-/* Club - Royal Purple */
+/* Club - Violet */
 .category-badge.cat-club {
-  background-color: rgba(168, 85, 247, 0.16);
-  border-color: rgba(168, 85, 247, 0.45);
-  color: #c084fc;
+  background-color: rgba(147, 51, 234, 0.1);
+  border-color: rgba(147, 51, 234, 0.25);
+  color: #9333ea;
 }
 html[data-theme="light"] .category-badge.cat-club {
-  background-color: #f3e8ff;
-  border-color: #e9d5ff;
+  background-color: #faf5ff;
+  border-color: #f3e8ff;
   color: #7e22ce;
 }
 
-/* Workshop - Electric Magenta / Hot Pink (Distinct from all other tags) */
+/* Workshop - Rose */
 .category-badge.cat-workshop {
-  background-color: rgba(249, 24, 128, 0.16);
-  border-color: rgba(249, 24, 128, 0.45);
-  color: #ff60a8;
+  background-color: rgba(225, 29, 72, 0.1);
+  border-color: rgba(225, 29, 72, 0.25);
+  color: #e11d48;
 }
 html[data-theme="light"] .category-badge.cat-workshop {
-  background-color: #fdf2f8;
-  border-color: #fbcfe8;
-  color: #db2777;
+  background-color: #fff1f2;
+  border-color: #ffe4e6;
+  color: #be123c;
 }
 
-/* Hackathon - Electric Lime (Distinct from Red Alerts & Blue Communities) */
+/* Hackathon - Indigo */
 .category-badge.cat-hackathon {
-  background-color: rgba(163, 230, 53, 0.16);
-  border-color: rgba(163, 230, 53, 0.45);
-  color: #a3e635;
+  background-color: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: #6366f1;
 }
 html[data-theme="light"] .category-badge.cat-hackathon {
-  background-color: #ecfccb;
-  border-color: #d9f99d;
-  color: #4d7c0f;
+  background-color: #eef2ff;
+  border-color: #e0e7ff;
+  color: #4338ca;
 }
 
-/* Placement - Emerald Green */
+/* Placement - Emerald */
 .category-badge.cat-placement {
-  background-color: rgba(0, 186, 124, 0.16);
-  border-color: rgba(0, 186, 124, 0.45);
-  color: #34d399;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #10b981;
 }
 html[data-theme="light"] .category-badge.cat-placement {
-  background-color: #d1fae5;
-  border-color: #a7f3d0;
+  background-color: #ecfdf5;
+  border-color: #d1fae5;
   color: #047857;
 }
 
-/* General / Fallback Categories - Cool Slate (Zero blue) */
+/* General / Fallbacks - Neutral Slate */
 .category-badge.cat-general,
 .category-badge.cat-career,
 .category-badge.cat-university,
 .category-badge.cat-studentutilities {
-  background-color: rgba(148, 163, 184, 0.16);
-  border-color: rgba(148, 163, 184, 0.4);
-  color: #cbd5e1;
+  background-color: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #94a3b8;
 }
 html[data-theme="light"] .category-badge.cat-general,
 html[data-theme="light"] .category-badge.cat-career,
 html[data-theme="light"] .category-badge.cat-university,
 html[data-theme="light"] .category-badge.cat-studentutilities {
-  background-color: #f1f5f9;
-  border-color: #cbd5e1;
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
   color: #475569;
 }
 
@@ -2994,45 +2994,58 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 12px;
-  margin-left: -8px;
-  gap: 6px 12px;
+  margin-top: 10px;
+  gap: 6px 14px;
 }
 
 .x-action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 0;
-  background: none;
+  gap: 5px;
+  padding: 4px 8px;
+  background: transparent;
   border: none;
   cursor: pointer;
   border-radius: 9999px;
   color: var(--text-secondary);
-  transition: color 0.15s ease;
-  min-width: 52px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.x-action-btn:hover {
+  background-color: var(--bg-hover-subtle);
+  color: var(--text-primary);
 }
 
 .x-action-icon-wrap {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease;
 }
 
 .x-action-icon-wrap svg {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
 }
 
 .x-action-count {
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 12.5px;
+  font-weight: 500;
   line-height: 1;
-  min-width: 18px;
+}
+
+.x-action-btn.pinned {
+  color: #d97706;
+}
+
+.x-action-btn.bookmarked {
+  color: var(--accent-color);
+}
+
+.x-action-btn.x-delete:hover {
+  color: #f4212e;
 }
 
 /* Reply: blue */
@@ -3990,13 +4003,13 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 .reddit-sub-badge {
   font-family: inherit;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1;
-  padding: 3px 8px 3px 4px;
-  border-radius: 9999px;
-  background-color: rgba(29, 155, 240, 0.08);
-  color: var(--accent-color);
-  border: 1px solid rgba(29, 155, 240, 0.28);
+  padding: 2.5px 8px 2.5px 5px;
+  border-radius: 6px;
+  background-color: var(--bg-hover-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
   cursor: pointer;
   transition: all 0.15s ease;
   display: inline-flex;
@@ -4006,9 +4019,9 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 }
 
 .reddit-sub-badge:hover {
-  background-color: rgba(29, 155, 240, 0.2);
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
   border-color: var(--accent-color);
-  color: var(--accent-color);
 }
 
 .active-community-banner {
@@ -5246,80 +5259,74 @@ dialog::backdrop {
 
   /* Post Cards Mobile */
   .post-card {
-    padding: 12px 14px;
-    gap: 10px;
-  }
-
-  .post-avatar-col .avatar {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
-  }
-
-  .post-header-line {
-    flex-wrap: wrap;
-    gap: 4px;
+    padding: 14px 16px;
+    gap: 12px;
   }
 
   .post-user-info {
-    font-size: 14px;
-    gap: 4px;
+    font-size: 14.5px;
+    gap: 5px;
+  }
+
+  .post-user-name {
+    font-weight: 700;
+    font-size: 14.5px;
+    letter-spacing: -0.01em;
+  }
+
+  .post-user-handle {
+    font-size: 13px;
+  }
+
+  .post-timestamp {
+    font-size: 13px;
   }
 
   .post-text {
-    font-size: 14px;
-    line-height: 1.45;
+    font-size: 14.5px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
   }
 
   .post-media-container {
-    margin-top: 8px;
+    margin-top: 10px;
     border-radius: 12px;
-    max-height: 340px;
+    max-height: 360px;
   }
 
   .post-actions-row {
     margin-top: 10px;
     display: flex;
-    justify-content: space-between;
-    max-width: 440px;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-start;
   }
 
   .x-action-btn {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 4px 6px;
-    gap: 4px;
+    min-width: unset;
+    min-height: 36px;
+    padding: 4px 8px;
+    gap: 5px;
     border-radius: 9999px;
     -webkit-tap-highlight-color: transparent;
   }
 
   .x-action-btn:active {
-    transform: scale(0.92);
+    transform: scale(0.95);
   }
 
   .x-action-icon-wrap {
-    width: 32px;
-    height: 32px;
+    width: 20px;
+    height: 20px;
   }
 
   .x-action-icon-wrap svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
 
   .x-action-count {
     font-size: 12px;
-  }
-
-  @media (max-width: 440px) {
-    .x-action-btn {
-      min-width: 38px;
-      padding: 2px 4px;
-      gap: 2px;
-    }
-    .x-action-count {
-      font-size: 11px;
-    }
   }
 
   /* Tabs mobile */
