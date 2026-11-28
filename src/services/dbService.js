@@ -8,6 +8,7 @@ import {
   PORTAL_LOGOS,
   USERS
 } from '../data/initialData';
+import { cleanInstagramUrl } from '../utils/urlUtils';
 
 // --- Helpers to Map DB Schema to Frontend State ---
 
@@ -492,14 +493,17 @@ export async function fetchWebsites() {
   } catch (err) {
     console.info('[Supabase:fetchWebsites fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_websites_v10');
+      localStorage.removeItem('college_hub_websites_v10');
+      const saved = localStorage.getItem('college_hub_websites_v11');
       if (saved) {
         const parsed = JSON.parse(saved);
         const mergedMap = new Map();
-        INITIAL_WEBSITES.forEach((w) => mergedMap.set(w.id, w));
+        INITIAL_WEBSITES.forEach((w) => mergedMap.set(w.id, { ...w, url: cleanInstagramUrl(w.url) }));
         parsed.forEach((w) => {
           if (w && w.id) {
-            mergedMap.set(w.id, { ...mergedMap.get(w.id), ...w });
+            const merged = { ...mergedMap.get(w.id), ...w };
+            merged.url = cleanInstagramUrl(merged.url);
+            mergedMap.set(w.id, merged);
           }
         });
         return Array.from(mergedMap.values());

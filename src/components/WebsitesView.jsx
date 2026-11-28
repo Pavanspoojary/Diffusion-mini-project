@@ -20,6 +20,7 @@ import {
   VerifiedBadge
 } from './Icons';
 import { PORTAL_LOGOS, INITIAL_WEBSITES } from '../data/initialData';
+import { cleanInstagramUrl } from '../utils/urlUtils';
 
 function PortalLogoIcon({ site, getSiteIcon }) {
   const [hasError, setHasError] = useState(false);
@@ -161,10 +162,12 @@ export default function WebsitesView({
 
   const displayWebsites = useMemo(() => {
     const map = new Map();
-    (INITIAL_WEBSITES || []).forEach((w) => map.set(w.id, w));
+    (INITIAL_WEBSITES || []).forEach((w) => map.set(w.id, { ...w, url: cleanInstagramUrl(w.url) }));
     (websites || []).forEach((w) => {
       if (w && w.id) {
-        map.set(w.id, { ...map.get(w.id), ...w });
+        const merged = { ...map.get(w.id), ...w };
+        merged.url = cleanInstagramUrl(merged.url);
+        map.set(w.id, merged);
       }
     });
     return Array.from(map.values());
@@ -192,7 +195,8 @@ export default function WebsitesView({
 
   const handleCopy = (site) => {
     try {
-      navigator.clipboard.writeText(site.url);
+      const cleanUrl = cleanInstagramUrl(site.url);
+      navigator.clipboard.writeText(cleanUrl);
       setCopiedId(site.id);
       setTimeout(() => setCopiedId(null), 2000);
     } catch {}
@@ -206,7 +210,7 @@ export default function WebsitesView({
     onAddWebsite({
       name: newSiteName.trim(),
       description: newSiteDesc.trim(),
-      url: newSiteUrl.trim(),
+      url: cleanInstagramUrl(newSiteUrl.trim()),
       category: newSiteCat,
       badge: `${newSiteCat} Portal`,
       iconType: newSiteIcon
@@ -503,7 +507,7 @@ export default function WebsitesView({
                   </button>
 
                   <a
-                    href={site.url}
+                    href={cleanInstagramUrl(site.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="web-launch-btn"
