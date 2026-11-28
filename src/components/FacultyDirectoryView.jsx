@@ -300,6 +300,9 @@ export default function FacultyDirectoryView({
               {filteredLecturers.map((lec) => {
                 const isOwn = canManageLecturer(lec);
                 const topDegree = lec.education?.[0]?.degree;
+                const focusArea = (lec.headline && lec.headline.includes('|'))
+                  ? lec.headline.split('|').slice(1).join('|').trim()
+                  : (lec.about && lec.about !== lec.headline ? lec.about : '');
                 return (
                   <article
                     key={lec.id}
@@ -336,9 +339,11 @@ export default function FacultyDirectoryView({
                         {lec.designation} · {lec.department}
                       </div>
 
-                      <p className="li-dir-headline">
-                        {lec.headline || lec.about}
-                      </p>
+                      {focusArea && (
+                        <p className="li-dir-headline">
+                          {focusArea}
+                        </p>
+                      )}
 
                       {topDegree && (
                         <div className="li-dir-edu-line">
