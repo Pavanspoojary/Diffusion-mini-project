@@ -282,14 +282,12 @@ export const CommunityAvatar = ({ id, size = 36, className = '' }) => {
       return (
         <div
           className={`reddit-avatar-circle ${className}`}
-          style={{ ...containerStyle, backgroundColor: '#ffffff', border: '1.5px solid #cbd5e1' }}
+          style={{ ...containerStyle, backgroundColor: '#00ba7c', color: '#ffffff' }}
         >
-          <div style={{ width: size * 0.62, height: size * 0.62, backgroundColor: '#1e293b', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox="0 0 24 24" width={size * 0.42} height={size * 0.42} fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="7 8 3 12 7 16" />
-              <polyline points="17 8 21 12 17 16" />
-            </svg>
-          </div>
+          <svg viewBox="0 0 24 24" width={size * 0.6} height={size * 0.6} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
         </div>
       );
 
