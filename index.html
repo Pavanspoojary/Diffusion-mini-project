@@ -1,16 +1,36 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-color="blue">
+<html lang="en" data-theme="light" data-color="blue">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="color-scheme" content="dark light">
-  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Campus Hub - Real-time Notices, Events & Resources">
   <title>SMVITM Campus Hub</title>
   <link rel="icon" type="image/png" href="/smvitm-logo.png">
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
+  <script>
+    (function() {
+      try {
+        var explicit = localStorage.getItem('college_hub_theme_explicit');
+        var t = localStorage.getItem('college_hub_theme');
+        // Force light/white theme by default unless user explicitly chose dark in Display settings
+        if (explicit !== 'true' || (t !== 'dark' && t !== 'dim' && t !== 'light')) {
+          t = 'light';
+          localStorage.setItem('college_hub_theme', 'light');
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        var c = localStorage.getItem('college_hub_color') || 'blue';
+        document.documentElement.setAttribute('data-color', c);
+        var metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) {
+          metaTheme.setAttribute('content', t === 'light' ? '#ffffff' : (t === 'dim' ? '#15202b' : '#000000'));
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script>
     // Automatic self-recovery when encountering stale service-worker chunk 404s
     window.addEventListener('error', function(event) {

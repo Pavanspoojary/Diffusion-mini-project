@@ -71,15 +71,18 @@ export default function DisplayModal({
           <div>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)' }}>Background</span>
             <div className="bg-picker-group" style={{ marginTop: 8 }}>
-              <label className={`bg-option bg-default ${theme === 'dark' ? 'active' : ''}`}>
+              <label className={`bg-option bg-light ${theme === 'light' ? 'active' : ''}`}>
                 <input
                   type="radio"
                   name="bgTheme"
-                  value="dark"
-                  checked={theme === 'dark'}
-                  onChange={() => setTheme('dark')}
+                  value="light"
+                  checked={theme === 'light'}
+                  onChange={() => {
+                    try { localStorage.setItem('college_hub_theme_explicit', 'true'); } catch (e) {}
+                    setTheme('light');
+                  }}
                 />
-                <span>Lights out</span>
+                <span>Light</span>
               </label>
 
               <label className={`bg-option bg-dim ${theme === 'dim' ? 'active' : ''}`}>
@@ -88,20 +91,26 @@ export default function DisplayModal({
                   name="bgTheme"
                   value="dim"
                   checked={theme === 'dim'}
-                  onChange={() => setTheme('dim')}
+                  onChange={() => {
+                    try { localStorage.setItem('college_hub_theme_explicit', 'true'); } catch (e) {}
+                    setTheme('dim');
+                  }}
                 />
                 <span>Dim</span>
               </label>
 
-              <label className={`bg-option bg-light ${theme === 'light' ? 'active' : ''}`}>
+              <label className={`bg-option bg-default ${theme === 'dark' ? 'active' : ''}`}>
                 <input
                   type="radio"
                   name="bgTheme"
-                  value="light"
-                  checked={theme === 'light'}
-                  onChange={() => setTheme('light')}
+                  value="dark"
+                  checked={theme === 'dark'}
+                  onChange={() => {
+                    try { localStorage.setItem('college_hub_theme_explicit', 'true'); } catch (e) {}
+                    setTheme('dark');
+                  }}
                 />
-                <span>Light</span>
+                <span>Lights out</span>
               </label>
             </div>
           </div>
