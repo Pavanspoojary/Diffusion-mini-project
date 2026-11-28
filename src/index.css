@@ -4911,17 +4911,49 @@ dialog::backdrop {
     max-width: 100% !important;
     border-left: none !important;
     border-right: none !important;
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)) !important;
     min-height: 100vh;
   }
 
   .sticky-header {
     padding-top: env(safe-area-inset-top, 0px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  [data-theme="dark"] .sticky-header,
+  [data-theme="dark"] .header-top-row,
+  [data-theme="dark"] .feed-filter-bar {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+  }
+
+  [data-theme="light"] .sticky-header,
+  [data-theme="light"] .header-top-row,
+  [data-theme="light"] .feed-filter-bar {
+    background-color: rgba(255, 255, 255, 0.88) !important;
+  }
+
+  [data-theme="dim"] .sticky-header,
+  [data-theme="dim"] .header-top-row,
+  [data-theme="dim"] .feed-filter-bar {
+    background-color: rgba(21, 32, 43, 0.88) !important;
   }
 
   .header-top-row {
     padding: 10px 14px 6px 14px;
     gap: 8px;
+  }
+
+  .header-notif-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .header-main-title {
@@ -4933,44 +4965,105 @@ dialog::backdrop {
     font-size: 11px;
   }
 
-  /* Filter bar mobile */
+  /* Filter bar mobile - horizontal smooth pill tray */
   .feed-filter-bar {
-    padding: 6px 12px;
-    flex-wrap: wrap;
-    gap: 6px;
+    padding: 8px 14px;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+    gap: 8px;
   }
 
-  .feed-filter-group {
-    gap: 6px;
-  }
-
-  .feed-filter-btn {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-
-  .feed-filter-count {
+  .feed-filter-bar::-webkit-scrollbar {
     display: none;
   }
 
-  /* Mobile Bottom Navigation - 100% Solid & Auto-Hide on Scroll */
+  .feed-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap !important;
+    flex-shrink: 0;
+  }
+
+  .feed-filter-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .feed-filter-count {
+    display: inline-flex;
+  }
+
+  /* Mobile LinkedIn Composer - sleek single line trigger like native app */
+  .li-composer {
+    padding: 10px 14px !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .li-composer-avatar {
+    margin-top: 0 !important;
+    flex-shrink: 0;
+  }
+
+  .li-composer-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .li-start-post {
+    height: 40px !important;
+    border-radius: 9999px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border: 1px solid var(--border-color) !important;
+    background-color: var(--card-bg) !important;
+    color: var(--text-muted) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .li-composer-actions {
+    display: none !important;
+  }
+
+  /* Mobile Bottom Navigation - Frosted Glass & Active Glow */
   .mobile-bottom-nav {
     display: flex !important;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: calc(52px + env(safe-area-inset-bottom, 0px));
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background-color: var(--bg-primary) !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
     border-top: 1px solid var(--border-color);
     z-index: 90;
     justify-content: space-around;
     align-items: center;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
+  }
+
+  [data-theme="light"] .mobile-bottom-nav {
+    background-color: rgba(255, 255, 255, 0.88) !important;
+  }
+
+  [data-theme="dim"] .mobile-bottom-nav {
+    background-color: rgba(21, 32, 43, 0.88) !important;
   }
 
   .mobile-bottom-nav.nav-hidden {
@@ -4982,18 +5075,20 @@ dialog::backdrop {
     align-items: center;
     justify-content: center;
     height: 100%;
+    min-height: 48px;
     flex: 1;
     color: var(--text-secondary);
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: color 0.15s ease, transform 0.1s ease;
+    transition: color 0.15s ease, transform 0.12s ease;
     position: relative;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .mobile-nav-item:active {
-    transform: scale(0.92);
+    transform: scale(0.9);
   }
 
   .mobile-nav-item.active {
@@ -5003,41 +5098,44 @@ dialog::backdrop {
   .mobile-nav-item.active::after {
     content: '';
     position: absolute;
-    top: 4px;
-    width: 16px;
+    bottom: 6px;
+    width: 18px;
     height: 3px;
     border-radius: 9999px;
     background-color: var(--accent-color);
+    box-shadow: 0 1px 6px rgba(29, 155, 240, 0.5);
   }
 
   .mobile-nav-icon {
     width: 22px;
     height: 22px;
+    display: block;
   }
 
   /* Floating Action Button (+) */
   .mobile-fab-btn {
     display: flex !important;
     position: fixed;
-    bottom: calc(66px + env(safe-area-inset-bottom, 0px));
-    right: 16px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    right: 18px;
     width: 52px;
     height: 52px;
     border-radius: 50%;
     background-color: var(--accent-color);
     color: #ffffff;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
-    z-index: 80;
+    box-shadow: 0 4px 18px rgba(29, 155, 240, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 85;
     align-items: center;
     justify-content: center;
     border: none;
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
     will-change: transform;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .mobile-fab-btn.nav-hidden {
-    transform: translateY(calc(60px + env(safe-area-inset-bottom, 0px)));
+    transform: translateY(calc(80px + env(safe-area-inset-bottom, 0px)));
   }
 
   .mobile-fab-btn:active {
@@ -5078,13 +5176,23 @@ dialog::backdrop {
   }
 
   .post-actions-row {
-    margin-top: 8px;
+    margin-top: 10px;
+    display: flex;
     justify-content: space-between;
+    max-width: 440px;
   }
 
   .x-action-btn {
     min-width: 44px;
-    gap: 2px;
+    min-height: 44px;
+    padding: 4px 6px;
+    gap: 4px;
+    border-radius: 9999px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .x-action-btn:active {
+    transform: scale(0.92);
   }
 
   .x-action-icon-wrap {
@@ -5099,6 +5207,17 @@ dialog::backdrop {
 
   .x-action-count {
     font-size: 12px;
+  }
+
+  @media (max-width: 440px) {
+    .x-action-btn {
+      min-width: 38px;
+      padding: 2px 4px;
+      gap: 2px;
+    }
+    .x-action-count {
+      font-size: 11px;
+    }
   }
 
   /* Tabs mobile */
@@ -6178,6 +6297,43 @@ dialog::backdrop {
 
 .btn-confirm-cancel:hover {
   background-color: var(--bg-hover-subtle);
+}
+
+@media (max-width: 640px) {
+  .confirm-modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .confirm-modal-box {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    padding: 16px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px !important;
+    animation: sheetSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .confirm-modal-box::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--border-color);
+    margin: 0 auto 12px auto;
+  }
+}
+
+@keyframes sheetSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 
