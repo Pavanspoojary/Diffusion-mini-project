@@ -3920,15 +3920,6 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   font-weight: 700;
 }
 
-.reddit-active-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--accent-color);
-  margin-right: 6px;
-  box-shadow: 0 0 6px var(--accent-color);
-}
-
 .reddit-avatar-circle {
   transition: transform 0.15s ease;
 }

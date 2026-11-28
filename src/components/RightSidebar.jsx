@@ -138,7 +138,6 @@ export default function RightSidebar({
                   ) : (
                     isJoined && <span className="reddit-joined-mark" title="Joined">Joined</span>
                   )}
-                  {isActive && <span className="reddit-active-dot" />}
                 </button>
               );
             })}
