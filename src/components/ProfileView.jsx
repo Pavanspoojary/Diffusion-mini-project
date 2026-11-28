@@ -203,6 +203,7 @@ export default function ProfileView({
               >
                 <IconGraduationCap className="profile-shortcut-icon" />
                 <span>Faculty & Lecturer Profiles</span>
+                <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
               </button>
             )}
 
@@ -213,6 +214,7 @@ export default function ProfileView({
             >
               <IconBookmarks className="profile-shortcut-icon" />
               <span>Saved Bookmarks</span>
+              <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
             </button>
 
             <button
@@ -222,6 +224,7 @@ export default function ProfileView({
             >
               <IconSettings className="profile-shortcut-icon" />
               <span>Display & Appearance</span>
+              <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
             </button>
           </div>
         </div>

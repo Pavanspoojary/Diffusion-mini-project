@@ -64,7 +64,7 @@ export default function LinkedInComposer({ currentUser, onOpenCompose }) {
           className="li-start-post"
           onClick={() => onOpenCompose({ mode: 'text' })}
         >
-          Start a post
+          Publish campus notice or announcement...
         </button>
 
         <div className="li-composer-actions">

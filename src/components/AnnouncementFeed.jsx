@@ -325,7 +325,7 @@ export default function AnnouncementFeed({
                 <h1 className="header-main-title">Notices & Announcements</h1>
                 {currentUser.roleKey !== 'student' && (
                   <span className="header-sub-title">
-                    {`${currentUser.role} Control Feed`}
+                    Official Institutional Feed
                   </span>
                 )}
               </div>

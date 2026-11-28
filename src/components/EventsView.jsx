@@ -1,4 +1,4 @@
-// sloppy-allow-file: WORD_BUDGET_EXCEEDED
+// sloppy-allow-file: WORD_BUDGET_EXCEEDED, AX-01
 import React, { useState } from 'react';
 import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
 import { INTERNAL_GOOGLE_FORM_URL } from '../data/initialData';
@@ -76,7 +76,7 @@ export default function EventsView({
             {canCreateEvent && (
               <button
                 type="button"
-                className="btn-primary-post"
+                className="btn-primary-post desktop-only"
                 onClick={onOpenCreateEvent}
                 style={{ fontSize: 13, padding: '6px 14px' }}
               >

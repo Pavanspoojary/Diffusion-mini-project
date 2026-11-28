@@ -1367,19 +1367,19 @@ export default function App({ isClerkConfigured = false }) {
         </button>
       </nav>
 
-      {/* MOBILE FLOATING ACTION BUTTON (POST: Faculty, Coordinator, Admin only) */}
-      {currentUser.roleKey !== 'student' && activeNav !== 'bookmarks' && (
+      {/* MOBILE FLOATING ACTION BUTTON (Feed / Events only: Faculty, Coordinator, Admin) */}
+      {currentUser.roleKey !== 'student' && (activeNav === 'announcements' || activeNav === 'events') && (
         <button
           type="button"
           className={`mobile-fab-btn ${isBottomNavHidden ? 'nav-hidden' : ''}`}
           onClick={() => {
-            if (currentUser.roleKey === 'coordinator') {
+            if (activeNav === 'events') {
               setIsCreateEventOpen(true);
             } else {
               openCompose();
             }
           }}
-          aria-label="Create item"
+          aria-label={activeNav === 'events' ? 'Create event' : 'Create notice'}
         >
           <span style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}>+</span>
         </button>
