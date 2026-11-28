@@ -207,28 +207,17 @@ export default function EventsView({
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                     {evt.type === 'internal' ? (
                       <>
-                        {evt.registeredCount >= evt.maxCapacity && !evt.isRegistered ? (
-                          <button
-                            type="button"
-                            className="btn-event-register"
-                            style={{ opacity: 0.6, cursor: 'not-allowed', backgroundColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
-                            disabled
-                          >
-                            Seats Filled (Housefull)
-                          </button>
-                        ) : (
-                          <a
-                            href={evt.link || INTERNAL_GOOGLE_FORM_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-event-register"
-                            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                            title="Opens official Google Form in a new tab"
-                          >
-                            <span>Register via Google Form</span>
-                            <IconExternal style={{ width: 13, height: 13 }} />
-                          </a>
-                        )}
+                        <a
+                          href={evt.link || INTERNAL_GOOGLE_FORM_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-event-register"
+                          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                          title="Opens official Google Form in a new tab"
+                        >
+                          <span>Register via Google Form</span>
+                          <IconExternal style={{ width: 13, height: 13 }} />
+                        </a>
 
                         {/* QR Attendance Buttons */}
                         {currentUser.roleKey === 'student' ? (
@@ -264,12 +253,6 @@ export default function EventsView({
                         <span>Official Registration</span>
                         <IconExternal style={{ width: 14, height: 14 }} />
                       </a>
-                    )}
-                  </div>
-
-                  <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                    {evt.type === 'internal' && (
-                      <span>{evt.registeredCount} / {evt.maxCapacity} Seats Filled</span>
                     )}
                   </div>
                 </div>

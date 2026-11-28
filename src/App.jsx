@@ -218,13 +218,21 @@ export default function App({ isClerkConfigured = false }) {
       localStorage.removeItem('college_hub_events_v7');
       localStorage.removeItem('college_hub_events_v8');
       localStorage.removeItem('college_hub_events_v9');
-      const savedV10 = localStorage.getItem('college_hub_events_v10');
-      if (savedV10) {
-        const parsed = JSON.parse(savedV10);
-        return parsed.map((e) => ({
-          ...e,
-          link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
-        }));
+      localStorage.removeItem('college_hub_events_v10');
+      const savedV11 = localStorage.getItem('college_hub_events_v11');
+      if (savedV11) {
+        const parsed = JSON.parse(savedV11);
+        return parsed.map((e) => {
+          const initMatch = INITIAL_EVENTS.find((init) => init.id === e.id);
+          return {
+            ...e,
+            poster: initMatch?.poster || e.poster,
+            banner: initMatch?.banner || e.banner,
+            badge: initMatch?.badge || e.badge,
+            highlightTag: initMatch?.highlightTag || e.highlightTag,
+            link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
+          };
+        });
       }
       return INITIAL_EVENTS.map((e) => ({
         ...e,
@@ -364,7 +372,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v10', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v11', JSON.stringify(events));
     } catch {}
   }, [events]);
 
@@ -678,11 +686,6 @@ export default function App({ isClerkConfigured = false }) {
     const wasRegistered = Boolean(target.isRegistered);
     const currentCount = target.registeredCount || 0;
 
-    if (!wasRegistered && target.maxCapacity && currentCount >= target.maxCapacity) {
-      showToast('Event capacity full (Housefull)');
-      return;
-    }
-
     const nextIsRegistered = registrationDetails ? true : !wasRegistered;
 
     setEvents((prev) =>
@@ -756,8 +759,6 @@ export default function App({ isClerkConfigured = false }) {
       creatorId: currentUser.id,
       organizer: eventData.organizer || currentUser.name,
       ...eventData,
-      registeredCount: 0,
-      maxCapacity: 150,
       isRegistered: false,
       qrPayload: `EVENT_${Date.now()}`,
       attendance: []

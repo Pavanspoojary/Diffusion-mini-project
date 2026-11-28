@@ -3308,7 +3308,7 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   height: auto;
   display: block;
   object-fit: cover;
-  object-position: center 25%;
+  object-position: center center;
   transition: transform 0.25s ease;
 }
 
