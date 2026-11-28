@@ -435,17 +435,23 @@ export default function WebsitesView({
             const isCopied = copiedId === site.id;
             const hostname = getHostname(site.url);
 
+            const isAppIcon = site.id === 'web-1' || site.logo === '/portals/printin.svg' || site.logo === '/portals/printin.png';
+
             return (
               <article key={site.id} className="web-card">
                 <div className="web-card-top">
                   {/* Category Branded Icon */}
                   <div
-                    className="web-card-icon"
-                    style={{
-                      backgroundColor: colors.bg,
-                      color: colors.color,
-                      borderColor: colors.border
-                    }}
+                    className={`web-card-icon ${isAppIcon ? 'web-card-icon-app' : ''}`}
+                    style={
+                      isAppIcon
+                        ? { backgroundColor: 'transparent', borderColor: 'transparent', padding: 0 }
+                        : {
+                            backgroundColor: colors.bg,
+                            color: colors.color,
+                            borderColor: colors.border
+                          }
+                    }
                   >
                     <PortalLogoIcon site={site} getSiteIcon={getSiteIcon} />
                   </div>

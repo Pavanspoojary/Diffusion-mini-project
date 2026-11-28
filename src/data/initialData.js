@@ -1074,7 +1074,7 @@ export const INITIAL_EVENTS = [
 ];
 
 export const PORTAL_LOGOS = {
-  'web-1': '/portals/printin.png',
+  'web-1': '/portals/printin.svg',
   'web-2': '/portals/edmin.png',
   'web-3': '/portals/vtu.png',
   'web-4': '/portals/library.png',
@@ -1110,7 +1110,7 @@ export const INITIAL_WEBSITES = [
     url: 'https://printin.buildwithtba.in/',
     badge: 'Campus Service',
     iconType: 'printer',
-    logo: '/portals/printin.png'
+    logo: '/portals/printin.svg'
   },
   {
     id: 'web-2',
