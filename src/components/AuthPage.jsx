@@ -9,7 +9,8 @@ export default function AuthPage({
   onLogin,
   onSignup,
   users,
-  isClerkEnabled = false
+  isClerkEnabled = false,
+  clerkFallbackNotice = false
 }) {
   const [modalMode, setModalMode] = useState(null); // 'signin' | 'signup' | null
   const [showPassword, setShowPassword] = useState(false);
@@ -143,6 +144,24 @@ export default function AuthPage({
 
           <h1 className="auth-main-heading">Happening now</h1>
           <h2 className="auth-sub-heading">Join your campus community today.</h2>
+
+          {clerkFallbackNotice && (
+            <div
+              style={{
+                margin: '12px 0 16px',
+                padding: '10px 14px',
+                borderRadius: 10,
+                fontSize: 13,
+                lineHeight: 1.45,
+                background: 'rgba(234, 179, 8, 0.12)',
+                color: 'var(--text-secondary)',
+                border: '1px solid rgba(234, 179, 8, 0.3)',
+                textAlign: 'center'
+              }}
+            >
+              Clerk production mode requires a custom domain on Vercel. Showing campus authentication fallback.
+            </div>
+          )}
 
           <div className="auth-actions-group">
             {isClerkEnabled ? (

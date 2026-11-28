@@ -113,7 +113,21 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
     const timer = setTimeout(() => {
       setClerkTimedOut(true);
     }, 2000);
-    return () => clearTimeout(timer);
+
+    const handleClerkScriptError = (event) => {
+      const msg = event?.message || event?.reason?.message || '';
+      if (typeof msg === 'string' && (msg.includes('clerk') || msg.includes('Clerk'))) {
+        setClerkTimedOut(true);
+      }
+    };
+    window.addEventListener('error', handleClerkScriptError);
+    window.addEventListener('unhandledrejection', handleClerkScriptError);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('error', handleClerkScriptError);
+      window.removeEventListener('unhandledrejection', handleClerkScriptError);
+    };
   }, [isClerkEnabled, isLoaded]);
 
   const clerkEmail =
@@ -1115,13 +1129,15 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
   }
 
   if (!isSignedIn && !isAuthenticated) {
+    const isClerkReady = Boolean(isClerkEnabled && isLoaded);
     return (
       <div className="auth-root">
         <AuthPage
           onLogin={handleLogin}
           onSignup={handleSignup}
           users={USERS}
-          isClerkEnabled={isClerkEnabled}
+          isClerkEnabled={isClerkReady}
+          clerkFallbackNotice={Boolean(isClerkEnabled && clerkTimedOut && !isLoaded)}
         />
         <Toast message={toastMessage} />
       </div>

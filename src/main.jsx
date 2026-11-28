@@ -7,10 +7,14 @@ import './index.css';
 const clerkKey = (() => {
   const nextKey = (import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || '').trim();
   const viteKey = (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || '').trim();
-  // Prioritize live production keys (pk_live_*) over development keys (pk_test_*)
-  if (nextKey.startsWith('pk_live_')) return nextKey;
-  if (viteKey.startsWith('pk_live_')) return viteKey;
-  return nextKey || viteKey || '';
+  const isVercelApp = typeof window !== 'undefined' && window.location.hostname.endsWith('.vercel.app');
+  // On *.vercel.app without a custom domain, production keys (pk_live_*) fail because CNAMEs cannot be configured.
+  // Prefer development keys (pk_test_*) on vercel.app to avoid net::ERR_CONNECTION_CLOSED script failure.
+  if (isVercelApp) {
+    if (viteKey.startsWith('pk_test_')) return viteKey;
+    if (nextKey.startsWith('pk_test_')) return nextKey;
+  }
+  return viteKey || nextKey || '';
 })();
 
 const isClerkConfigured = Boolean(clerkKey);
