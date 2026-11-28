@@ -64,14 +64,15 @@ export const CATEGORIES = [
 export const USERS = {
   student: {
     id: 'user-student',
-    name: 'Student',
-    usn: 'USN202601',
+    name: 'Nishan D Shetty',
+    usn: '4MW24AD023',
+    email: 'nishan.24ad023@sode-edu.in',
     role: 'Student',
     roleKey: 'student',
     branch: 'AI&DS',
     department: 'Dept. of AI & Data Science',
-    handle: '@student_aids',
-    avatarChar: 'S',
+    handle: '@nishan_ad',
+    avatarChar: 'N',
     avatarBg: 'linear-gradient(135deg, #1d9bf0, #7856ff)',
     verified: true,
     verifiedType: 'blue'
@@ -93,14 +94,15 @@ export const USERS = {
   },
   coordinator: {
     id: 'user-coordinator',
-    name: 'Event Coordinator',
-    usn: 'EVT-COORD-01',
+    name: 'Prof. Sudarshan K',
+    usn: 'FAC-COORD-02',
+    email: 'sudarshan.ds@sode-edu.in',
     role: 'Event Coordinator',
     roleKey: 'coordinator',
     branch: 'AI&DS',
     department: 'Campus Events Office',
     handle: '@events_coord',
-    avatarChar: 'E',
+    avatarChar: 'S',
     avatarBg: '#00897b',
     verified: true,
     verifiedType: 'blue'
@@ -987,6 +989,9 @@ export const INITIAL_ANNOUNCEMENTS = [
   }
 ];
 
+export const INTERNAL_GOOGLE_FORM_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor';
+
 export const INITIAL_EVENTS = [
   {
     id: 'evt-algorhythm-2026',
@@ -1003,91 +1008,67 @@ export const INITIAL_EVENTS = [
     registeredCount: 142,
     isRegistered: false,
     qrPayload: 'EVENT_ALGORHYTHM_2026',
-    link: 'https://www.instagram.com/reel/De9IDZuyW5v/?rpxt=MWw4amx3ZnN6dWVxag==',
-    attendance: []
-  },
-  {
-    id: 'evt-1',
-    type: 'internal',
-    title: 'DevHacks 2026: 24-Hour AI & Edge Hackathon',
-    organizer: 'Dept. of AI&DS & Campus Events',
-    date: 'Oct 28, 2026',
-    time: '09:00 AM - 09:00 AM (Next Day)',
-    venue: 'Central Computing Lab, Main Block',
-    poster: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Oct 26, 2026 11:59 PM',
-    description: 'Build innovative agentic workflows, autonomous copilots, and intelligent applications. Mentorship by industry engineers. Food and refreshments provided.',
-    maxCapacity: 120,
-    registeredCount: 86,
-    isRegistered: true,
-    qrPayload: 'EVENT_DEVHACKS_2026',
+    link: INTERNAL_GOOGLE_FORM_URL,
     attendance: [
-      { usn: 'USN202601', name: 'Student', checkIn: '09:12 AM', checkOut: 'In Progress', status: 'Checked In' },
-      { usn: 'USN202602', name: 'Student 2', checkIn: '08:58 AM', checkOut: 'In Progress', status: 'Checked In' },
-      { usn: 'USN202603', name: 'Student 3', checkIn: '09:05 AM', checkOut: 'In Progress', status: 'Checked In' },
-      { usn: 'USN202604', name: 'Student 4', checkIn: '09:01 AM', checkOut: 'In Progress', status: 'Checked In' }
+      { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:45 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '09:50 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: '4MW23AI012', name: 'Pavan S Poojary', checkIn: '10:02 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: '4MW23CS045', name: 'Ananya Hegde', checkIn: '10:15 AM', checkOut: 'In Progress', status: 'Checked In' }
     ]
   },
   {
-    id: 'evt-2',
+    id: 'evt-cisc-2026',
     type: 'internal',
-    title: 'Workshop on Production Deep Learning & Model Serving',
-    organizer: 'Faculty Coordinator & AI&DS Faculty',
-    date: 'Nov 04, 2026',
-    time: '02:00 PM - 05:00 PM',
-    venue: 'Seminar Hall 2, Dept. of AI&DS',
-    poster: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Nov 02, 2026 05:00 PM',
-    description: 'Hands-on model deployment using FastAPI, ONNX Runtime, and containerization. Bring laptops with Python 3.10+ installed.',
-    maxCapacity: 60,
-    registeredCount: 48,
+    title: 'CISC 2026: Student Symposium Poster Presentation',
+    organizer: 'Shri Madhwa Vadiraja Institute of Technology & Management (SMVITM), Bantakal',
+    date: 'Dec 19, 2026',
+    time: '09:30 AM - 04:30 PM',
+    venue: 'SMVITM Campus, Bantakal (Hybrid Mode)',
+    poster: '/events/cisc-2026-poster.jpg',
+    deadline: 'Dec 04, 2026',
+    description: '2nd International Conference on Computational Intelligence & Smart Communication. The Student Symposium Poster Presentation provides a platform for UG & PG students from all disciplines to showcase research, innovative ideas, and prototypes in AI, Data Analytics, Computer Vision, Cybersecurity, IoT, and Next-Gen Communication. Registration fee: ₹500 per team.',
+    maxCapacity: 150,
+    registeredCount: 38,
     isRegistered: false,
-    qrPayload: 'EVENT_DEEPLEARNING_WORKSHOP_2026',
-    attendance: []
+    qrPayload: 'EVENT_CISC_POSTER_2026',
+    link: INTERNAL_GOOGLE_FORM_URL,
+    attendance: [
+      { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:20 AM', checkOut: 'In Progress', status: 'Checked In' },
+      { usn: '4MW24AD030', name: 'Prathik Devadiga', checkIn: '09:25 AM', checkOut: 'In Progress', status: 'Checked In' }
+    ]
   },
   {
-    id: 'evt-3',
+    id: 'evt-cmr-hackfest-2027',
     type: 'internal',
-    title: 'Varnothsava 2027: Annual Fest Technical Inauguration',
-    organizer: 'Student Welfare Office',
-    date: 'Nov 12, 2026',
-    time: '10:00 AM - 04:30 PM',
-    venue: 'College Open Air Auditorium',
-    poster: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Nov 10, 2026 12:00 PM',
-    description: 'Annual intra-college cultural and technical showcase with code sprint, robotic obstacle courses, and project exhibitions.',
-    maxCapacity: 500,
-    registeredCount: 340,
+    title: 'CMR Hackfest 4.0: 36-Hour National Level Hackathon',
+    organizer: 'IDEA LAB-CMRCET & Centre for Engineering Education Research (CEER)',
+    date: 'Jan 08 - 09, 2027',
+    time: '36 Hours Non-Stop (Starts 09:00 AM)',
+    venue: 'CMRCET Campus, Medchal Road, Hyderabad',
+    poster: '/events/cmr-hackfest-2027.jpg',
+    deadline: 'Nov 25, 2026',
+    description: '36-Hour National Level Hackathon ("It\'s not a bug, It\'s a future"). Industry problem statements across Generative AI, Healthtech, Clean Energy, Robotics & Drones, Smart Education, and IoT. Cash prize pool upto ₹2,22,000 (Winner: ₹1,00,000). Team size: 3-6 students. Registration fee: Rs. 575 per student (includes food & accommodation).',
+    maxCapacity: 200,
+    registeredCount: 94,
     isRegistered: false,
-    qrPayload: 'EVENT_VARNOTHSAVA_INAUGURATION_2026',
-    attendance: []
+    qrPayload: 'EVENT_CMR_HACKFEST_2027',
+    link: INTERNAL_GOOGLE_FORM_URL,
+    attendance: [
+      { usn: '4MW24AD023', name: 'Nishan D Shetty', checkIn: '09:10 AM', checkOut: 'In Progress', status: 'Checked In' }
+    ]
   },
   {
-    id: 'evt-4',
+    id: 'evt-ideatex-2027',
     type: 'external',
-    title: 'Smart India Hackathon (SIH) 2026 - College Teams Nomination',
-    organizer: 'Ministry of Education Innovation Cell (MIC)',
-    date: 'Nov 18, 2026',
-    time: 'Online / Multi-center',
-    venue: 'National Level Finals',
-    poster: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Oct 30, 2026',
-    link: 'https://sih.gov.in',
-    description: 'National level hackathon for college teams solving real-world challenges for ministries and public sector departments.',
-    isRegistered: false
-  },
-  {
-    id: 'evt-5',
-    type: 'external',
-    title: 'IEEE Mangalore Subsection Student Paper Conference',
-    organizer: 'IEEE Mangalore Subsection',
-    date: 'Dec 05, 2026',
-    time: '09:30 AM - 05:00 PM',
-    venue: 'NITK Surathkal',
-    poster: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80',
-    deadline: 'Nov 15, 2026',
-    link: 'https://ieee-mangalore.org',
-    description: 'Call for research papers across AI, Computer Vision, and IoT. Accepted peer-reviewed papers will be published in IEEE Xplore.',
+    title: 'IdeateX 2026-27: National Innovation & Grand Challenge Hackathon',
+    organizer: 'Kishkinda University & BITM (Ballari)',
+    date: 'Feb 27, 2027',
+    time: 'Hybrid Mode (Online + Offline)',
+    venue: 'Kishkinda University Campus, Ballari',
+    poster: '/events/ideatex-2027-poster.jpg',
+    deadline: 'Dec 01, 2026 (Extended)',
+    link: 'https://www.ideatex.in',
+    description: 'National Innovation & Grand Challenge Competition across Six Frontiers: MedTech, Industry Problems, AgriTech, Smart Spaces, GreenTech, and EdTech. Take real-world problems from idea to working prototype with industry mentorship. Total prize pool ₹10 Lakh. Team size: 4-5 students. Registration fee: ₹1,000 per team. Official website: www.ideatex.in',
     isRegistered: false
   }
 ];

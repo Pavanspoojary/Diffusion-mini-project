@@ -95,7 +95,9 @@ function mapEventFromDB(row, userRegisteredSet = new Set(), attendanceList = [])
     registeredCount: Number(row.registered_count ?? row.registeredCount ?? 0),
     isRegistered: userRegisteredSet.has(row.id),
     qrPayload: row.qr_payload || row.qrPayload || `EVENT_${row.id}`,
-    link: row.link || null,
+    link: (row.type === 'internal')
+      ? 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor'
+      : ((row.link && !row.link.includes('instagram.com')) ? row.link : null),
     attendance: attendanceList
   };
 }
@@ -359,8 +361,16 @@ export async function fetchEvents(currentUserId = 'user-student') {
   } catch (err) {
     console.info('[Supabase:fetchEvents fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_events_v3') || localStorage.getItem('college_hub_events_v2');
-      if (saved) return JSON.parse(saved);
+      const saved = localStorage.getItem('college_hub_events_v8');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.map((e) => ({
+          ...e,
+          link: e.type === 'internal'
+            ? 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor'
+            : e.link
+        }));
+      }
     } catch {}
     return INITIAL_EVENTS;
   }

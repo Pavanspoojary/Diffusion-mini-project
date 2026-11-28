@@ -6,12 +6,14 @@
   "scripts": {
     "dev": "vite --host --port 8080",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:events": "node -e \"import('./src/utils/eventValidators.js').then(({ validateAllEvents }) => import('./src/data/initialData.js').then(({ INITIAL_EVENTS }) => { const res = validateAllEvents(INITIAL_EVENTS); if (!res.allValid) { console.error('Event validation failed:', res.results); process.exit(1); } console.log('All ' + INITIAL_EVENTS.length + ' events validated successfully.'); }))\""
   },
   "dependencies": {
     "@clerk/react": "^6.19.7",
     "@supabase/supabase-js": "^2.118.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "html5-qrcode": "^2.3.8",
     "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

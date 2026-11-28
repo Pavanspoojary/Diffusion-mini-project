@@ -30,6 +30,7 @@ import {
   USERS,
   INITIAL_ANNOUNCEMENTS,
   INITIAL_EVENTS,
+  INTERNAL_GOOGLE_FORM_URL,
   INITIAL_WEBSITES,
   INITIAL_NOTIFICATIONS,
   INITIAL_LECTURERS
@@ -59,6 +60,17 @@ import {
   saveLocalLecturers,
   findLecturerProfile
 } from './services/dbService';
+
+const getRouteNav = () => {
+  if (typeof window === 'undefined') return 'announcements';
+  const path = window.location.pathname.replace(/^\/+/, '').toLowerCase();
+  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+  if (path === 'events' || path === 'event' || hash === 'events' || hash === 'event') return 'events';
+  if (path === 'websites' || path === 'portals' || hash === 'websites') return 'websites';
+  if (path === 'bookmarks' || hash === 'bookmarks') return 'bookmarks';
+  if (path === 'notifications' || hash === 'notifications') return 'notifications';
+  return 'announcements';
+};
 
 export default function App({ isClerkConfigured = false }) {
   // Theme & Styling
@@ -150,8 +162,8 @@ export default function App({ isClerkConfigured = false }) {
   });
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
-  // Navigation & Filtering
-  const [activeNav, setActiveNav] = useState('announcements'); // announcements | events | websites | notifications | bookmarks
+  // Navigation & Filtering (supports direct URL routing: /events, /websites, /bookmarks, /notifications)
+  const [activeNav, setActiveNav] = useState(getRouteNav); // announcements | events | websites | notifications | bookmarks
   const [activeBranch, setActiveBranch] = useState('ALL');
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -186,13 +198,24 @@ export default function App({ isClerkConfigured = false }) {
   const [events, setEvents] = useState(() => {
     try {
       localStorage.removeItem('college_hub_events_v1');
-      const savedV3 = localStorage.getItem('college_hub_events_v3');
-      if (savedV3) return JSON.parse(savedV3);
-      const saved = localStorage.getItem('college_hub_events_v2');
-      if (saved && saved.includes('algorhythm')) {
-        return JSON.parse(saved);
+      localStorage.removeItem('college_hub_events_v2');
+      localStorage.removeItem('college_hub_events_v3');
+      localStorage.removeItem('college_hub_events_v4');
+      localStorage.removeItem('college_hub_events_v5');
+      localStorage.removeItem('college_hub_events_v6');
+      localStorage.removeItem('college_hub_events_v7');
+      const savedV8 = localStorage.getItem('college_hub_events_v8');
+      if (savedV8) {
+        const parsed = JSON.parse(savedV8);
+        return parsed.map((e) => ({
+          ...e,
+          link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
+        }));
       }
-      return INITIAL_EVENTS;
+      return INITIAL_EVENTS.map((e) => ({
+        ...e,
+        link: e.type === 'internal' ? INTERNAL_GOOGLE_FORM_URL : e.link
+      }));
     } catch {
       return INITIAL_EVENTS;
     }
@@ -318,7 +341,7 @@ export default function App({ isClerkConfigured = false }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('college_hub_events_v3', JSON.stringify(events));
+      localStorage.setItem('college_hub_events_v8', JSON.stringify(events));
     } catch {}
   }, [events]);
 
@@ -327,6 +350,29 @@ export default function App({ isClerkConfigured = false }) {
       localStorage.setItem('college_hub_websites_v10', JSON.stringify(websites));
     } catch {}
   }, [websites]);
+
+  // Sync URL route with activeNav
+  useEffect(() => {
+    const currentNav = getRouteNav();
+    const targetPath = activeNav === 'announcements' ? '/' : `/${activeNav}`;
+    if (currentNav !== activeNav && window.location.pathname !== targetPath) {
+      window.history.pushState(null, '', targetPath);
+    }
+  }, [activeNav]);
+
+  // Handle browser back / forward navigation and hash changes
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const nav = getRouteNav();
+      setActiveNav(nav);
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
 
   // Persist Sidebar State
   useEffect(() => {
@@ -603,20 +649,29 @@ export default function App({ isClerkConfigured = false }) {
     await deleteAnnouncementFromDB(noticeId);
   };
 
-  const handleRegisterEvent = async (eventId) => {
+  const handleRegisterEvent = async (eventId, registrationDetails = null) => {
     const target = events.find((evt) => evt.id === eventId);
-    const wasRegistered = target ? Boolean(target.isRegistered) : false;
-    const currentCount = target ? (target.registeredCount || 0) : 0;
+    if (!target) return;
+    const wasRegistered = Boolean(target.isRegistered);
+    const currentCount = target.registeredCount || 0;
+
+    if (!wasRegistered && target.maxCapacity && currentCount >= target.maxCapacity) {
+      showToast('Event capacity full (Housefull)');
+      return;
+    }
+
+    const nextIsRegistered = registrationDetails ? true : !wasRegistered;
 
     setEvents((prev) =>
       prev.map((evt) => {
         if (evt.id === eventId) {
-          const isRegistered = !evt.isRegistered;
-          showToast(isRegistered ? 'Registered for event' : 'Registration cancelled');
+          const delta = nextIsRegistered === wasRegistered ? 0 : (nextIsRegistered ? 1 : -1);
+          showToast(nextIsRegistered ? 'Registration submitted via Google Form!' : 'Registration cancelled');
           return {
             ...evt,
-            isRegistered,
-            registeredCount: Math.max(0, (evt.registeredCount || 0) + (isRegistered ? 1 : -1))
+            isRegistered: nextIsRegistered,
+            registeredCount: Math.max(0, (evt.registeredCount || 0) + delta),
+            registrationDetails: nextIsRegistered ? registrationDetails : null
           };
         }
         return evt;
@@ -1355,6 +1410,7 @@ export default function App({ isClerkConfigured = false }) {
         currentUser={currentUser}
         mode={qrModal.mode}
         onRecordAttendance={handleRecordAttendance}
+        onRegisterEvent={handleRegisterEvent}
       />
 
       {/* FLOATING TOAST NOTIFICATION */}

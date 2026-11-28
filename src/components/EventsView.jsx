@@ -1,6 +1,7 @@
 // sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState } from 'react';
 import { IconQR, IconExternal, IconMedia, IconCheck, IconSidebarToggle, IconNotifications, IconTrash } from './Icons';
+import { INTERNAL_GOOGLE_FORM_URL } from '../data/initialData';
 
 export default function EventsView({
   events,
@@ -155,21 +156,21 @@ export default function EventsView({
 
                 {/* Event Metadata Grid */}
                 <div className="event-meta-grid">
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Date:</span>
-                    <span>{evt.date}</span>
+                    <span className="meta-value">{evt.date}</span>
                   </div>
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Time:</span>
-                    <span>{evt.time}</span>
+                    <span className="meta-value">{evt.time}</span>
                   </div>
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Venue:</span>
-                    <span>{evt.venue}</span>
+                    <span className="meta-value">{evt.venue}</span>
                   </div>
-                  <div>
+                  <div className="event-meta-item">
                     <span className="meta-label">Deadline:</span>
-                    <span style={{ color: 'var(--like-color)', fontWeight: 600 }}>{evt.deadline}</span>
+                    <span className="meta-value deadline">{evt.deadline}</span>
                   </div>
                 </div>
 
@@ -195,13 +196,28 @@ export default function EventsView({
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                     {evt.type === 'internal' ? (
                       <>
-                        <button
-                          type="button"
-                          className={`btn-event-register ${evt.isRegistered ? 'registered' : ''}`}
-                          onClick={() => onRegisterEvent(evt.id)}
-                        >
-                          {evt.isRegistered ? 'Registered' : 'Register for Event'}
-                        </button>
+                        {evt.registeredCount >= evt.maxCapacity && !evt.isRegistered ? (
+                          <button
+                            type="button"
+                            className="btn-event-register"
+                            style={{ opacity: 0.6, cursor: 'not-allowed', backgroundColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                            disabled
+                          >
+                            Seats Filled (Housefull)
+                          </button>
+                        ) : (
+                          <a
+                            href={evt.link || INTERNAL_GOOGLE_FORM_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-event-register"
+                            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                            title="Opens official Google Form in a new tab"
+                          >
+                            <span>Register via Google Form</span>
+                            <IconExternal style={{ width: 13, height: 13 }} />
+                          </a>
+                        )}
 
                         {/* QR Attendance Buttons */}
                         {currentUser.roleKey === 'student' ? (

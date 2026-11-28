@@ -45,7 +45,7 @@ export default function CreateEventModal({
       deadline: deadline.trim() || 'Registration open',
       description: description.trim(),
       poster: poster || null,
-      link: link.trim() || null
+      link: link.trim() || (type === 'internal' ? 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor' : null)
     });
 
     onClose();
@@ -159,19 +159,17 @@ export default function CreateEventModal({
             />
           </label>
 
-          {type === 'external' && (
-            <label style={{ fontSize: 13, fontWeight: 700 }}>
-              External Registration URL:
-              <input
-                type="url"
-                placeholder="https://..."
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                className="search-input"
-                style={{ width: '100%', marginTop: 4, padding: 8, borderRadius: 8, border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-primary)' }}
-              />
-            </label>
-          )}
+          <label style={{ fontSize: 13, fontWeight: 700 }}>
+            {type === 'internal' ? 'Google Form Registration URL:' : 'Official Registration URL:'}
+            <input
+              type="url"
+              placeholder={type === 'internal' ? 'https://forms.gle/...' : 'https://...'}
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              className="search-input"
+              style={{ width: '100%', marginTop: 4, padding: 8, borderRadius: 8, border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-primary)' }}
+            />
+          </label>
 
           <div>
             <span style={{ fontSize: 13, fontWeight: 700, display: 'block', marginBottom: 6 }}>

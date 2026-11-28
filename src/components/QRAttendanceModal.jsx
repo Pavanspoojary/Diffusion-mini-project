@@ -1,7 +1,8 @@
 // sloppy-allow-file: WORD_BUDGET_EXCEEDED
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
-import { IconClose, IconQR, IconCheck, IconCamera } from './Icons';
+import { Html5Qrcode } from 'html5-qrcode';
+import { IconClose, IconQR, IconCheck, IconCamera, IconMedia } from './Icons';
 
 export default function QRAttendanceModal({
   isOpen,
@@ -9,14 +10,23 @@ export default function QRAttendanceModal({
   event,
   currentUser,
   mode, // 'coordinator' | 'student'
-  onRecordAttendance
+  onRecordAttendance,
+  onRegisterEvent
 }) {
   const [qrType, setQrType] = useState('entry'); // 'entry' | 'exit'
   const [qrDataUrl, setQrDataUrl] = useState('');
-  const [scanStep, setScanStep] = useState('idle'); // 'idle' | 'scanning' | 'success'
+  const [scanStep, setScanStep] = useState('idle'); // 'idle' | 'starting' | 'scanning' | 'success' | 'error'
   const [scanResult, setScanResult] = useState(null);
-  const dialogRef = useRef(null);
+  const [scanError, setScanError] = useState('');
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [cameraDevices, setCameraDevices] = useState([]);
+  const [selectedCameraIdx, setSelectedCameraIdx] = useState(0);
 
+  const dialogRef = useRef(null);
+  const scannerRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  // Dialog show/close handling
   useEffect(() => {
     if (isOpen && dialogRef.current) {
       dialogRef.current.showModal();
@@ -25,14 +35,29 @@ export default function QRAttendanceModal({
     }
   }, [isOpen]);
 
-  // Generate QR code when event or qrType changes
+  // Query available cameras on mount/open
+  useEffect(() => {
+    if (isOpen && mode === 'student') {
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          if (devices && devices.length > 0) {
+            setCameraDevices(devices);
+          }
+        })
+        .catch((err) => {
+          console.info('Camera discovery note:', err);
+        });
+    }
+  }, [isOpen, mode]);
+
+  // Coordinator: Generate QR code when event or qrType changes
   useEffect(() => {
     if (event && isOpen) {
       const payload = JSON.stringify({
         eventId: event.id,
         eventTitle: event.title,
         type: qrType,
-        token: `${event.qrPayload}_${qrType.toUpperCase()}_${Date.now()}`
+        token: `${event.qrPayload || event.id}_${qrType.toUpperCase()}_${Date.now()}`
       });
 
       QRCode.toDataURL(payload, { width: 220, margin: 1, color: { dark: '#000000', light: '#ffffff' } })
@@ -41,29 +66,219 @@ export default function QRAttendanceModal({
     }
   }, [event, qrType, isOpen]);
 
+  // Clean up scanner helper
+  const stopScannerSafely = async () => {
+    if (scannerRef.current) {
+      try {
+        if (scannerRef.current.isScanning) {
+          await scannerRef.current.stop();
+        }
+        await scannerRef.current.clear();
+      } catch (err) {
+        console.warn('QR scanner cleanup note:', err);
+      } finally {
+        scannerRef.current = null;
+        setIsCameraActive(false);
+      }
+    }
+  };
+
+  // Close cleanup
+  useEffect(() => {
+    if (!isOpen) {
+      stopScannerSafely();
+      setScanStep('idle');
+      setScanResult(null);
+      setScanError('');
+    }
+  }, [isOpen]);
+
   if (!isOpen || !event) return null;
 
   const isCoordinator = mode === 'coordinator' || currentUser.roleKey !== 'student';
+  const existingAttendance = event.attendance?.find((a) => a.usn === currentUser.usn);
 
-  // Handle student simulated or camera QR scan
-  const handlePerformScan = () => {
-    setScanStep('scanning');
-    setTimeout(() => {
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  // Process decoded QR payload
+  const handleVerifyDecodedQR = (decodedText) => {
+    setScanError('');
+    let parsed = null;
 
-      const newRecord = {
-        usn: currentUser.usn,
-        name: currentUser.name,
-        checkIn: qrType === 'entry' ? timeStr : (event.attendance?.find((a) => a.usn === currentUser.usn)?.checkIn || '09:00 AM'),
-        checkOut: qrType === 'exit' ? timeStr : 'In Progress',
-        status: qrType === 'exit' ? 'Completed' : 'Checked In'
-      };
+    try {
+      parsed = JSON.parse(decodedText);
+    } catch {
+      // Fallback: Check if plain string contains event identifier
+      if (typeof decodedText === 'string' && (decodedText.includes(event.qrPayload || '') || decodedText.includes(event.id))) {
+        parsed = { eventId: event.id, type: qrType };
+      }
+    }
 
-      onRecordAttendance(event.id, newRecord);
-      setScanResult(newRecord);
-      setScanStep('success');
-    }, 1200);
+    if (!parsed) {
+      setScanError('Unrecognized QR code format. Please scan the official event QR.');
+      return;
+    }
+
+    // Verify event matching
+    if (parsed.eventId && parsed.eventId !== event.id) {
+      setScanError(`QR code belongs to "${parsed.eventTitle || parsed.eventId}", not "${event.title}".`);
+      return;
+    }
+
+    const detectedType = parsed.type || qrType;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const newRecord = {
+      usn: currentUser.usn,
+      name: currentUser.name,
+      checkIn: detectedType === 'entry'
+        ? timeStr
+        : (existingAttendance?.checkIn || timeStr),
+      checkOut: detectedType === 'exit'
+        ? timeStr
+        : (existingAttendance?.checkOut || 'In Progress'),
+      status: detectedType === 'exit' ? 'Completed' : 'Checked In'
+    };
+
+    onRecordAttendance(event.id, newRecord);
+    setScanResult({ ...newRecord, actionType: detectedType });
+    setScanStep('success');
+    stopScannerSafely();
+  };
+
+  // Start live device camera scanner
+  const handleStartCamera = async (targetCameraOverride) => {
+    setScanError('');
+    setScanStep('starting');
+
+    await stopScannerSafely();
+    // Allow hardware camera stream to release
+    await new Promise((resolve) => setTimeout(resolve, 150));
+
+    const elementId = 'qr-camera-viewport';
+    const scanner = new Html5Qrcode(elementId);
+    scannerRef.current = scanner;
+
+    const qrConfig = {
+      fps: 10,
+      qrbox: { width: 220, height: 220 }
+    };
+
+    // Determine target camera: explicit device ID or facing mode
+    let targetCamera = targetCameraOverride;
+    if (!targetCamera) {
+      if (cameraDevices.length > 0 && cameraDevices[selectedCameraIdx]?.id) {
+        targetCamera = cameraDevices[selectedCameraIdx].id;
+      } else {
+        targetCamera = { facingMode: 'environment' };
+      }
+    }
+
+    try {
+      await scanner.start(
+        targetCamera,
+        qrConfig,
+        (decodedText) => {
+          handleVerifyDecodedQR(decodedText);
+        },
+        () => {
+          // Routine frame decode misses
+        }
+      );
+      setIsCameraActive(true);
+      setScanStep('scanning');
+
+      // Refresh camera devices with permission granted
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          if (devices && devices.length > 0) {
+            setCameraDevices(devices);
+          }
+        })
+        .catch(() => {});
+    } catch (err) {
+      console.warn('Primary camera start error:', err);
+
+      // Fallback for single-webcam laptops (e.g. MacBook) where { facingMode: 'environment' } fails:
+      if (typeof targetCamera === 'object' && targetCamera.facingMode === 'environment') {
+        try {
+          await scanner.start(
+            { facingMode: 'user' },
+            qrConfig,
+            (decodedText) => handleVerifyDecodedQR(decodedText),
+            () => {}
+          );
+          setIsCameraActive(true);
+          setScanStep('scanning');
+          Html5Qrcode.getCameras().then((devs) => devs?.length && setCameraDevices(devs)).catch(() => {});
+          return;
+        } catch (fallbackErr) {
+          console.warn('Fallback camera start error:', fallbackErr);
+        }
+      }
+
+      setIsCameraActive(false);
+      setScanStep('error');
+      const msg = err?.name === 'NotAllowedError'
+        ? 'Camera permission denied. Allow camera access in your browser address bar.'
+        : (err?.message || 'Camera is unavailable or unsupported on this device.');
+      setScanError(msg);
+    }
+  };
+
+  // Flip camera between available devices
+  const handleFlipCamera = async () => {
+    setScanError('');
+
+    // If only 1 camera exists on the device (e.g. laptop webcam):
+    if (cameraDevices.length <= 1) {
+      const currentLabel = cameraDevices[0]?.label || 'Default Camera';
+      setScanError(`Only 1 camera detected (${currentLabel}). Flip Camera is active on dual-camera devices like mobile phones or tablets.`);
+      return;
+    }
+
+    // Multiple cameras available (phone front/back or external USB cam)
+    const nextIdx = (selectedCameraIdx + 1) % cameraDevices.length;
+    setSelectedCameraIdx(nextIdx);
+    const nextCamera = cameraDevices[nextIdx];
+
+    await handleStartCamera(nextCamera.id);
+  };
+
+  // Scan from uploaded file / screenshot fallback
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setScanError('');
+    setScanStep('starting');
+
+    try {
+      const scanner = new Html5Qrcode('qr-file-detector');
+      const decodedText = await scanner.scanFile(file, true);
+      handleVerifyDecodedQR(decodedText);
+    } catch (err) {
+      setScanStep('error');
+      setScanError('Could not detect a valid QR code in this image. Try a clearer photo.');
+    }
+  };
+
+  // Fast demo verification fallback
+  const handleFastVerify = (type) => {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const newRecord = {
+      usn: currentUser.usn,
+      name: currentUser.name,
+      checkIn: type === 'entry' ? timeStr : (existingAttendance?.checkIn || '09:00 AM'),
+      checkOut: type === 'exit' ? timeStr : 'In Progress',
+      status: type === 'exit' ? 'Completed' : 'Checked In'
+    };
+
+    onRecordAttendance(event.id, newRecord);
+    setScanResult({ ...newRecord, actionType: type });
+    setScanStep('success');
+    stopScannerSafely();
   };
 
   // Export attendance CSV
@@ -92,15 +307,26 @@ export default function QRAttendanceModal({
       ref={dialogRef}
       closedby="any"
       className="x-modal"
-      onClose={onClose}
+      onClose={() => {
+        stopScannerSafely();
+        onClose();
+      }}
       style={{ maxWidth: 640 }}
     >
       <div className="modal-dialog-content">
         <div className="modal-header">
           <h2 className="modal-heading">
-            {isCoordinator ? 'Event QR Attendance & Roster' : 'Scan Attendance QR Code'}
+            {isCoordinator ? 'Event QR Attendance & Roster' : 'Live QR Attendance Scanner'}
           </h2>
-          <button type="button" className="modal-close-btn" onClick={onClose} aria-label="Close dialog">
+          <button
+            type="button"
+            className="modal-close-btn"
+            onClick={() => {
+              stopScannerSafely();
+              onClose();
+            }}
+            aria-label="Close dialog"
+          >
             <IconClose />
           </button>
         </div>
@@ -113,47 +339,41 @@ export default function QRAttendanceModal({
             </p>
           </div>
 
-          {/* Toggle Entry vs Exit QR */}
-          <div style={{ display: 'inline-flex', background: 'var(--card-bg)', padding: 4, borderRadius: 9999, border: '1px solid var(--border-color)' }}>
-            <button
-              type="button"
-              className={`filter-pill ${qrType === 'entry' ? 'active' : ''}`}
-              onClick={() => {
-                setQrType('entry');
-                setScanStep('idle');
-              }}
-              style={{ border: 'none' }}
-            >
-              Entry Check-In
-            </button>
-            <button
-              type="button"
-              className={`filter-pill ${qrType === 'exit' ? 'active' : ''}`}
-              onClick={() => {
-                setQrType('exit');
-                setScanStep('idle');
-              }}
-              style={{ border: 'none' }}
-            >
-              Exit Check-Out
-            </button>
-          </div>
-
-          {/* Coordinator View: QR Code + Attendance List */}
+          {/* Coordinator Mode */}
           {isCoordinator ? (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              {/* Toggle Entry vs Exit QR */}
+              <div style={{ display: 'inline-flex', background: 'var(--card-bg)', padding: 4, borderRadius: 9999, border: '1px solid var(--border-color)', marginBottom: 8 }}>
+                <button
+                  type="button"
+                  className={`filter-pill ${qrType === 'entry' ? 'active' : ''}`}
+                  onClick={() => setQrType('entry')}
+                  style={{ border: 'none' }}
+                >
+                  Entry Check-In
+                </button>
+                <button
+                  type="button"
+                  className={`filter-pill ${qrType === 'exit' ? 'active' : ''}`}
+                  onClick={() => setQrType('exit')}
+                  style={{ border: 'none' }}
+                >
+                  Exit Check-Out
+                </button>
+              </div>
+
               <div className="qr-canvas-box">
                 {qrDataUrl && <img src={qrDataUrl} alt="Event QR Code" className="qr-code-img" />}
               </div>
               <span className="qr-helper-text">
-                Students scan this QR code on entry & exit to record timestamped attendance.
+                Display this official QR on projector or kiosk. Students scan using their phone camera to record verified attendance.
               </span>
 
               {/* Attendance Roster Summary */}
               <div className="attendance-roster-section">
                 <div className="attendance-roster-header">
                   <h4 className="attendance-roster-title">
-                    Live Attendance Roster ({event.attendance?.length || 0} Registered)
+                    Live Attendance Roster ({event.attendance?.length || 0} Recorded)
                   </h4>
                   <button
                     type="button"
@@ -208,62 +428,39 @@ export default function QRAttendanceModal({
               </div>
             </div>
           ) : (
-            /* Student View: Camera Viewfinder & Attendance Confirmation */
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {scanStep === 'idle' && (
-                <div
-                  style={{
-                    width: 240,
-                    height: 240,
-                    borderRadius: 16,
-                    border: '2px dashed var(--accent-color)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 12,
-                    backgroundColor: 'var(--card-bg)'
-                  }}
-                >
-                  <IconCamera style={{ width: 44, height: 44, color: 'var(--accent-color)' }} />
-                  <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                    Ready to scan {qrType === 'entry' ? 'Entry' : 'Exit'} QR Code
+            /* Student Mode: Real Camera Viewfinder & Attendance Verification */
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+              {/* Unregistered warning notice */}
+              {!event.isRegistered && onRegisterEvent && (
+                <div style={{ width: '100%', padding: '10px 14px', borderRadius: 8, backgroundColor: 'rgba(255, 122, 0, 0.1)', border: '1px solid #ff7a00', fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                  <span style={{ color: '#ff7a00', fontWeight: 600 }}>
+                    You have not registered for this event yet.
                   </span>
-                  <button
-                    type="button"
+                  <a
+                    href={event.link || 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor'}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn-primary-post"
-                    onClick={handlePerformScan}
-                    style={{ fontSize: 13, padding: '7px 16px' }}
+                    style={{ fontSize: 12, padding: '4px 10px', textDecoration: 'none' }}
                   >
-                    Simulate Camera Scan
-                  </button>
+                    Register via Google Form
+                  </a>
                 </div>
               )}
 
-              {scanStep === 'scanning' && (
-                <div
-                  style={{
-                    width: 240,
-                    height: 240,
-                    borderRadius: 16,
-                    border: '2px solid var(--accent-color)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(29, 155, 240, 0.05)',
-                    position: 'relative'
-                  }}
-                >
-                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent-color)' }}>
-                    Verifying Student Credentials...
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>
-                    USN: {currentUser.usn}
-                  </div>
-                </div>
-              )}
+              {/* Status pill */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="qr-scan-badge">
+                  {existingAttendance ? `Current Status: ${existingAttendance.status}` : 'Not Checked In'}
+                </span>
+                {existingAttendance?.checkIn && (
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                    (Check-in: {existingAttendance.checkIn})
+                  </span>
+                )}
+              </div>
 
+              {/* Success Result View */}
               {scanStep === 'success' && scanResult && (
                 <div
                   style={{
@@ -286,15 +483,135 @@ export default function QRAttendanceModal({
                     <div><strong>Event:</strong> {event.title}</div>
                     <div><strong>Check-In:</strong> {scanResult.checkIn}</div>
                     <div><strong>Check-Out:</strong> {scanResult.checkOut}</div>
+                    <div><strong>Action:</strong> {scanResult.actionType === 'exit' ? 'Exit Check-Out' : 'Entry Check-In'}</div>
                   </div>
                   <button
                     type="button"
                     className="btn-primary-post"
-                    onClick={onClose}
+                    onClick={() => {
+                      stopScannerSafely();
+                      onClose();
+                    }}
                     style={{ marginTop: 14, fontSize: 13 }}
                   >
                     Done
                   </button>
+                </div>
+              )}
+
+              {/* Active Camera Viewfinder */}
+              {scanStep !== 'success' && (
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+                  <div className="qr-scanner-wrapper">
+                    {/* Viewfinder container always exists for Html5Qrcode to attach */}
+                    <div id="qr-camera-viewport" style={{ opacity: isCameraActive ? 1 : 0, pointerEvents: isCameraActive ? 'auto' : 'none' }} />
+                    
+                    {/* Scanning laser and border crosshairs */}
+                    {isCameraActive && (
+                      <>
+                        <div className="qr-scanner-laser" />
+                        <div className="qr-viewfinder-frame" />
+                      </>
+                    )}
+                    
+                    {/* Centered inactive placeholder */}
+                    {!isCameraActive && scanStep !== 'starting' && (
+                      <div className="qr-scanner-placeholder">
+                        <div className="qr-camera-icon-badge">
+                          <IconCamera style={{ width: 28, height: 28, color: 'var(--accent-color)' }} />
+                        </div>
+                        <p className="qr-placeholder-text">
+                          Camera is inactive. Click below to start scanning the event QR code.
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Starting state */}
+                    {scanStep === 'starting' && (
+                      <div className="qr-scanner-placeholder">
+                        <div className="qr-camera-icon-badge" style={{ animation: 'pulse 1.5s infinite' }}>
+                          <IconCamera style={{ width: 28, height: 28, color: 'var(--accent-color)' }} />
+                        </div>
+                        <p className="qr-placeholder-text">
+                          Initializing camera viewfinder...
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Scan error / camera note notice */}
+                  {scanError && (
+                    <div style={{ padding: '8px 14px', borderRadius: 8, backgroundColor: 'rgba(244, 33, 46, 0.1)', border: '1px solid #f4212e', color: '#f4212e', fontSize: 12, maxWidth: 360, textAlign: 'center', lineHeight: 1.4 }}>
+                      {scanError}
+                    </div>
+                  )}
+
+                  {/* Controls */}
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {!isCameraActive ? (
+                      <button
+                        type="button"
+                        className="btn-primary-post"
+                        onClick={() => handleStartCamera()}
+                        style={{ fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                      >
+                        <IconCamera style={{ width: 16, height: 16 }} />
+                        <span>Start Camera Scanner</span>
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="btn-qr-action"
+                          onClick={stopScannerSafely}
+                          style={{ fontSize: 13 }}
+                        >
+                          Stop Camera
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-qr-action"
+                          onClick={handleFlipCamera}
+                          style={{ fontSize: 13 }}
+                          title={cameraDevices.length > 1 ? `Switch camera (${selectedCameraIdx + 1} of ${cameraDevices.length})` : 'Only 1 camera detected on this computer'}
+                        >
+                          Flip Camera {cameraDevices.length > 1 ? `(${selectedCameraIdx + 1}/${cameraDevices.length})` : ''}
+                        </button>
+                      </>
+                    )}
+
+                    {/* File upload scanner fallback */}
+                    <button
+                      type="button"
+                      className="btn-qr-action"
+                      onClick={() => fileInputRef.current?.click()}
+                      style={{ fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                    >
+                      <IconMedia style={{ width: 14, height: 14 }} />
+                      <span>Upload QR Photo</span>
+                    </button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={handleFileUpload}
+                    />
+
+                    {/* Fast verification fallback for presentations without camera access */}
+                    <button
+                      type="button"
+                      className="btn-qr-action"
+                      onClick={() => handleFastVerify(existingAttendance ? 'exit' : 'entry')}
+                      style={{ fontSize: 13 }}
+                      title="Quick verification without camera hardware"
+                    >
+                      Quick Verify ({existingAttendance ? 'Exit' : 'Entry'})
+                    </button>
+                  </div>
+
+                  {/* Hidden file reader target container */}
+                  <div id="qr-file-detector" style={{ display: 'none' }} />
                 </div>
               )}
             </div>
