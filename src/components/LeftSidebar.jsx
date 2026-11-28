@@ -11,6 +11,7 @@ import {
   IconDisplay,
   IconLogout,
   IconMore,
+  IconSidebarToggle,
   VerifiedBadge,
   UserAvatar
 } from './Icons';
