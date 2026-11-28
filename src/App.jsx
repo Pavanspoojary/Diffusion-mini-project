@@ -294,6 +294,38 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
     }
   });
 
+  useEffect(() => {
+    try {
+      localStorage.setItem('college_hub_notifs_v1', JSON.stringify(notifications));
+    } catch {}
+  }, [notifications]);
+
+  // Native Web & PWA Notification Trigger
+  const triggerNativeNotification = async (title, body, url = '/') => {
+    if (typeof window === 'undefined' || !('Notification' in window)) return;
+    if (Notification.permission !== 'granted') return;
+
+    try {
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification(title, {
+          body,
+          icon: '/smvitm-logo.png',
+          badge: '/apple-touch-icon.png',
+          vibrate: [200, 100, 200],
+          data: { url }
+        });
+      } else {
+        new Notification(title, {
+          body,
+          icon: '/smvitm-logo.png'
+        });
+      }
+    } catch (err) {
+      console.info('[Notification trigger skipped]', err);
+    }
+  };
+
   // Modal States
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const [composeIntent, setComposeIntent] = useState({ mode: 'text' });
@@ -716,6 +748,7 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
       unread: true
     };
     setNotifications([newNotif, ...notifications]);
+    triggerNativeNotification(newNotif.title, newNotif.body, '/');
 
     // Persist asynchronously
     await createAnnouncement(newNotice);
@@ -769,6 +802,22 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
 
     // Persist to Supabase
     await toggleEventRegistration(eventId, currentUser, wasRegistered, currentCount);
+
+    if (nextIsRegistered && !wasRegistered) {
+      const regNotif = {
+        id: `notif-${Date.now()}`,
+        type: 'event',
+        title: `Registered: ${target.title}`,
+        body: `You are registered for ${target.title}. Access your pass in your profile.`,
+        time: 'Just now',
+        unread: true,
+        targetId: target.id,
+        targetNav: 'events'
+      };
+      setNotifications((prev) => [regNotif, ...prev]);
+      triggerNativeNotification(regNotif.title, regNotif.body, '/events');
+      createNotification(regNotif).catch(() => {});
+    }
   };
 
   const handleRecordAttendance = async (eventId, record) => {
@@ -809,6 +858,7 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
       unread: true
     };
     setNotifications([newNotif, ...notifications]);
+    triggerNativeNotification(newNotif.title, newNotif.body, '/events');
 
     // Persist to Supabase
     await recordAttendanceInDB(eventId, record);
@@ -830,8 +880,22 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
     setEvents([newEvent, ...events]);
     showToast('New event published');
 
+    const newNotif = {
+      id: `notif-${Date.now()}`,
+      type: 'event',
+      title: `New Event: ${newEvent.title}`,
+      body: `${newEvent.organizer} published an event for ${newEvent.date || 'upcoming dates'}.`,
+      time: 'Just now',
+      unread: true,
+      targetId: newEvent.id,
+      targetNav: 'events'
+    };
+    setNotifications((prev) => [newNotif, ...prev]);
+    triggerNativeNotification(newNotif.title, newNotif.body, '/events');
+
     // Persist to Supabase
     await createEvent(newEvent);
+    await createNotification(newNotif);
   };
 
   const handleDeleteEvent = async (eventId) => {
@@ -1094,6 +1158,32 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 
+  const handleSelectNotification = (notif) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notif.id ? { ...n, unread: false } : n))
+    );
+    if (notif.type === 'event' || notif.targetNav === 'events') {
+      setActiveNav('events');
+    } else {
+      setActiveNav('announcements');
+    }
+  };
+
+  const handleSendTestNotification = () => {
+    const testNotif = {
+      id: `notif-${Date.now()}`,
+      type: 'notice',
+      title: 'SMVITM Campus Hub',
+      body: 'In-app and PWA push notifications are active on this device.',
+      time: 'Just now',
+      unread: true,
+      targetNav: 'announcements'
+    };
+    setNotifications((prev) => [testNotif, ...prev]);
+    triggerNativeNotification(testNotif.title, testNotif.body, '/');
+    showToast('Test notification triggered');
+  };
+
   const openCompose = (intent) => {
     if (currentUser.roleKey === 'student') return;
     setComposeIntent(intent || { mode: 'text' });
@@ -1294,6 +1384,8 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
             currentUser={currentUser}
             onBack={() => setActiveNav('announcements')}
             isHeaderHidden={isHeaderHidden}
+            onSelectNotification={handleSelectNotification}
+            onSendTestNotification={handleSendTestNotification}
           />
         )}
 
@@ -1333,6 +1425,7 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
             onOpenDisplay={() => setIsDisplayOpen(true)}
             onOpenPwaModal={() => setIsPwaModalOpen(true)}
             isAppInstalled={isAppInstalled}
+            unreadCount={unreadCount}
             onOpenCommunity={openCommunity}
             onOpenFacultyDirectory={() => {
               setSelectedLecturerId(null);

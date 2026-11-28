@@ -5,6 +5,7 @@ import {
   IconDisplay,
   IconGraduationCap,
   IconAppDownload,
+  IconNotifications,
   CommunityAvatar,
   VerifiedBadge,
   UserAvatar
@@ -29,6 +30,7 @@ export default function ProfileView({
   onOpenFacultyDirectory,
   onOpenPwaModal,
   isAppInstalled = false,
+  unreadCount = 0,
   onLogout,
   isHeaderHidden = false
 }) {
@@ -209,6 +211,37 @@ export default function ProfileView({
                 <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
               </button>
             )}
+
+            <button
+              type="button"
+              className="profile-shortcut-item"
+              onClick={() => onSelectNav('notifications')}
+            >
+              <IconNotifications className="profile-shortcut-icon" />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span>Notifications &amp; Reminders</span>
+                  {unreadCount > 0 && (
+                    <span
+                      style={{
+                        background: 'var(--accent-color)',
+                        color: '#fff',
+                        fontSize: 11,
+                        fontWeight: 700,
+                        padding: '1px 6px',
+                        borderRadius: 10
+                      }}
+                    >
+                      {unreadCount}
+                    </span>
+                  )}
+                </div>
+                <span style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 400 }}>
+                  Academic circulars, event alerts &amp; reminders
+                </span>
+              </div>
+              <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
+            </button>
 
             <button
               type="button"

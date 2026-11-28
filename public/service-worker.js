@@ -59,3 +59,44 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
+// 3. Notification Handling for PWA and Browser Background Alerts
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url && 'focus' in client) {
+          if ('navigate' in client && targetUrl) {
+            client.navigate(targetUrl);
+          }
+          return client.focus();
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(targetUrl);
+      }
+    })
+  );
+});
+
+self.addEventListener('push', (event) => {
+  let payload = { title: 'Campus Hub Alert', body: 'New campus announcement or event update.' };
+  if (event.data) {
+    try {
+      payload = event.data.json();
+    } catch {
+      payload.body = event.data.text();
+    }
+  }
+  event.waitUntil(
+    self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: '/smvitm-logo.png',
+      badge: '/apple-touch-icon.png',
+      data: payload.data || { url: '/' }
+    })
+  );
+});
