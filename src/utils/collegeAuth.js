@@ -10,12 +10,22 @@ export const DEPT_CODE_MAP = {
   aids: 'AI&DS',
   ai: 'AI-ML',
   aiml: 'AI-ML',
+  ml: 'AI-ML',
   cs: 'CS',
   cse: 'CS',
   ec: 'EC',
   ece: 'EC',
   me: 'MECH',
-  mech: 'MECH'
+  mech: 'MECH',
+  cv: 'CIVIL',
+  civil: 'CIVIL',
+  mba: 'MBA',
+  maths: 'MATHS',
+  math: 'MATHS',
+  phy: 'PHY',
+  physics: 'PHY',
+  chem: 'CHEM',
+  chemistry: 'CHEM'
 };
 
 /**
@@ -26,7 +36,10 @@ export const ADMIN_EMAILS = new Set([
   '01pavan06@gmail.com'
 ]);
 
-const FACULTY_SUFFIXES = ['aids', 'aiml', 'mech', 'cse', 'ece', 'ds', 'ad', 'ai', 'cs', 'ec', 'me'];
+const FACULTY_SUFFIXES = [
+  'aids', 'aiml', 'mech', 'cse', 'ece', 'civil', 'maths', 'physics', 'chemistry', 'mba',
+  'ds', 'ad', 'ai', 'ml', 'cs', 'ec', 'me', 'cv', 'math', 'phy', 'chem'
+];
 
 /**
  * Parses a college email address, determines role (admin / student / faculty),

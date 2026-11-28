@@ -320,6 +320,71 @@ export const CommunityAvatar = ({ id, size = 36, className = '' }) => {
         </div>
       );
 
+    case 'CIVIL':
+      return (
+        <div
+          className={`reddit-avatar-circle ${className}`}
+          style={{ ...containerStyle, backgroundColor: '#059669', color: '#ffffff' }}
+        >
+          <svg viewBox="0 0 24 24" width={size * 0.58} height={size * 0.58} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 21h18M5 21V7l7-4 7 4v14M9 9v3M15 9v3M9 15v3M15 15v3" />
+          </svg>
+        </div>
+      );
+
+    case 'MBA':
+      return (
+        <div
+          className={`reddit-avatar-circle ${className}`}
+          style={{ ...containerStyle, backgroundColor: '#6366f1', color: '#ffffff' }}
+        >
+          <svg viewBox="0 0 24 24" width={size * 0.58} height={size * 0.58} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+          </svg>
+        </div>
+      );
+
+    case 'MATHS':
+      return (
+        <div
+          className={`reddit-avatar-circle ${className}`}
+          style={{ ...containerStyle, backgroundColor: '#0891b2', color: '#ffffff' }}
+        >
+          <svg viewBox="0 0 24 24" width={size * 0.58} height={size * 0.58} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 17l4-10h4l3 6 4-3" />
+          </svg>
+        </div>
+      );
+
+    case 'PHY':
+      return (
+        <div
+          className={`reddit-avatar-circle ${className}`}
+          style={{ ...containerStyle, backgroundColor: '#db2777', color: '#ffffff' }}
+        >
+          <svg viewBox="0 0 24 24" width={size * 0.58} height={size * 0.58} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="2" fill="currentColor" />
+            <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(30 12 12)" />
+            <ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-30 12 12)" />
+          </svg>
+        </div>
+      );
+
+    case 'CHEM':
+      return (
+        <div
+          className={`reddit-avatar-circle ${className}`}
+          style={{ ...containerStyle, backgroundColor: '#0d9488', color: '#ffffff' }}
+        >
+          <svg viewBox="0 0 24 24" width={size * 0.58} height={size * 0.58} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 2v5.5L4.5 18a2 2 0 0 0 1.7 3h11.6a2 2 0 0 0 1.7-3L14 7.5V2" />
+            <line x1="8.5" y1="2" x2="15.5" y2="2" />
+            <line x1="7" y1="16" x2="17" y2="16" />
+          </svg>
+        </div>
+      );
+
     default:
       return (
         <div
@@ -517,7 +582,8 @@ export const IconAward = ({ className = 'action-icon', style, ...props }) => (
 );
 
 export const UserAvatar = ({ user, sizeClass = 'avatar-md', className = '', style = {}, onClick }) => {
-  const photo = user?.photoUrl;
+  const [imgError, setImgError] = React.useState(false);
+  const photo = !imgError ? user?.photoUrl : null;
   const bg = user?.avatarBg || '#1d9bf0';
   const char = user?.avatarChar || (user?.name ? user.name.charAt(0).toUpperCase() : 'U');
 
@@ -525,6 +591,7 @@ export const UserAvatar = ({ user, sizeClass = 'avatar-md', className = '', styl
     <img
       src={photo}
       alt={user?.name || 'User profile photo'}
+      onError={() => setImgError(true)}
       style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
     />
   ) : (

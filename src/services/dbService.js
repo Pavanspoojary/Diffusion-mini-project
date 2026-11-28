@@ -592,7 +592,7 @@ export function subscribeToTable(table, onPayload) {
 
 // --- Lecturer Profiles API ---
 
-const LECTURERS_STORAGE_KEY = 'college_hub_lecturers_v1';
+const LECTURERS_STORAGE_KEY = 'college_hub_lecturers_v2';
 
 function mapLecturerFromDB(row) {
   return {
@@ -661,11 +661,12 @@ export function loadLocalLecturers() {
     const saved = localStorage.getItem(LECTURERS_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed) && parsed.length >= 50) {
         return parsed;
       }
     }
   } catch {}
+  saveLocalLecturers(INITIAL_LECTURERS);
   return INITIAL_LECTURERS;
 }
 
