@@ -9,10 +9,8 @@ import {
   IconBookmarks,
   IconProfile,
   IconDisplay,
-  IconGraduationCap,
   IconLogout,
   IconMore,
-  IconSidebarToggle,
   VerifiedBadge,
   UserAvatar
 } from './Icons';
@@ -31,25 +29,23 @@ export default function LeftSidebar({
   onLogout
 }) {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
-  const moreMenuRef = useRef(null);
   const userMenuRef = useRef(null);
 
+  const formattedHandle = currentUser.handle
+    ? (currentUser.handle.startsWith('@') ? currentUser.handle : `@${currentUser.handle}`)
+    : '';
+
   useEffect(() => {
-    if (!showMoreMenu && !showUserDropdown) return;
+    if (!showUserDropdown) return;
 
     const handleClickOutside = (e) => {
-      if (showMoreMenu && moreMenuRef.current && !moreMenuRef.current.contains(e.target)) {
-        setShowMoreMenu(false);
-      }
-      if (showUserDropdown && userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
         setShowUserDropdown(false);
       }
     };
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
-        setShowMoreMenu(false);
         setShowUserDropdown(false);
       }
     };
@@ -60,7 +56,7 @@ export default function LeftSidebar({
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [showMoreMenu, showUserDropdown]);
+  }, [showUserDropdown]);
 
   const canPublish = currentUser.roleKey !== 'student';
 
@@ -155,100 +151,6 @@ export default function LeftSidebar({
               <span className="nav-label">Bookmarks</span>
             </button>
 
-            {/* More Menu Dropdown */}
-            <div ref={moreMenuRef} style={{ position: 'relative' }}>
-              <button
-                type="button"
-                className={`nav-item ${showMoreMenu ? 'active' : ''}`}
-                onClick={() => setShowMoreMenu((prev) => !prev)}
-                aria-expanded={showMoreMenu}
-                aria-haspopup="true"
-              >
-                <div className="nav-icon-wrap">
-                  <IconMore className="nav-icon" />
-                </div>
-                <span className="nav-label">More</span>
-              </button>
-
-              {showMoreMenu && (
-                <div className="dropdown-popover more-menu-popover" style={{ bottom: 'calc(100% + 4px)', left: 0 }}>
-                  <button
-                    type="button"
-                    className="dropdown-item"
-                    onClick={() => {
-                      setShowMoreMenu(false);
-                      setActiveNav('faculty');
-                    }}
-                  >
-                    <div className="dropdown-item-left">
-                      <IconGraduationCap style={{ width: 18, height: 18 }} />
-                      <span className="dropdown-item-label">Faculty Directory</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="dropdown-item"
-                    onClick={() => {
-                      setShowMoreMenu(false);
-                      setActiveNav('websites');
-                    }}
-                  >
-                    <div className="dropdown-item-left">
-                      <IconWebsites style={{ width: 18, height: 18 }} />
-                      <span className="dropdown-item-label">College ERP & Portals</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="dropdown-item"
-                    onClick={() => {
-                      setShowMoreMenu(false);
-                      onOpenDisplay();
-                    }}
-                  >
-                    <div className="dropdown-item-left">
-                      <IconDisplay style={{ width: 18, height: 18 }} />
-                      <span className="dropdown-item-label">Display & Appearance</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="dropdown-item"
-                    onClick={() => {
-                      setShowMoreMenu(false);
-                      if (onToggleSidebar) onToggleSidebar();
-                    }}
-                  >
-                    <div className="dropdown-item-left">
-                      <IconSidebarToggle style={{ width: 18, height: 18 }} />
-                      <span className="dropdown-item-label">Toggle Sidebar</span>
-                    </div>
-                    <span className="dropdown-kbd">[</span>
-                  </button>
-
-                  <div className="dropdown-divider" />
-
-                  {onLogout && (
-                    <button
-                      type="button"
-                      className="dropdown-item dropdown-item-danger"
-                      onClick={() => {
-                        setShowMoreMenu(false);
-                        onLogout();
-                      }}
-                    >
-                      <div className="dropdown-item-left">
-                        <IconLogout style={{ width: 18, height: 18 }} />
-                        <span className="dropdown-item-label">Log out @{currentUser.handle}</span>
-                      </div>
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
           </nav>
 
           {/* Post / Publish CTA Button (Faculty, Coordinator, Admin only) */}
@@ -299,7 +201,7 @@ export default function LeftSidebar({
                     <span className="user-display-name" style={{ fontSize: 14, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{currentUser.name}</span>
                     <VerifiedBadge type={currentUser.verifiedType} />
                   </div>
-                  <span className="user-handle" style={{ fontSize: 12, color: 'var(--text-secondary)' }}>@{currentUser.handle}</span>
+                  <span className="user-handle" style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{formattedHandle}</span>
                 </div>
               </div>
 
@@ -346,7 +248,7 @@ export default function LeftSidebar({
                 >
                   <div className="dropdown-item-left">
                     <IconLogout style={{ width: 18, height: 18 }} />
-                    <span className="dropdown-item-label">Log out @{currentUser.handle}</span>
+                    <span className="dropdown-item-label">Log out {formattedHandle}</span>
                   </div>
                 </button>
               )}
