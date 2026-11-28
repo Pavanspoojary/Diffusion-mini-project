@@ -14,6 +14,69 @@ const SEMESTER_OPTIONS = [
   '8th Sem'
 ];
 
+function getInitialForm(lecturer) {
+  if (!lecturer) {
+    return {
+      name: '',
+      designation: '',
+      headline: '',
+      branch: 'AI&DS',
+      department: '',
+      employeeId: '',
+      location: 'SMVITM Campus, Bantakal, Udupi',
+      experienceYears: '',
+      about: '',
+      contact: {
+        email: '',
+        phone: '',
+        office: '',
+        officeHours: '',
+        linkedin: '',
+        scholar: '',
+        website: ''
+      },
+      yearsTaught: [],
+      semestersTaught: [],
+      subjects: [],
+      education: [],
+      experience: [],
+      skills: []
+    };
+  }
+  return {
+    name: lecturer.name || '',
+    designation: lecturer.designation || '',
+    headline: lecturer.headline || '',
+    branch: lecturer.branch || 'AI&DS',
+    department: lecturer.department || '',
+    employeeId: lecturer.employeeId || '',
+    location: lecturer.location || 'SMVITM Campus, Bantakal, Udupi',
+    experienceYears: lecturer.experienceYears || '',
+    about: lecturer.about || '',
+    contact: {
+      email: lecturer.contact?.email || '',
+      phone: lecturer.contact?.phone || '',
+      office: lecturer.contact?.office || '',
+      officeHours: lecturer.contact?.officeHours || '',
+      linkedin: lecturer.contact?.linkedin || '',
+      scholar: lecturer.contact?.scholar || '',
+      website: lecturer.contact?.website || ''
+    },
+    yearsTaught: Array.isArray(lecturer.yearsTaught) ? [...lecturer.yearsTaught] : [],
+    semestersTaught: Array.isArray(lecturer.semestersTaught) ? [...lecturer.semestersTaught] : [],
+    subjects: Array.isArray(lecturer.subjects)
+      ? lecturer.subjects.map((s) => ({ ...s }))
+      : [],
+    education: Array.isArray(lecturer.education)
+      ? lecturer.education.map((e) => ({ ...e }))
+      : [],
+    experience: Array.isArray(lecturer.experience)
+      ? lecturer.experience.map((ex) => ({ ...ex }))
+      : [],
+    skills: Array.isArray(lecturer.skills) ? [...lecturer.skills] : []
+  };
+}
+
 export default function LecturerEditModal({
   isOpen,
   onClose,
@@ -21,7 +84,7 @@ export default function LecturerEditModal({
   onSaveProfile
 }) {
   const [activeSection, setActiveSection] = useState('intro'); // 'intro' | 'contact' | 'teaching' | 'education'
-  const [form, setForm] = useState(null);
+  const [form, setForm] = useState(() => getInitialForm(lecturer));
   const [skillInput, setSkillInput] = useState('');
   const dialogRef = useRef(null);
 
@@ -29,50 +92,28 @@ export default function LecturerEditModal({
     if (isOpen && lecturer) {
       setActiveSection('intro');
       setSkillInput('');
-      setForm({
-        name: lecturer.name || '',
-        designation: lecturer.designation || '',
-        headline: lecturer.headline || '',
-        branch: lecturer.branch || 'AI&DS',
-        department: lecturer.department || '',
-        employeeId: lecturer.employeeId || '',
-        location: lecturer.location || 'SMVITM Campus, Bantakal, Udupi',
-        experienceYears: lecturer.experienceYears || '',
-        about: lecturer.about || '',
-        contact: {
-          email: lecturer.contact?.email || '',
-          phone: lecturer.contact?.phone || '',
-          office: lecturer.contact?.office || '',
-          officeHours: lecturer.contact?.officeHours || '',
-          linkedin: lecturer.contact?.linkedin || '',
-          scholar: lecturer.contact?.scholar || '',
-          website: lecturer.contact?.website || ''
-        },
-        yearsTaught: Array.isArray(lecturer.yearsTaught) ? [...lecturer.yearsTaught] : [],
-        semestersTaught: Array.isArray(lecturer.semestersTaught) ? [...lecturer.semestersTaught] : [],
-        subjects: Array.isArray(lecturer.subjects)
-          ? lecturer.subjects.map((s) => ({ ...s }))
-          : [],
-        education: Array.isArray(lecturer.education)
-          ? lecturer.education.map((e) => ({ ...e }))
-          : [],
-        experience: Array.isArray(lecturer.experience)
-          ? lecturer.experience.map((ex) => ({ ...ex }))
-          : [],
-        skills: Array.isArray(lecturer.skills) ? [...lecturer.skills] : []
-      });
+      setForm(getInitialForm(lecturer));
     }
   }, [isOpen, lecturer]);
 
   useEffect(() => {
-    if (isOpen && dialogRef.current) {
-      if (!dialogRef.current.open) dialogRef.current.showModal();
-    } else if (!isOpen && dialogRef.current && dialogRef.current.open) {
-      dialogRef.current.close();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      if (!dialog.open) {
+        try {
+          dialog.showModal();
+        } catch {
+          dialog.setAttribute('open', '');
+        }
+      }
+    } else if (dialog.open) {
+      dialog.close();
     }
   }, [isOpen]);
 
-  if (!isOpen || !lecturer || !form) return null;
+  if (!isOpen || !lecturer) return null;
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -239,10 +280,22 @@ export default function LecturerEditModal({
 
   return (
     <dialog
-      ref={dialogRef}
+      ref={(el) => {
+        dialogRef.current = el;
+        if (el && isOpen && !el.open) {
+          try {
+            el.showModal();
+          } catch {
+            el.setAttribute('open', '');
+          }
+        }
+      }}
       closedby="any"
       className="x-modal li-edit-profile-modal"
       onClose={onClose}
+      onClick={(e) => {
+        if (e.target === dialogRef.current) onClose();
+      }}
     >
       <div className="modal-dialog-content">
         <div className="modal-header">

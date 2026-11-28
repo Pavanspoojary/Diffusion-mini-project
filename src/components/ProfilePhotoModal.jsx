@@ -51,10 +51,19 @@ export default function ProfilePhotoModal({
   }, [isOpen, lecturer]);
 
   useEffect(() => {
-    if (isOpen && dialogRef.current) {
-      if (!dialogRef.current.open) dialogRef.current.showModal();
-    } else if (!isOpen && dialogRef.current && dialogRef.current.open) {
-      dialogRef.current.close();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      if (!dialog.open) {
+        try {
+          dialog.showModal();
+        } catch {
+          dialog.setAttribute('open', '');
+        }
+      }
+    } else if (dialog.open) {
+      dialog.close();
     }
   }, [isOpen]);
 
@@ -96,10 +105,22 @@ export default function ProfilePhotoModal({
 
   return (
     <dialog
-      ref={dialogRef}
+      ref={(el) => {
+        dialogRef.current = el;
+        if (el && isOpen && !el.open) {
+          try {
+            el.showModal();
+          } catch {
+            el.setAttribute('open', '');
+          }
+        }
+      }}
       closedby="any"
       className="x-modal li-photo-modal"
       onClose={onClose}
+      onClick={(e) => {
+        if (e.target === dialogRef.current) onClose();
+      }}
     >
       <input
         type="file"
