@@ -89,6 +89,12 @@ function mapEventFromDB(row, userRegisteredSet = new Set(), attendanceList = [])
     time: row.time,
     venue: row.venue,
     poster: row.poster || null,
+    banner: row.banner || (
+      row.id === 'evt-algorhythm-2026' ? '/events/algo-highlight-banner.jpg' :
+      row.id === 'evt-cisc-2026' ? '/events/cisc-highlight-banner.jpg' :
+      row.id === 'evt-cmr-hackfest-2027' ? '/events/cmr-highlight-banner.jpg' :
+      row.id === 'evt-ideatex-2027' ? '/events/ideatex-highlight-banner.jpg' : (row.poster || null)
+    ),
     badge: row.badge || (
       row.id === 'evt-algorhythm-2026' ? 'Cultural & Talent Fest' :
       row.id === 'evt-cisc-2026' ? 'Poster Presentation' :
