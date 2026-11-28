@@ -24,7 +24,10 @@ import { cleanInstagramUrl } from '../utils/urlUtils';
 
 function PortalLogoIcon({ site, getSiteIcon }) {
   const [hasError, setHasError] = useState(false);
-  const logo = site.logo || (PORTAL_LOGOS && PORTAL_LOGOS[site.id]);
+  let logo = site.logo || (PORTAL_LOGOS && PORTAL_LOGOS[site.id]);
+  if (site.id === 'web-2' && (logo === '/portals/edmin.png' || !logo)) {
+    logo = '/portals/edmin.svg';
+  }
 
   if (logo && !hasError) {
     return (
@@ -439,7 +442,7 @@ export default function WebsitesView({
             const isCopied = copiedId === site.id;
             const hostname = getHostname(site.url);
 
-            const isAppIcon = site.id === 'web-1' || site.logo === '/portals/printin.svg' || site.logo === '/portals/printin.png';
+            const isAppIcon = site.id === 'web-1' || site.id === 'web-2' || site.logo?.includes('printin') || site.logo?.includes('edmin');
 
             return (
               <article key={site.id} className="web-card">

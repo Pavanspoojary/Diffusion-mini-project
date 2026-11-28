@@ -9097,7 +9097,7 @@ export const INITIAL_EVENTS = [
 
 export const PORTAL_LOGOS = {
   'web-1': '/portals/printin.svg',
-  'web-2': '/portals/edmin.png',
+  'web-2': '/portals/edmin.svg',
   'web-3': '/portals/vtu.png',
   'web-4': '/portals/library.png',
   'web-5': '/portals/asv.svg',
@@ -9142,7 +9142,7 @@ export const INITIAL_WEBSITES = [
     url: 'https://smvitm.edmin.co/#/login',
     badge: 'Academic ERP',
     iconType: 'database',
-    logo: '/portals/edmin.png'
+    logo: '/portals/edmin.svg'
   },
   {
     id: 'web-3',
