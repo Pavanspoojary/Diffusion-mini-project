@@ -4170,10 +4170,17 @@ dialog::backdrop {
   -webkit-backdrop-filter: blur(2px);
 }
 
+body.modal-open,
+body:has(dialog[open]) {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
 .modal-dialog-content {
   display: flex;
   flex-direction: column;
   max-height: 85vh;
+  overscroll-behavior: contain;
 }
 
 .modal-header {
@@ -7062,11 +7069,7 @@ html[data-theme="dim"] .li-dir-avatar {
 }
 
 .li-hero-banner-grid {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 16px 16px;
-  pointer-events: none;
+  display: none;
 }
 
 .li-hero-dept-pill {
@@ -7961,6 +7964,8 @@ dialog.x-modal.li-edit-profile-modal {
   padding: 16px 20px;
   max-height: 62vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .li-edit-fields {

@@ -82,7 +82,6 @@ export default function LecturerProfileDetail({
           className="li-hero-banner"
           style={{ background: lecturer.bannerBg || 'linear-gradient(135deg, #4f46e5, #1d9bf0)' }}
         >
-          <div className="li-hero-banner-grid" />
           <span className="li-hero-dept-pill">{lecturer.branch} Faculty</span>
           {canEdit && (
             <button
