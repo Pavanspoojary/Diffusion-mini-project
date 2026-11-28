@@ -73,7 +73,7 @@ const getRouteNav = () => {
   return 'announcements';
 };
 
-export default function App({ isClerkConfigured = false }) {
+export default function App({ isClerkConfigured = false, clerkPublishableKey = '' }) {
   // Theme & Styling - default to 'light' / white theme
   const [theme, setTheme] = useState(() => {
     try {
@@ -92,7 +92,9 @@ export default function App({ isClerkConfigured = false }) {
   // Authentication State
   const isClerkEnabled = Boolean(
     isClerkConfigured ||
-    (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY && import.meta.env.VITE_CLERK_PUBLISHABLE_KEY.trim() !== '')
+    Boolean(clerkPublishableKey) ||
+    Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY?.trim()) ||
+    Boolean(import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim())
   );
 
   const { isLoaded, isSignedIn } = useAuth();
