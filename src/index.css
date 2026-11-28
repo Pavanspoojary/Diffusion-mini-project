@@ -278,7 +278,8 @@ img {
 
 html[data-theme="light"] .smvitm-brand-logo,
 html[data-theme="light"] .x-logo,
-html[data-theme="light"] .auth-hero-x-logo {
+html[data-theme="light"] .auth-hero-x-logo,
+html[data-theme="light"] .auth-mobile-logo {
   filter: brightness(0);
 }
 
@@ -5490,7 +5491,16 @@ dialog::backdrop {
   font-size: 15px;
   padding: 10px 16px;
   border-radius: 9999px;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+html[data-theme="light"] .btn-auth-signin {
+  border-color: #cfd9de;
 }
 
 .btn-auth-signin:hover {
@@ -5693,19 +5703,31 @@ dialog::backdrop {
 @media (max-width: 900px) {
   .auth-main-grid {
     grid-template-columns: 1fr;
-    padding: 16px;
+    padding: 24px 20px 32px 20px;
   }
   .auth-hero-logo-col {
     display: none;
   }
   .auth-mobile-logo-bar {
     display: block;
+    margin-bottom: 24px;
+  }
+  .auth-content-col {
+    padding: 0;
+    max-width: 100%;
+  }
+  .auth-actions-group {
+    width: 100%;
+    max-width: 360px;
   }
   .auth-main-heading {
-    font-size: 40px;
+    font-size: 38px;
+    letter-spacing: -0.8px;
+    margin-bottom: 18px;
   }
   .auth-sub-heading {
-    font-size: 24px;
+    font-size: 22px;
+    margin-bottom: 24px;
   }
 }
 

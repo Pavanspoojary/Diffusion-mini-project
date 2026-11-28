@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Campus Hub - Real-time Notices, Events & Resources">
   <title>SMVITM Campus Hub</title>
@@ -14,7 +14,13 @@
   <script>
     (function() {
       try {
-        var t = localStorage.getItem('college_hub_theme') || 'light';
+        var explicit = localStorage.getItem('college_hub_theme_explicit');
+        var t = localStorage.getItem('college_hub_theme');
+        // Force light/white theme by default unless user explicitly chose dark in Display settings
+        if (explicit !== 'true' || (t !== 'dark' && t !== 'dim' && t !== 'light')) {
+          t = 'light';
+          localStorage.setItem('college_hub_theme', 'light');
+        }
         document.documentElement.setAttribute('data-theme', t);
         var c = localStorage.getItem('college_hub_color') || 'blue';
         document.documentElement.setAttribute('data-color', c);

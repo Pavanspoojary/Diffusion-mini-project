@@ -73,8 +73,19 @@ const getRouteNav = () => {
 };
 
 export default function App({ isClerkConfigured = false }) {
-  // Theme & Styling
-  const [theme, setTheme] = useState(() => localStorage.getItem('college_hub_theme') || 'light');
+  // Theme & Styling - default to 'light' / white theme
+  const [theme, setTheme] = useState(() => {
+    try {
+      const explicit = localStorage.getItem('college_hub_theme_explicit');
+      const saved = localStorage.getItem('college_hub_theme');
+      if (explicit === 'true' && (saved === 'dark' || saved === 'dim' || saved === 'light')) {
+        return saved;
+      }
+      return 'light';
+    } catch {
+      return 'light';
+    }
+  });
   const [color, setColor] = useState(() => localStorage.getItem('college_hub_color') || 'blue');
 
   // Authentication State

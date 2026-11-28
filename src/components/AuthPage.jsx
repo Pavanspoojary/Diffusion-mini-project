@@ -127,14 +127,14 @@ export default function AuthPage({
       <div className="auth-main-grid">
         {/* Left Giant X Logo Section */}
         <div className="auth-hero-logo-col">
-          <XLogo className="auth-hero-x-logo" />
+          <XLogo className="auth-hero-x-logo smvitm-brand-logo" />
         </div>
 
         {/* Right Content Section */}
         <div className="auth-content-col">
           {/* Top Mobile Logo */}
           <div className="auth-mobile-logo-bar">
-            <XLogo style={{ width: 40, height: 40 }} />
+            <XLogo className="auth-mobile-logo smvitm-brand-logo" style={{ width: 44, height: 44 }} />
           </div>
 
           <h1 className="auth-main-heading">Happening now</h1>
