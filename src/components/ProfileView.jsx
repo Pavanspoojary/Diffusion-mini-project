@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   IconSidebarToggle,
   IconBookmarks,
-  IconSettings,
+  IconDisplay,
   IconGraduationCap,
   CommunityAvatar,
   VerifiedBadge,
@@ -222,7 +222,7 @@ export default function ProfileView({
               className="profile-shortcut-item"
               onClick={onOpenDisplay}
             >
-              <IconSettings className="profile-shortcut-icon" />
+              <IconDisplay className="profile-shortcut-icon" />
               <span>Display & Appearance</span>
               <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
             </button>

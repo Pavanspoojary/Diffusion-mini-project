@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   IconClose,
-  IconSettings,
+  IconDisplay,
   IconBookmarks,
   CommunityAvatar,
   VerifiedBadge,
@@ -143,7 +143,7 @@ export default function MobileDrawer({
               onClose();
             }}
           >
-            <IconSettings className="mobile-drawer-action-icon" />
+            <IconDisplay className="mobile-drawer-action-icon" />
             <span>Display & Appearance</span>
           </button>
         </div>
