@@ -4,6 +4,7 @@ import {
   IconBookmarks,
   IconDisplay,
   IconGraduationCap,
+  IconAppDownload,
   CommunityAvatar,
   VerifiedBadge,
   UserAvatar
@@ -26,6 +27,8 @@ export default function ProfileView({
   onOpenDisplay,
   onOpenCommunity,
   onOpenFacultyDirectory,
+  onOpenPwaModal,
+  isAppInstalled = false,
   onLogout,
   isHeaderHidden = false
 }) {
@@ -226,6 +229,23 @@ export default function ProfileView({
               <span>Display & Appearance</span>
               <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
             </button>
+
+            {onOpenPwaModal && (
+              <button
+                type="button"
+                className="profile-shortcut-item"
+                onClick={onOpenPwaModal}
+              >
+                <IconAppDownload className="profile-shortcut-icon" />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
+                  <span>Download / Install App</span>
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 400 }}>
+                    {isAppInstalled ? 'Installed as App' : 'Add to home screen & offline access'}
+                  </span>
+                </div>
+                <span className="profile-shortcut-chevron" aria-hidden="true">&rsaquo;</span>
+              </button>
+            )}
           </div>
         </div>
 

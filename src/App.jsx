@@ -15,6 +15,7 @@ import BookmarksView from './components/BookmarksView';
 import ComposeModal from './components/ComposeModal';
 import CreateEventModal from './components/CreateEventModal';
 import DisplayModal from './components/DisplayModal';
+import PwaInstallModal from './components/PwaInstallModal';
 import LightboxModal from './components/LightboxModal';
 import QRAttendanceModal from './components/QRAttendanceModal';
 import AuthPage from './components/AuthPage';
@@ -298,6 +299,52 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
   const [composeIntent, setComposeIntent] = useState({ mode: 'text' });
   const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
   const [isDisplayOpen, setIsDisplayOpen] = useState(false);
+  const [isPwaModalOpen, setIsPwaModalOpen] = useState(false);
+  const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      Boolean(window.navigator.standalone)
+    );
+  });
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredInstallPrompt(e);
+    };
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setDeferredInstallPrompt(null);
+      showToast('Campus Hub installed successfully');
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleTriggerPwaInstall = async () => {
+    if (deferredInstallPrompt) {
+      try {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          setDeferredInstallPrompt(null);
+          setIsAppInstalled(true);
+          setIsPwaModalOpen(false);
+          showToast('Installing Campus Hub...');
+        }
+      } catch (err) {
+        setIsPwaModalOpen(true);
+      }
+    } else {
+      setIsPwaModalOpen(true);
+    }
+  };
   const [lightboxImg, setLightboxImg] = useState(null);
   const [qrModal, setQrModal] = useState({ isOpen: false, event: null, mode: 'student' });
   const [toastMessage, setToastMessage] = useState('');
@@ -1284,6 +1331,8 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
             onToggleSidebar={handleToggleSidebar}
             onSelectNav={(nav) => setActiveNav(nav)}
             onOpenDisplay={() => setIsDisplayOpen(true)}
+            onOpenPwaModal={() => setIsPwaModalOpen(true)}
+            isAppInstalled={isAppInstalled}
             onOpenCommunity={openCommunity}
             onOpenFacultyDirectory={() => {
               setSelectedLecturerId(null);
@@ -1437,6 +1486,14 @@ export default function App({ isClerkConfigured = false, clerkPublishableKey = '
         setTheme={setTheme}
         color={color}
         setColor={setColor}
+      />
+
+      <PwaInstallModal
+        isOpen={isPwaModalOpen}
+        onClose={() => setIsPwaModalOpen(false)}
+        canInstallDirectly={Boolean(deferredInstallPrompt)}
+        onInstall={handleTriggerPwaInstall}
+        isAlreadyInstalled={isAppInstalled}
       />
 
       <LightboxModal

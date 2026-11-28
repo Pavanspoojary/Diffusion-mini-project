@@ -633,3 +633,9 @@ export const UserAvatar = ({ user, sizeClass = 'avatar-md', className = '', styl
     </div>
   );
 };
+
+export const IconAppDownload = ({ className = 'profile-shortcut-icon', style, ...props }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props}>
+    <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14zm-4-6V8h-2v5H8.5l3.5 3.5 3.5-3.5H13z" fill="currentColor" />
+  </svg>
+);
