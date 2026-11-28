@@ -1648,38 +1648,81 @@ select option {
 .li-composer-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-  margin-top: 4px;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .li-composer-action {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
-  border-radius: 8px;
+  padding: 6px 12px;
+  border-radius: 9999px;
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--text-secondary);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  background-color: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
 }
 
 .li-composer-action:hover {
-  background-color: var(--bg-hover);
+  background-color: var(--bg-hover-subtle);
+  border-color: var(--border-color);
   color: var(--text-primary);
 }
 
 .li-composer-action-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
 }
 
-.li-composer-action-icon.video { color: #00ba7c; }
-.li-composer-action-icon.photo { color: #378fe9; }
-.li-composer-action-icon.article { color: #e16729; }
+.li-composer-action:hover .li-composer-action-icon {
+  transform: scale(1.06);
+}
+
+.li-composer-action-icon .li-icon,
+.li-composer-action-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.li-composer-action-icon.video {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+html[data-theme="light"] .li-composer-action-icon.video {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.li-composer-action-icon.photo {
+  background-color: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
+}
+html[data-theme="light"] .li-composer-action-icon.photo {
+  background-color: #f0f9ff;
+  color: #0284c7;
+}
+
+.li-composer-action-icon.article {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+html[data-theme="light"] .li-composer-action-icon.article {
+  background-color: #fefce8;
+  color: #b45309;
+}
 
 /* --- Compose modal --- */
 dialog.x-modal.li-compose-modal {
