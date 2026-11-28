@@ -146,8 +146,21 @@ export const IconMore = ({ className = 'icon-sm', style, ...props }) => (
 );
 
 export const IconMedia = ({ className = 'tool-icon', style, ...props }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props}>
-    <path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.41 0 .75.34.75.75v9.64l-4.14-4.14c-.68-.68-1.79-.68-2.47 0l-5.64 5.64-1.64-1.64c-.68-.68-1.79-.68-2.47 0L3.5 14.36V4.25c0-.41.34-.75.75-.75zm15.5 17H4.25a.75.75 0 0 1-.75-.75v-4.04l2.5-2.5a.25.25 0 0 1 .35 0l1.64 1.64c.68.68 1.79.68 2.47 0l5.64-5.64a.25.25 0 0 1 .35 0l4.65 4.65v5.89c0 .41-.34.75-.75.75zM7.5 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill="currentColor" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+    style={style}
+    {...props}
+  >
+    <rect width="18" height="18" x="3" y="3" rx="4" />
+    <circle cx="9" cy="9" r="2" />
+    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
   </svg>
 );
 
@@ -344,14 +357,41 @@ export const IconLink = ({ className = 'li-icon', style, ...props }) => (
 );
 
 export const IconVideo = ({ className = 'li-icon', style, ...props }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props}>
-    <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" fill="currentColor" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+    style={style}
+    {...props}
+  >
+    <rect width="14" height="13" x="2" y="5.5" rx="3" />
+    <path d="m16 9.5 6-3.5v12l-6-3.5v-5z" />
   </svg>
 );
 
 export const IconArticle = ({ className = 'li-icon', style, ...props }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style} {...props}>
-    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={className}
+    style={style}
+    {...props}
+  >
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <line x1="10" y1="9" x2="8" y2="9" />
   </svg>
 );
 
