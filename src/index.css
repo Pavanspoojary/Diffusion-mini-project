@@ -5381,28 +5381,6 @@ dialog::backdrop {
   margin-bottom: 24px;
 }
 
-.auth-hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  background-color: var(--bg-hover-subtle);
-  border: 1px solid var(--border-color);
-  margin-bottom: 20px;
-  align-self: flex-start;
-}
-
-.auth-hero-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: var(--accent-color);
-}
-
 .auth-main-heading {
   font-size: 64px;
   font-weight: 800;
@@ -5807,11 +5785,6 @@ html[data-theme="light"] .btn-auth-signin {
     font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
-  }
-
-  .auth-hero-badge {
-    align-self: center;
-    margin-bottom: 16px;
   }
 
   .auth-main-heading {

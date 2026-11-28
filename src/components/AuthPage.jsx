@@ -141,11 +141,6 @@ export default function AuthPage({
             </div>
           </div>
 
-          <div className="auth-hero-badge">
-            <span className="auth-hero-badge-dot"></span>
-            Official Institutional Portal
-          </div>
-
           <h1 className="auth-main-heading">Happening now</h1>
           <h2 className="auth-sub-heading">Join your campus community today.</h2>
 
