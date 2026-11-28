@@ -7,7 +7,7 @@ import {
   VerifiedBadge,
   UserAvatar
 } from './Icons';
-import { BRANCHES } from '../data/initialData';
+import { COMMUNITIES } from '../data/initialData';
 import { canAccessCommunity } from '../utils/collegeAuth';
 
 export default function MobileDrawer({
@@ -95,7 +95,7 @@ export default function MobileDrawer({
                 <span className="mobile-drawer-comm-sub">General Feed</span>
               </div>
             </button>
-            {BRANCHES.map((b) => {
+            {COMMUNITIES.map((b) => {
               const hasAccess = canAccessCommunity(currentUser, b.id);
               return (
                 <button

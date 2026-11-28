@@ -18,7 +18,7 @@ import {
   VerifiedBadge,
   UserAvatar
 } from './Icons';
-import { BRANCHES, CATEGORIES, USERS } from '../data/initialData';
+import { COMMUNITIES, CATEGORIES, USERS } from '../data/initialData';
 
 const MAX_CHARS = 500;
 const MAX_CHARS_ARTICLE = 3000;
@@ -354,7 +354,7 @@ export default function ComposeModal({
               onChange={(e) => setBranch(e.target.value)}
             >
               <option value="ALL">s/all (All Departments)</option>
-              {BRANCHES.map((b) => (
+              {COMMUNITIES.map((b) => (
                 <option key={b.id} value={b.id}>{b.slug}</option>
               ))}
             </select>

@@ -3,7 +3,7 @@
  * Clean X.com Theme - Zero Emojis Policy
  */
 
-export const BRANCHES = [
+export const COMMUNITIES = [
   {
     id: 'AI&DS',
     label: 'AI & Data Science',
@@ -57,42 +57,42 @@ export const BRANCHES = [
     members: '140 members',
     description: 'Structural, Environmental & Infrastructure Engineering',
     avatarBg: 'linear-gradient(135deg, #10b981, #059669)'
-  },
+  }
+];
+
+export const BRANCHES = [
+  ...COMMUNITIES,
   {
     id: 'MBA',
     label: 'Management Studies (MBA)',
     code: 'MBA',
-    slug: 's/MBA',
-    members: '120 members',
-    description: 'Business Administration, Marketing & Finance',
-    avatarBg: 'linear-gradient(135deg, #6366f1, #8b5cf6)'
+    department: 'Dept. of Management Studies (MBA)',
+    avatarBg: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+    isCommunity: false
   },
   {
     id: 'MATHS',
     label: 'Mathematics',
     code: 'MATHS',
-    slug: 's/MATHS',
-    members: '95 members',
-    description: 'Applied Mathematics, Calculus & Statistics',
-    avatarBg: 'linear-gradient(135deg, #06b6d4, #0284c7)'
+    department: 'Dept. of Mathematics',
+    avatarBg: 'linear-gradient(135deg, #06b6d4, #0284c7)',
+    isCommunity: false
   },
   {
     id: 'PHY',
     label: 'Physics',
     code: 'PHY',
-    slug: 's/PHY',
-    members: '85 members',
-    description: 'Applied Physics, Materials Science & Optics',
-    avatarBg: 'linear-gradient(135deg, #ec4899, #f43f5e)'
+    department: 'Dept. of Physics',
+    avatarBg: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+    isCommunity: false
   },
   {
     id: 'CHEM',
     label: 'Chemistry',
     code: 'CHEM',
-    slug: 's/CHEM',
-    members: '80 members',
-    description: 'Engineering Chemistry, Polymers & Nanotechnology',
-    avatarBg: 'linear-gradient(135deg, #14b8a6, #0d9488)'
+    department: 'Dept. of Chemistry',
+    avatarBg: 'linear-gradient(135deg, #14b8a6, #0d9488)',
+    isCommunity: false
   }
 ];
 

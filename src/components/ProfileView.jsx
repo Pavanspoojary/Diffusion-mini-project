@@ -8,7 +8,7 @@ import {
   VerifiedBadge,
   UserAvatar
 } from './Icons';
-import { BRANCHES } from '../data/initialData';
+import { COMMUNITIES } from '../data/initialData';
 import LecturerProfileDetail from './LecturerProfileDetail';
 
 export default function ProfileView({
@@ -169,7 +169,7 @@ export default function ProfileView({
         <div className="profile-section">
           <span className="profile-section-title">Branch Communities</span>
           <div className="profile-community-grid">
-            {BRANCHES.map((b) => (
+            {COMMUNITIES.map((b) => (
               <button
                 key={b.id}
                 type="button"

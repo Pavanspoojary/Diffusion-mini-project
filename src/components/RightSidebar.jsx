@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconSearch, IconClose, CommunityAvatar } from './Icons';
-import { BRANCHES } from '../data/initialData';
+import { COMMUNITIES } from '../data/initialData';
 import { canAccessCommunity } from '../utils/collegeAuth';
 
 export default function RightSidebar({
@@ -110,7 +110,7 @@ export default function RightSidebar({
           </div>
 
           <div className="reddit-feed-list">
-            {BRANCHES.map((b) => {
+            {COMMUNITIES.map((b) => {
               const isActive = activeBranch === b.id;
               const isJoined = joinedCommunities.includes(b.id);
               const hasAccess = canAccessCommunity(currentUser, b.id);

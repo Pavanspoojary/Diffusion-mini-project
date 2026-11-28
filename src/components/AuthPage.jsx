@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SignInButton, SignUpButton } from '@clerk/react';
 import { XLogo, IconClose, VerifiedBadge } from './Icons';
-import { BRANCHES } from '../data/initialData';
+import { COMMUNITIES } from '../data/initialData';
 import { ADMIN_EMAILS } from '../utils/collegeAuth';
 
 export default function AuthPage({
@@ -377,7 +377,7 @@ export default function AuthPage({
                         value={signupBranch}
                         onChange={(e) => setSignupBranch(e.target.value)}
                       >
-                        {BRANCHES.map((b) => (
+                        {COMMUNITIES.map((b) => (
                           <option key={b.id} value={b.id}>{b.code} ({b.label})</option>
                         ))}
                       </select>
