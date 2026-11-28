@@ -3279,6 +3279,7 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 .event-highlight-banner {
   position: relative;
   width: 100%;
+  max-height: 250px;
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--border-color);
@@ -3303,9 +3304,11 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
 
 .event-highlight-banner-img {
   width: 100%;
+  max-height: 250px;
   height: auto;
   display: block;
   object-fit: cover;
+  object-position: center 25%;
   transition: transform 0.25s ease;
 }
 

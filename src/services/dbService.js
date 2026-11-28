@@ -130,6 +130,7 @@ function mapEventToDB(event) {
     time: event.time,
     venue: event.venue,
     poster: event.poster || null,
+    banner: event.banner || null,
     deadline: event.deadline || null,
     description: event.description || '',
     max_capacity: event.maxCapacity || 150,

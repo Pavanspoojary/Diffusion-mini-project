@@ -17,6 +17,7 @@ export default function CreateEventModal({
   const [deadline, setDeadline] = useState('');
   const [description, setDescription] = useState('');
   const [poster, setPoster] = useState('');
+  const [banner, setBanner] = useState('');
   const [link, setLink] = useState('');
   const dialogRef = useRef(null);
   const posterInputRef = useRef(null);
@@ -45,6 +46,7 @@ export default function CreateEventModal({
       deadline: deadline.trim() || 'Registration open',
       description: description.trim(),
       poster: poster || null,
+      banner: banner || null,
       link: link.trim() || (type === 'internal' ? 'https://docs.google.com/forms/d/e/1FAIpQLSfPzeFRunxDAwmcZNHQDBOziyT3qCQ327DA-4tWFjiGFsvDsg/viewform?usp=publish-editor' : null)
     });
 
@@ -184,17 +186,47 @@ export default function CreateEventModal({
                 const file = e.target.files?.[0];
                 if (file) {
                   const reader = new FileReader();
-                  reader.onload = (ev) => setPoster(ev.target.result);
+                  reader.onload = (ev) => {
+                    const dataUrl = ev.target.result;
+                    setPoster(dataUrl);
+
+                    // Automatically generate a sleek 16:6 hero banner from the graphic region
+                    const img = new Image();
+                    img.onload = () => {
+                      try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 1200;
+                        canvas.height = 420;
+                        const ctx = canvas.getContext('2d');
+                        if (img.naturalHeight > img.naturalWidth) {
+                          // Vertical poster: skip top logos (12%), slice the hero graphical title (32%)
+                          const srcY = img.naturalHeight * 0.12;
+                          const srcH = img.naturalHeight * 0.32;
+                          ctx.drawImage(img, 0, srcY, img.naturalWidth, srcH, 0, 0, canvas.width, canvas.height);
+                        } else {
+                          // Already a landscape graphic
+                          ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, canvas.width, canvas.height);
+                        }
+                        setBanner(canvas.toDataURL('image/jpeg', 0.92));
+                      } catch {
+                        setBanner(dataUrl);
+                      }
+                    };
+                    img.src = dataUrl;
+                  };
                   reader.readAsDataURL(file);
                 }
               }}
             />
             {poster ? (
               <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', maxHeight: 180, border: '1px solid var(--border-color)' }}>
-                <img src={poster} alt="Event poster" style={{ width: '100%', maxHeight: 180, objectFit: 'cover', display: 'block' }} />
+                <img src={banner || poster} alt="Event banner preview" style={{ width: '100%', maxHeight: 180, objectFit: 'cover', display: 'block' }} />
                 <button
                   type="button"
-                  onClick={() => setPoster('')}
+                  onClick={() => {
+                    setPoster('');
+                    setBanner('');
+                  }}
                   style={{
                     position: 'absolute',
                     top: 8,
