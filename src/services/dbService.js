@@ -90,6 +90,24 @@ function mapEventFromDB(row, userRegisteredSet = new Set(), attendanceList = [])
     time: row.time,
     venue: row.venue,
     poster: row.poster || null,
+    banner: row.banner || (
+      row.id === 'evt-algorhythm-2026' ? '/events/algo-highlight-banner.jpg' :
+      row.id === 'evt-cisc-2026' ? '/events/cisc-highlight-banner.jpg' :
+      row.id === 'evt-cmr-hackfest-2027' ? '/events/cmr-highlight-banner.jpg' :
+      row.id === 'evt-ideatex-2027' ? '/events/ideatex-highlight-banner.jpg' : (row.poster || null)
+    ),
+    badge: row.badge || (
+      row.id === 'evt-algorhythm-2026' ? 'Cultural & Talent Fest' :
+      row.id === 'evt-cisc-2026' ? 'Poster Presentation' :
+      row.id === 'evt-cmr-hackfest-2027' ? '36-Hour Hackathon' :
+      row.id === 'evt-ideatex-2027' ? 'Grand Challenge Hackathon' : (row.type === 'internal' ? 'Internal Event' : 'Competition')
+    ),
+    highlightTag: row.highlight_tag || row.highlightTag || (
+      row.id === 'evt-algorhythm-2026' ? 'Live Stage & DJ' :
+      row.id === 'evt-cisc-2026' ? 'Hybrid Mode' :
+      row.id === 'evt-cmr-hackfest-2027' ? '₹2.22 Lakh Prizes' :
+      row.id === 'evt-ideatex-2027' ? '₹10 Lakh Prizes' : null
+    ),
     deadline: row.deadline || '',
     description: row.description || '',
     maxCapacity: Number(row.max_capacity ?? row.maxCapacity ?? 150),
@@ -113,6 +131,7 @@ function mapEventToDB(event) {
     time: event.time,
     venue: event.venue,
     poster: event.poster || null,
+    banner: event.banner || null,
     deadline: event.deadline || null,
     description: event.description || '',
     max_capacity: event.maxCapacity || 150,
@@ -362,7 +381,7 @@ export async function fetchEvents(currentUserId = 'user-student') {
   } catch (err) {
     console.info('[Supabase:fetchEvents fallback]', err.message);
     try {
-      const saved = localStorage.getItem('college_hub_events_v8');
+      const saved = localStorage.getItem('college_hub_events_v11');
       if (saved) {
         const parsed = JSON.parse(saved);
         return parsed.map((e) => ({

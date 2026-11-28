@@ -3374,6 +3374,81 @@ html[data-theme="light"] .category-badge.cat-studentutilities {
   border: 1px solid #00ba7c;
 }
 
+/* Competition Highlight Banner */
+.event-highlight-banner {
+  position: relative;
+  width: 100%;
+  max-height: 250px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  cursor: pointer;
+  margin: 10px 0 12px 0;
+  padding: 0;
+  display: block;
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.event-highlight-banner:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.event-highlight-banner:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.event-highlight-banner-img {
+  width: 100%;
+  max-height: 250px;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform 0.25s ease;
+}
+
+.event-highlight-banner:hover .event-highlight-banner-img {
+  transform: scale(1.015);
+}
+
+.event-highlight-hint {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.event-highlight-banner:hover .event-highlight-hint {
+  background-color: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 580px) {
+  .event-highlight-banner {
+    border-radius: 12px;
+    margin: 8px 0 10px 0;
+  }
+}
+
 .event-meta-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

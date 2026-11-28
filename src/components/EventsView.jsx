@@ -154,6 +154,30 @@ export default function EventsView({
                   )}
                 </div>
 
+                {/* Competition Highlight Banner */}
+                {(evt.banner || evt.poster) && (
+                  <button
+                    type="button"
+                    className="event-highlight-banner"
+                    aria-label={`View full poster flyer for ${evt.title}`}
+                    title="Click to view full poster flyer in lightbox"
+                    onClick={() => onOpenImage(evt.poster || evt.banner)}
+                  >
+                    <img
+                      src={evt.banner || evt.poster}
+                      alt={`${evt.title} competition highlight`}
+                      className="event-highlight-banner-img"
+                      loading="lazy"
+                    />
+
+                    {/* Full Flyer Lightbox Action Pill */}
+                    <span className="event-highlight-hint">
+                      <IconMedia style={{ width: 12, height: 12 }} />
+                      <span>View Full Flyer</span>
+                    </span>
+                  </button>
+                )}
+
                 {/* Event Metadata Grid */}
                 <div className="event-meta-grid">
                   <div className="event-meta-item">
@@ -174,50 +198,26 @@ export default function EventsView({
                   </div>
                 </div>
 
-                <p className="post-text" style={{ margin: 0 }}>
+                <p className="post-text" style={{ margin: '4px 0 0 0' }}>
                   {evt.description}
                 </p>
-
-                {/* Poster Attachment */}
-                {evt.poster && (
-                  <button
-                    type="button"
-                    className="post-media-container"
-                    style={{ border: 'none', background: 'transparent', padding: 0, width: '100%', cursor: 'pointer', textAlign: 'left' }}
-                    aria-label={`View full poster for ${evt.title}`}
-                    onClick={() => onOpenImage(evt.poster)}
-                  >
-                    <img src={evt.poster} alt={`${evt.title} poster`} className="post-media-img" />
-                  </button>
-                )}
 
                 {/* Event Action Suite */}
                 <div className="event-actions-bar">
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                     {evt.type === 'internal' ? (
                       <>
-                        {evt.registeredCount >= evt.maxCapacity && !evt.isRegistered ? (
-                          <button
-                            type="button"
-                            className="btn-event-register"
-                            style={{ opacity: 0.6, cursor: 'not-allowed', backgroundColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
-                            disabled
-                          >
-                            Seats Filled (Housefull)
-                          </button>
-                        ) : (
-                          <a
-                            href={evt.link || INTERNAL_GOOGLE_FORM_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-event-register"
-                            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
-                            title="Opens official Google Form in a new tab"
-                          >
-                            <span>Register via Google Form</span>
-                            <IconExternal style={{ width: 13, height: 13 }} />
-                          </a>
-                        )}
+                        <a
+                          href={evt.link || INTERNAL_GOOGLE_FORM_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-event-register"
+                          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                          title="Opens official Google Form in a new tab"
+                        >
+                          <span>Register via Google Form</span>
+                          <IconExternal style={{ width: 13, height: 13 }} />
+                        </a>
 
                         {/* QR Attendance Buttons */}
                         {currentUser.roleKey === 'student' ? (
@@ -253,12 +253,6 @@ export default function EventsView({
                         <span>Official Registration</span>
                         <IconExternal style={{ width: 14, height: 14 }} />
                       </a>
-                    )}
-                  </div>
-
-                  <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                    {evt.type === 'internal' && (
-                      <span>{evt.registeredCount} / {evt.maxCapacity} Seats Filled</span>
                     )}
                   </div>
                 </div>
