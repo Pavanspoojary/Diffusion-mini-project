@@ -70,7 +70,7 @@ export default function LinkedInComposer({ currentUser, onOpenCompose }) {
         <div className="li-composer-actions">
           <button
             type="button"
-            className="li-composer-action"
+            className="li-composer-action video"
             onClick={() => {
               if (videoInputRef.current) {
                 videoInputRef.current.click();
@@ -82,12 +82,12 @@ export default function LinkedInComposer({ currentUser, onOpenCompose }) {
             <span className="li-composer-action-icon video">
               <IconVideo />
             </span>
-            <span>Video</span>
+            <span className="li-composer-action-label">Video</span>
           </button>
 
           <button
             type="button"
-            className="li-composer-action"
+            className="li-composer-action photo"
             onClick={() => {
               if (photoInputRef.current) {
                 photoInputRef.current.click();
@@ -99,18 +99,18 @@ export default function LinkedInComposer({ currentUser, onOpenCompose }) {
             <span className="li-composer-action-icon photo">
               <IconMedia className="li-icon" />
             </span>
-            <span>Photo</span>
+            <span className="li-composer-action-label">Photo</span>
           </button>
 
           <button
             type="button"
-            className="li-composer-action"
+            className="li-composer-action article"
             onClick={() => onOpenCompose({ mode: 'article' })}
           >
             <span className="li-composer-action-icon article">
               <IconArticle />
             </span>
-            <span>Write article</span>
+            <span className="li-composer-action-label">Write article</span>
           </button>
         </div>
       </div>
