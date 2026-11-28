@@ -89,6 +89,18 @@ function mapEventFromDB(row, userRegisteredSet = new Set(), attendanceList = [])
     time: row.time,
     venue: row.venue,
     poster: row.poster || null,
+    badge: row.badge || (
+      row.id === 'evt-algorhythm-2026' ? 'Cultural & Talent Fest' :
+      row.id === 'evt-cisc-2026' ? 'Poster Presentation' :
+      row.id === 'evt-cmr-hackfest-2027' ? '36-Hour Hackathon' :
+      row.id === 'evt-ideatex-2027' ? 'Grand Challenge Hackathon' : (row.type === 'internal' ? 'Internal Event' : 'Competition')
+    ),
+    highlightTag: row.highlight_tag || row.highlightTag || (
+      row.id === 'evt-algorhythm-2026' ? 'Live Stage & DJ' :
+      row.id === 'evt-cisc-2026' ? 'Hybrid Mode' :
+      row.id === 'evt-cmr-hackfest-2027' ? '₹2.22 Lakh Prizes' :
+      row.id === 'evt-ideatex-2027' ? '₹10 Lakh Prizes' : null
+    ),
     deadline: row.deadline || '',
     description: row.description || '',
     maxCapacity: Number(row.max_capacity ?? row.maxCapacity ?? 150),

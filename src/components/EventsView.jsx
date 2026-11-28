@@ -154,6 +154,43 @@ export default function EventsView({
                   )}
                 </div>
 
+                {/* Sleek Top-Framed Event Banner Preview */}
+                {evt.poster && (
+                  <button
+                    type="button"
+                    className="event-banner-container"
+                    aria-label={`View full poster for ${evt.title}`}
+                    title="Click to view full poster flyer"
+                    onClick={() => onOpenImage(evt.poster)}
+                  >
+                    <img
+                      src={evt.poster}
+                      alt={`${evt.title} poster`}
+                      className="event-banner-img"
+                      loading="lazy"
+                    />
+                    <div className="event-banner-overlay" />
+
+                    {/* Floating Highlight Badges */}
+                    <div className="event-banner-badge-group">
+                      <span className="event-banner-badge">
+                        {evt.badge || (evt.type === 'internal' ? 'Internal Event' : 'Competition')}
+                      </span>
+                      {evt.highlightTag && (
+                        <span className="event-banner-badge secondary">
+                          {evt.highlightTag}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Full Poster Lightbox Pill */}
+                    <span className="event-banner-hint">
+                      <IconMedia style={{ width: 12, height: 12 }} />
+                      <span>Full Poster</span>
+                    </span>
+                  </button>
+                )}
+
                 {/* Event Metadata Grid */}
                 <div className="event-meta-grid">
                   <div className="event-meta-item">
@@ -174,22 +211,9 @@ export default function EventsView({
                   </div>
                 </div>
 
-                <p className="post-text" style={{ margin: 0 }}>
+                <p className="post-text" style={{ margin: '4px 0 0 0' }}>
                   {evt.description}
                 </p>
-
-                {/* Poster Attachment */}
-                {evt.poster && (
-                  <button
-                    type="button"
-                    className="post-media-container"
-                    style={{ border: 'none', background: 'transparent', padding: 0, width: '100%', cursor: 'pointer', textAlign: 'left' }}
-                    aria-label={`View full poster for ${evt.title}`}
-                    onClick={() => onOpenImage(evt.poster)}
-                  >
-                    <img src={evt.poster} alt={`${evt.title} poster`} className="post-media-img" />
-                  </button>
-                )}
 
                 {/* Event Action Suite */}
                 <div className="event-actions-bar">
